@@ -1,51 +1,38 @@
-# FitStat in SAS Event Stream Processing (ESP)
+# Computing Fit Statistics
 
 ## Overview
 
-The FitStat capability in **SAS Event Stream Processing (ESP)** is not exposed as a standard window in the ESP Studio graphical user interface like Pattern, Calculate, or Filter windows. Instead, FitStat is a **function inside the Calculate window** and is specifically associated with **model scoring windows** when working with analytics models like logistic regression, decision trees, or neural networks.
-
-### Where You Encounter FitStat in ESP
-
-- **Calculate Window**  
-  You can invoke FitStat as an algorithm within a Calculate window to compute error metrics on predictions flowing through the stream.
-
-  
-
----
+The goodness–of–fit (FitStat) capability in SAS Event Stream Processing is not a dedicated window, unlike the Pattern window, the Calculate window, or the Filter window. Instead, FitStat is an algorithm that you can use within the Calculate window. You can use it to compute error metrics on predictions that are flowing through the event stream. It is specifically associated with model scoring windows when working with analytics models like logistic regression, decision trees, or neural networks.
 
 ## Source
 
 The [input-fitstat.csv](input-fitstat.csv) file contains a list predicted values and ground truth values.
 
-- `inputs="y_c"`: The **predicted values** from your model (y_hat equivalent).
-- `response="x_c"`: The **actual observed target values** (ground truth).
+- `inputs="y_c"`: The predicted values from the model (y_hat equivalent).
+- `response="x_c"`: The actual observed target values (ground truth).
 
-FitStat will compare — predictions vs. actuals.
-
-
-
----
+The FitStat algorithm compares the predictions against the actual values.
 
 ## Workflow
 
 The following figure shows the diagram of the project: 
 
-![image-20250630132336672](img/image-20250630132336672.png)	
+![Diagram of the project](img/image-20250630132336672.png)	
 
-- The source window takes predicted (`y_c`) and actual (`x_c`) values from a stream.
-- The Calculate window receives data events from the Source window. It publishes goodness-of-fit statistics according to the FitStat algorithm's properties.
+- The Source window takes predicted (`y_c`) and actual (`x_c`) values from the event stream.
+- The Calculate window receives events from the Source window. It publishes goodness-of-fit statistics according to the FitStat algorithm's properties.
 
 ### w_calculate
 
-In the Calculate window used in this model, the FitStat algorithm is defined as an Online algorithm field in the settings:
+In the Calculate window used in this model, the FitStat algorithm is defined in the settings as an online algorithm:
 
-![image-20250630140551875](img/image-20250630140551875.png)	
+![Settings](img/image-20250630140551875.png)	
 
-along with the input-map properties and output-map properties. For input variables in regression models, only one input variable is required. This input variable specifies the predicted response. For classification models, the variables must be listed and must contain the predicted probabilities for each class.  For this project we have the following inputs:
+This window also has input map properties and output map properties. For input variables in regression models, only one input variable is required. This input variable specifies the predicted response. For classification models, the variables must be listed and must contain the predicted probabilities for each class. This project has the following inputs:
 
-![image-20250630133729401](img/image-20250630133729401.png)	
+![Input Map](img/image-20250630133729401.png)	
 
-In this example, the data from the source window is from a regression model.  In addition, the response variable specifies the target variable. The following output-map properties are also defined:
+In this example, the data from the Source window is from a regression model. In addition, the response variable specifies the target variable. The following output map properties are also defined:
 
 | Field    | Description                               |
 | -------- | ----------------------------------------- |
@@ -61,24 +48,21 @@ In this example, the data from the source window is from a regression model.  In
 | msleOut  | Mean squared logarithmic error            |
 | rmsleOut | Root MSLE                                 |
 
-As the data from the Source window is from a regression model, the variables mceOut and mcllOut appear as blank in the resulting output.
+As the data from the Source window is from a regression model, the variables mceOut and mcllOut appear empty in the resulting output.
 
 ## Test the Project and View the Results
 
-When you test the project, the results for each window appear on separate tabs.  The w_calculate shows the results from the FitStat algorithm.
+When you test the project, the results for each window appear on separate tabs. The **w_calculate** tab shows the results from the FitStat algorithm.
 
-![image-20250630135049837](img/image-20250630135049837.png)
+![w_calculate tab](img/image-20250630135049837.png)
 
-- The source tab shows the  predicted (`y_c`) and actual (`x_c`) values from a stream.
-- Fit statistics are calculated like nmissOut (Number of missing values), maeOut (Mean absolute error) and others in real-time as data flows through.
-- Outputs these stats as part of the event stream, where downstream windows or consumers can pick them up for monitoring, alerts, or dashboards.
+- The **sourceWindow** tab shows the  predicted (`y_c`) and actual (`x_c`) values from the event stream.
+- Fit statistics such as nmissOut (number of missing values) and maeOut (mean absolute error) are calculated in real time as data flows through the model.
 
-## Why Use FitStat in ESP?
+## Next Steps
 
-- **Live Model Monitoring:** See if model accuracy is degrading in production.
-- **Streaming Validation:** Detect data drift or issues without batch jobs.
-- **Alerts:** Trigger automated actions when errors cross a threshold.
+You could add downstream windows that pick up the results for use in monitoring, alerts, or dashboards.
 
 ## Additional Resources
 
-This is an undocumented secret feature of ESP.  It is best to not use it and just do batch monitoring in Model Manager instead. 
+For more information, see [SAS Help Center: Computing Fit Statistics for Scored Results](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espan&docsetTarget=p1wnq007i64zjon0zmxezvkad3m4.htm#p1k5j3rok1x59on15i884xa66ajq).
