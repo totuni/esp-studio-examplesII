@@ -2,7 +2,7 @@
 
 ## Overview
 
-The goodness–of–fit (FitStat) capability in SAS Event Stream Processing is not a dedicated window, unlike the Pattern window, the Calculate window, or the Filter window. Instead, FitStat is an algorithm that you can use within the Calculate window. You can use it to compute error metrics on predictions that are flowing through the event stream. It is specifically associated with model scoring windows when working with analytics models like logistic regression, decision trees, or neural networks.
+The goodness–of–fit (FitStat) capability in SAS Event Stream Processing is not a dedicated window, unlike the Pattern window, the Calculate window, or the Filter window. Instead, FitStat is an algorithm that you can use within the Calculate window. You can use it to compute error metrics on predictions that are flowing through the event stream. Models such as decision trees or neural networks generate predictions when applied to data. These results can then be reviewed to assess their accuracy or usefulness.
 
 ## Source
 
