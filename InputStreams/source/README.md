@@ -1,9 +1,85 @@
-# Transitioning a Model from Stateful to Stateless
+# Exploring ESP Source Connectors
 ## Overview
 
-This example demonstrates how to facilitate the transition of a stateful part of a model to a stateless part of a model. A Remove State window in this example converts all events that it receives into Inserts and adds a field named `eventNumber`.
+In SAS Event Stream Processing (ESP), *connectors* (also known as *adapters*) serve as the vital interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources — whether that's sensors via MQTT, logs via Kafka, files on disk, or live video streams over RTSP.
+
+Understanding connectors is fundamental for anyone getting started with ESP, as nearly every real-world application begins with getting data into the system. This example project is designed to help new users visualize and explore how ESP handles this through a set of simple, illustrative connector configurations. You can load this project into ESP Studio or deploy it via the XML directly to see how data flows into a source window from different origins.
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
+
+### 1. **CSV File Input (File/Socket Connector) — `Source_CSV`**
+
+Uses the `fs` connector to simulate data streaming from static CSV files.
+
+- Multiple versions are shown:
+  - Basic file read
+  - Repeating input
+  - Rate-controlled input
+- Also includes a *sub* MQTT connector attached to this window (used to simulate updates from the same source schema).
+
+🔹 **Use for:** Testing, log replay, geospatial tracking, and historical simulations.
+ 🔹 **Note:** Data is read from a local path and can be repeated or throttled.
+
+------
+
+### 2. **Timed Input — `Source_timed`**
+
+The `timer` connector generates events at a fixed interval (e.g., every 60 seconds).
+
+- Includes timestamped fields
+- Can be used to simulate heartbeats, time triggers, or scheduled events
+
+🔹 **Use for:** Time-based testing, sampling simulations, or keeping other windows "alive."
+
+------
+
+### 3. **Kafka Input — `Source_Kafka`**
+
+Demonstrates two Kafka connectors for consuming messages:
+
+- One starts from the latest offset
+- One reads all messages from the beginning of the topic
+- Uses opaque strings to simulate unstructured message ingestion
+
+🔹 **Use for:** Real-time event data, cloud-scale streaming, telemetry pipelines.
+ 🔹 **Note:** Set as inactive by default; requires a valid Kafka configuration (currently pointing to Azure Event Hubs).
+
+------
+
+### 4. **MQTT Input — `Source_MQTT`**
+
+Configured to read messages from a public MQTT broker (`test.mosquitto.org`).
+
+- Subscribes to a topic named `ExampleforESP`
+- Reads opaque strings
+- Matches lightweight IoT scenarios
+
+🔹 **Use for:** Edge device data, smart home sensors, gateway telemetry.
+ 🔹 **Note:** Set as inactive; you can activate and publish messages to this topic to test.
+
+------
+
+### 5. **Azure Event Hubs — `Source_Eventhub`**
+
+This is an example placeholder for reading from Azure Event Hubs.
+
+- Disabled by default
+- Requires user setup with an Azure namespace, access keys, and event path
+
+🔹 **Use for:** Cloud event ingestion, scalable IoT data pipelines.
+
+------
+
+### 6. **Video Stream Input — `Source_video`**
+
+Uses the `videocap` connector to read frames from a video file.
+
+- Designed to mimic live camera input
+- Publishes image blobs for computer vision pipelines
+- Optional resizing and frame rate settings included
+
+🔹 **Use for:** Surveillance analysis, object detection, video streaming analytics.
+ 🔹 **Note:** Disabled by default; file path points to a demo MP4 video.
 
 ## Source Data
 
@@ -12,11 +88,7 @@ The [InputRemove.csv](InputRemove.csv) file contains a list of stock market trad
 ## Workflow
 The following figure shows the diagram of the project:
 
-![Diagram of the project](img/removestateExample.png "Diagram of the project")
-
-- The sourceWindow window is a Source window. This is where events from the `InputRemove.csv` file enter the model.
-- The removestateWindow is a Remove State Window. This is where the model transitions to stateless.
-- The copyWindow window is a Copy window. This is where information is retained, to show the transition to a stateless model.
+![image-20250708160552348](img/image-20250708160552348.png)	
 
 ### sourceWindow
 
