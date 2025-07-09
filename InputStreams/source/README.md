@@ -84,9 +84,15 @@ The file/socket connector is ideal for:
 - Simulating real-time feeds using repeat and rate options.
 - Testing schemas and downstream logic before deploying with live connectors.
 
-​	
+#### Testing the Source_timed Window and View the Results	
 
+Activate your desired connector as follows and then run the project. 
 
+![image-20250709150946507](img/image-20250709150946507.png)	
+
+Output is as follows: 
+
+![image-20250709151235772](img/image-20250709151235772.png)	
 
 ------
 
@@ -124,6 +130,12 @@ The timed source window is ideal for:
 - Monitoring latency or throughput using predictable input rates.
 - Simulating "heartbeat" events for pipeline activity verification.
 - Driving scheduled processing in demos or training sessions when no live data is available.
+
+### Testing the Source_timed Window and View the Results
+
+Ensure that the Timer Connector is activated and run the project.   Output as follows: 
+
+![image-20250709150143448](img/image-20250709150143448.png)	
 
 ------
 
@@ -176,6 +188,16 @@ Kafka source connectors are ideal for:
 - Streaming logs, sensor readings, financial transactions, or telemetry data.
 - Integrating with enterprise pipelines already built on Kafka or Azure Event Hubs.
 - Supporting real-time analytics on live data as it flows through the Kafka stream.
+
+### Testing the Source_Kafka Window and View the Results
+
+Ensure that the Kafka Connector is activated and run the project. 
+
+![image-20250709145158627](img/image-20250709145158627.png)	
+
+Results will be similar to the following: 
+
+![image-20250709145339311](img/image-20250709145339311.png)	
 
 ------
 
@@ -232,7 +254,19 @@ MQTT source connectors are well suited for:
 - Learning or testing publish/subscribe patterns using public or local brokers.
 
 
-### Testing the Source_video Window and View the Results
+### Testing the Source_MQTT Window and View the Results
+
+Ensure that the MQTT Connector is activated and run the project.  
+
+![image-20250709144550750](img/image-20250709144550750.png)	
+
+Also, ensure that the MQTToutput subscriber connector is enabled in the Source_CSV window and the rate connector is selected. 
+
+​	![image-20250709144739200](img/image-20250709144739200.png)
+
+Events are read from the ISS csv file and outputted to the MQTT topic called ExampleforESP.   It is then read  by the MQTT source window and the output is as follows: 
+
+![image-20250709144358475](img/image-20250709144358475.png)
 
 ------
 
@@ -284,7 +318,11 @@ Event Hub connectors are ideal for:
 - Integrating ESP with cloud-first applications or IoT deployments using Azure IoT Hub (which can route data into Event Hubs).
 - Performing real-time monitoring and alerting on event data from applications, services, or devices.
 
-------
+### Testing the Source_Eventhub Window and View the Results
+
+Ensure that the Eventhub Connector is activated and run the project.
+
+![image-20250709143509046](img/image-20250709143509046.png)	
 
 ### 6. RTSP/Video Source Window (Source_video)
 
@@ -331,6 +369,8 @@ This type of source window is ideal for:
 Ensure that the Video Capture Connector is activated and run the project.
 
 ![image-20250709132820007](img/image-20250709132820007.png)	When you test the project, the results for each window appear on separate tabs. The following figure shows the results for the source window tab. This tab displays all events, with various opcodes.  Note that the image is transcoded into a non human readable blob format. 
+
+![image-20250709143855068](img/image-20250709143855068.png)	
 
 
 
