@@ -1,24 +1,86 @@
 # Exploring ESP Source Connectors
 ## Overview
 
-In SAS Event Stream Processing (ESP), *connectors* (also known as *adapters*) serve as the vital interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources — whether that's sensors via MQTT, logs via Kafka, files on disk, or live video streams over RTSP.
+In SAS Event Stream Processing (ESP), connectors which run inside the ESP server and adapters which run in their own address space serve as the vital interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources — whether that's sensors via MQTT, logs via Kafka, files on disk, or live video streams over RTSP.
 
 Understanding connectors is fundamental for anyone getting started with ESP, as nearly every real-world application begins with getting data into the system. This example project is designed to help new users visualize and explore how ESP handles this through a set of simple, illustrative connector configurations. You can load this project into ESP Studio or deploy it via the XML directly to see how data flows into a source window from different origins.
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
-### 1. **CSV File Input (File/Socket Connector) — `Source_CSV`**
+## Workflow
 
-Uses the `fs` connector to simulate data streaming from static CSV files.
+The following figure shows the diagram of the project:
 
-- Multiple versions are shown:
-  - Basic file read
-  - Repeating input
-  - Rate-controlled input
-- Also includes a *sub* MQTT connector attached to this window (used to simulate updates from the same source schema).
+![image-20250708160552348](img/image-20250708160552348.png)	
 
-🔹 **Use for:** Testing, log replay, geospatial tracking, and historical simulations.
- 🔹 **Note:** Data is read from a local path and can be repeated or throttled.
+This project is designed to showcase how different types of source windows can be used to ingest data into a SAS Event Stream Processing (ESP) project. Each source window demonstrates a unique input method—such as reading from a CSV file, consuming messages from Kafka or MQTT, streaming from a video file, receiving events from Azure Event Hub, or generating data on a timed interval. In the sections that follow, I will walk through each source window separately, highlighting the connector class it uses, key configuration properties, and any special considerations for activating or customizing the data feed.  
+
+Connectors in this project are turned off by default and should be turned on as each example is explored.  Connector examples which require external messaging environments to be configured and active will not execute when activated and are shown here purely to aide in future configurations. 
+
+### File/Socket Connector (Source_CSV)
+
+The  Source_CSV window demonstrates how to ingest data into ESP using the File/Socket connector, which is one of the most common and flexible ways to bring in structured data from a flat file. In this example, the input is a CSV file containing timestamped geographic data points, such as longitude and latitude.
+
+![image-20250709103953958](img/image-20250709103953958.png)	
+
+#### Schema
+
+The schema for the Source_CSV window includes:
+
+- key  (int64, key field): A unique identifier for each record.
+- dt  (date): A date field parsed using a specified format.
+- long (double): Longitude.
+- lat (double): Latitude.
+
+These fields correspond to columns in the source CSV file and are expected to be present in every record.
+
+#### Connector Variants
+
+Multiple `fs` connectors are defined for this window to illustrate different ingestion behaviors:
+
+1. **iss_input**
+
+   - Reads the file once from beginning to end.
+
+   - Useful for batch-style loading.
+
+   - Configured with:
+
+     - ![image-20250709105132718](img/image-20250709105132718.png)	
+
+       - Under All properties the dateformat is set. ![image-20250709110103940](img/image-20250709110103940.png)
+
+       
+
+2. **iss_input_repeat**
+
+   - Repeats the file input a specified number of times (repeatcount=100).
+   - Good for simulation or testing with looping input data.
+
+3. **iss_input_rate**
+
+   - Adds a pacing mechanism to simulate streaming input (rate=1 record per second).
+   - Also includes `repeatcount=100` to provide enough data over time.
+
+These connectors are declared but set to inactive by default, allowing the user to manually enable one or more depending on the testing or demo scenario.
+
+#### MQTT Connector Note
+
+Interestingly, this source window also includes a connector of a different class MQTToutput configured as a subscriber.  Connectors can be used to ingest data into a project, pub, short for publisher.  Or sub which is short for subscriber.  Subscriber connectors output data from a project to an external file or system.  The MQTT subscriber connector should only be activated when testing the MQTT source example.  This connector adds ISS data to an MQTT topic so that it can be read of the MQTT example.  
+
+  
+
+#### Use Cases
+
+The file/socket connector is ideal for:
+
+- Loading historical data during development.
+- Simulating real-time feeds using repeat and rate options.
+- Testing schemas and downstream logic before deploying with live connectors.
+
+​	
+
+
 
 ------
 
@@ -85,55 +147,15 @@ Uses the `videocap` connector to read frames from a video file.
 
 The [InputRemove.csv](InputRemove.csv) file contains a list of stock market trades. 
 
-## Workflow
-The following figure shows the diagram of the project:
 
-![image-20250708160552348](img/image-20250708160552348.png)	
 
-### sourceWindow
 
-Explore the settings for the sourceWindow window:
-1. Open the project in SAS Event Stream Processing Studio and select the sourceWindow window. 
-2. In the right pane, expand **State and Event Type**. Observe that the index type is PI_HASH. That is, the window is stateful. The window retains all incoming events.
-3. To examine the window's output schema, on the right toolbar, click ![Output Schema](img/output-schema-icon.png "Output Schema"). Observe the following fields: 
-   - `ID`: This field is the stock trade's ID, which is also selected as the key field.
-   - `symbol`: This field is the stock symbol. A stock symbol is a series of letters that are assigned to a security for trading purposes.
-   - `true_test`: This field is the "true_test" value for each trade.
-   - `price`: This field is the stock price.
-4. Click ![Properties](img/show-properties-icon.png "Properties"). 
-
-### removestateWindow
-
-Explore the settings for the removestateWindow window:
-1. Select the removestateWindow window.
-2. In the right pane, expand **Settings**. Observe that Updates, Deletes, Retention Updates, and Retention Deletes are the opcodes that are to be removed by this window.
-3. Observe that the **Include opcode and flag fields** check box is selected. This causes two fields to be added to the output schema.
-4. To examine the window's output schema, on the right toolbar, click ![Output Schema](img/output-schema-icon.png "Output Schema"). Observe the following details:
-   - `eventNumber`: This field is an event number that is assigned to each event. The event number is a monotone-increasing sequential integer. The output schema for a Remove State window always includes this field. This field is the only key of a Remove State window.
-   - `originalOC` and `originalFL`: These fields are present in the output schema because the **Include opcode and flag fields** check box is selected for this window. For each event, these fields contain the event's original opcode and the event's original flag.
-   - `ID`, `symbol`, `true_test`, and `price`: These fields are present in the sourceWindow window and are passed through, but the `ID` field is no longer a key field.
-5. Click ![Properties](img/show-properties-icon.png "Properties"). 
-
-### copyWindow
-
-Explore the settings for the copyWindow window:
-1. Select the copyWindow window.
-2. In the right pane, expand **State**. Observe that the window is stateful. The window retains all incoming events, except when a retention policy is used.
-3. Expand **Retention**. Observe that time-based retention is used. Events are retained for 30 seconds.
 
 ## Test the Project and View the Results
 
 When you test the project, the results for each window appear on separate tabs. The following figure shows the results for the sourceWindow tab. This tab displays all events, with various opcodes. 
 
-![sourceWindow tab](img/sourceWindow.png "sourceWindow tab")
 
-The following figure shows the results for the removestateWindow tab. The eventNumber, originalOC, and originalFL columns are present. The originalOC column shows that only Insert events entered into the window, as specified in the window's settings.
-
-![removestateWindow tab](img/removestateWindow.png "removestateWindow tab")
-
-The following figure shows the results for the copyWindow tab. This tab initially displays 13 Insert events. The window retains these events for 30 seconds. After this, 13 Delete events appear.
-
-![copyWindow tab](img/copyWindow.png "copyWindow tab")
 
 ## Next Steps
 
