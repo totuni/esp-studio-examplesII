@@ -36,7 +36,7 @@ These fields correspond to columns in the source CSV file and are expected to be
 
 #### Connector Variants
 
-Multiple `fs` connectors are defined for this window to illustrate different ingestion behaviors:
+Multiple connectors are defined for this window to illustrate different ingestion behaviors:
 
 1. **iss_input**
 
@@ -60,7 +60,7 @@ Multiple `fs` connectors are defined for this window to illustrate different ing
 3. **iss_input_rate**
 
    - Adds a pacing mechanism to simulate streaming input (rate=1 record per second).
-   - Also includes `repeatcount=100` to provide enough data over time.
+   - Also includes repeatcount=100 to provide enough data over time.
 
 These connectors are declared but set to inactive by default, allowing the user to manually enable one or more depending on the testing or demo scenario.
 
