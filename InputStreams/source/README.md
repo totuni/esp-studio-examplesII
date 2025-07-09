@@ -84,14 +84,40 @@ The file/socket connector is ideal for:
 
 ------
 
-### 2. **Timed Input — `Source_timed`**
+### 2. Timed Source Window (Source_timed)
 
-The `timer` connector generates events at a fixed interval (e.g., every 60 seconds).
+The Source_timed window demonstrates how to use the timer connector to generate synthetic data at regular intervals. This is especially useful for testing, monitoring time-based behaviors, or simulating periodic events in a streaming environment without relying on an external data source.
 
-- Includes timestamped fields
-- Can be used to simulate heartbeats, time triggers, or scheduled events
+**Schema**
 
-🔹 **Use for:** Time-based testing, sampling simulations, or keeping other windows "alive."
+The schema for this window includes:
+
+- id (int64, key): A unique identifier for each generated record.
+- time (stamp): A timestamp value associated with the generated event.
+- label (string): A string label to describe or categorize the event.
+
+These fields allow for basic tracking and labeling of each timed event, which can be useful for both functional testing and validating downstream logic such as filtering, pattern detection, or aggregation over time windows.
+
+**Connector Details**
+
+The timer connector is named timer_connector and is configured with the following properties:
+
+- type = pub — Indicates the connector is a publisher (i.e., it injects data into ESP).
+- basetime = 2020-06-08 00:56:00 — Sets the starting point for the simulated time field. This is helpful for repeatable tests.
+- interval = 60 — Defines how frequently events are generated.
+- unit = second — Specifies the interval unit. One event will be generated every 60 seconds.
+- label = minutely — Provides a fixed string value for the label field in each record.
+
+This configuration creates a synthetic stream of timestamped records at one-minute intervals. The defined basetime ensures consistency for test runs, which is especially useful when trying to reproduce results.
+
+**Use Cases**
+
+The timed source window is ideal for:
+
+- Testing logic in pattern windows, aggregations, and joins that depend on event timing.
+- Monitoring latency or throughput using predictable input rates.
+- Simulating "heartbeat" events for pipeline activity verification.
+- Driving scheduled processing in demos or training sessions when no live data is available.
 
 ------
 
