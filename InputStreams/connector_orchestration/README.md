@@ -1,127 +1,66 @@
-# Use a Lua Connector to Read RSS Feeds
-## Overview
-This example contains a Source window with a Lua connector that reads RSS feeds from scientific sites and publishes them into the project every five seconds.
+## How Does Connector Orchestration Work with ESP Connectors?
 
----
-**NOTE:**
-Use this example with SAS Event Stream Processing 2024.03 and later.
+### Overview
 
----
+This SAS Event Stream Processing (ESP) project demonstrates **connector orchestration**—a feature that controls the sequence and state of connector execution. The goal of this project is to detect suspicious badge swipe behavior, such as employees badging into multiple buildings within a short time span. It simulates real-time badge swipes, enriches them with employee metadata, and detects anomalies using pattern windows. Importantly, the project uses connector orchestration to ensure that data ingestion and output operations happen in a logical and controlled sequence.
 
-For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
+### Source Data
 
-## Use Case
-This example provides a simple demonstration of how you can use a Lua connector to feed data into a Source window. In a real-life scenario, a project might also contain additional windows to analyze the data.
+There are two primary data sources in this project:
 
-## Source Data
-Data is streamed from RSS feeds. No input files are required for this example.
+- **Employee Data**: Static reference data about employees (name, position, etc.) published via a Python connector. This acts as metadata for enriching swipe data.
+- **Badge Swipes**: Simulated streaming data representing badge swipes at different buildings, generated using a Python-based publisher that emits random events over time.
 
-## Workflow
-The following table explains the Lua code in the connector for the Source window. To view the Lua code in context, see the [model.xml](model.xml) file.
+The project assumes badge swipe data will be enriched with employee info before being used for pattern detection.
 
-<table>
-<tr>
-<th>Step</th> <th>Lua Code Section</th>
-</tr>
-<tr>
-<td> Specifies the RSS feeds that the connector reads. </td>
-<td>
+### Workflow
 
+The continuous query (`cq`) defines a data pipeline consisting of the following windows:
 
-```
-local   feeds = {
-  "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
-  "https://beta.nsf.gov/rss/rss_www_news.xml",
-  "https://www.newscientist.com/section/news/feed/"
-  }
-```
+1. **`Employee_Data` (Source Window)**
+    Ingests static employee records using a Python connector named `campus_metadata`.
+2. **`badge_swipes` (Source Window)**
+    Ingests simulated streaming badge swipe events using a Python connector named `card_reader`.
+3. **`Enriched_Data` (Join Window)**
+    Performs a **left outer join** of `badge_swipes` with `Employee_Data` on employee ID, combining real-time badge activity with descriptive metadata.
+4. **`Pattern_2_buildings` (Pattern Window)**
+    Detects cases where an employee badged into two different buildings within five minutes—indicating suspicious behavior. It outputs these violations to a local file using a file system (FS) connector named `record_violations`.
 
+### Orchestration
 
-</td>
-</tr>
-<tr>
-<td> Publishes events into the project. The "publish" function is required to use the Lua connector. When the "publish" function returns the value "true", the connector is finished. When the function returns the value "false", the connector keeps running.</td>
-<td>
+This project is a strong example of **connector orchestration** in ESP. Rather than starting all connectors simultaneously, it uses **connector groups** and **edges** to define dependencies between them. Here’s how the orchestration logic works:
 
-  
-```
-function publish()
-  for i,feed in ipairs(feeds)
-  do
-    events = getFeed(feed)
+1. **Connector Group: `First_EmployeeData`**
+   - Contains the `campus_metadata` connector for loading employee metadata.
+   - It is required to **finish** before other connectors begin, ensuring that reference data is available for joins.
+2. **Connector Group: `Second_OutputViolations`**
+   - Contains the `record_violations` FS connector that writes detected violations.
+   - This group depends on the **completion of employee data loading** before starting.
+3. **Connector Group: `Third_badgereaderdata`**
+   - Contains the `card_reader` connector which generates swipe data.
+   - It waits until the output connector is running, ensuring that the system is ready to process and capture violations as they occur.
 
-    if esp_inject(events) == false
-    then
-      return true
-    end
-  end
-
-  return false
-end
-```
-
-  
-</td>
-</tr>
-<tr>
-<td> Maps the data from the RSS feeds into the project's output. For example, "event.source = feed" causes a feed's URL to appear in the "source" column in the output. "event.date = entry.item.pubDate" causes data within the "pubDate" XML element in the feed to appear in the "date" column in the output. "event._opcode = "upsert"" causes the opcode of each event to be set to Upsert. <br>"request.tolua = true" causes the results to be processed as a Lua object instead of XML.</td>
-<td>
-
+**Orchestration Graph:**
 
 ```
-function getFeed(feed)
-  local   request = {}
-
-  request.url = feed
-  request.tolua = true
-
-  local   data = esp_sendHttp(request)
-  local   events = {}
-  local   index = 1
-
-  for i,entry in ipairs(data.response.rss.item_array)
-  do
-    local   event = {}
-    event.id = entry.item.guid["*value"]
-    event.source = feed
-    event.title = entry.item.title
-    event.date = entry.item.pubDate
-    event.description = entry.item.description
-    event.link = entry.item.link
-    event._opcode = "upsert"
-    events[index] = event
-    index = index + 1
-end
+scssCopyEditFirst_EmployeeData (finished)
+        ↓
+Second_OutputViolations (running)
+        ↓
+Third_badgereaderdata (running)
 ```
 
+This orchestration ensures:
 
-</td>
-</tr>
-<tr>
-<td> Returns results as SAS Event Stream Processing events. </td>
-<td>
+- Joins are not attempted until reference data is loaded.
+- Violations can be written before swipe events are processed.
+- Simulated data is not lost or processed prematurely.
 
+### Test the Project and View the Results
 
-```
-    return events
-end
-```
+*Placeholder: This section will contain steps to run the project in SAS ESP Studio and verify detected anomalies in the output CSV.*
 
+### Additional Resources
 
-</td>
-</tr>
-</table>
-
-## Test the Project and View the Results
-The following figure shows the result of running the project in test mode in SAS Event Stream Processing Studio:
-
-![Output from the lua_connector example in test mode](img/lua_connector_Source_window.png "Output from the lua_connector example in test mode")
-
-The actual events that appear in test mode depend on the events that are available in the RSS feeds at the time when you run the project.
-
-## Next Steps
-You can add windows to the project to further analyze the data. For example, you might add a Filter window to extract stories that contain the word "climate".
-
-## Additional Resources
-For more information, see [SAS Help Center: Using the Lua Connector](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espca&docsetTarget=p0ofbx04mv7n85n1mds3bck22qq0.htm).
-
+For more information on SAS ESP connector orchestration, see the official documentation:
+ 👉 SAS ESP Connector Orchestration
