@@ -56,9 +56,35 @@ This orchestration ensures:
 
 ### Test the Project and View the Results
 
-*Placeholder: This section will contain steps to run the project in SAS ESP Studio and verify detected anomalies in the output CSV.*
+When you test the project, the results for each window appear on separate tabs. The following figure shows the results for the Employee_Data tab which represents the campus metadata.
+
+![image-20250714143637846](img/image-20250714143637846.png)
+
+The following diagram shows the simulated badge reader data as it comes into the project. 	
+
+![image-20250714143851929](img/image-20250714143851929-1752518701832-1.png)	
+
+
+
+Once both sets of data are read in they are combined using a join window which results in enriched data. 
+
+
+
+![image-20250714143916171](img/image-20250714143916171.png)
+
+A pattern window is used to detect if an employee badges into two buildings in a short period of time.  Assuming a person can not be in 2 places at once a potential security violation is detected and the two buildings in question are logged. 
+
+![image-20250714143941993](img/image-20250714143941993.png)
+
+For later review, the results of the security audit are logged to a time stamped file and written to the output area of the project package.  
+
+![image-20250714144243496](img/image-20250714144243496.png)		
+
+
 
 ### Additional Resources
 
-For more information on SAS ESP connector orchestration, see the official documentation:
- 👉 SAS ESP Connector Orchestration
+For more information on SAS ESP connector orchestration, see the official documentation:  
+
+For more information, see [SAS Help Center: Orchestrating Connectors](https://helpcenter.unx.sas.com/test/doc/en/espcdc/v_061/espca/p1nhdjrc9n0nnmn1fxqnyc0nihzz.htm#p00oj8brm4320nn1h6fjuxz8ayd4).
+
