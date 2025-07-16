@@ -21,14 +21,13 @@ This data is published at an interval of 500 milliseconds.
 
 ### Workflow
 
-![image-20250716103651778](img/image-20250716103651778.png)	
+![image-20250716103651778](img/image-20250716103651778.png)		
 
 This project contains two main windows connected in a simple linear workflow:
 
 1. **SourceWindow**
     This is a window-source that receives data from the Lua connector. It defines the schema and structure for incoming events.
-2. **Filter**
-    This is a window-filter that contains logic to check if the temperature is above 75°F. If so, the event is forwarded; otherwise, it is discarded.
+2. **Filter** This is a window-filter that contains logic to check if the temperature is above 75°F. If so, the event is forwarded; otherwise, it is discarded.  Filter logic can be coded in Lua, Python, C or Expression language.  ![image-20250716132959551](img/image-20250716132959551.png)
 
 
 
@@ -38,11 +37,19 @@ This project contains two main windows connected in a simple linear workflow:
 
 ### Test the Project and View the Results
 
-*Placeholder – This section will be filled in with testing steps and screenshots/results from the running ESP project.*
+When you test the project, the results for each window appear on separate tabs. The following figure shows the results for the sourceWindow tab. This tab displays all events, with various opcodes.
+
+![image-20250716134016710](img/image-20250716134016710.png)	
+
+There are 10 sensor readings containing temperatures ranging from 69 thru 87 degrees.  When we apply a greater than 75 filter the number of events drops to four. 
+
+![image-20250716134253461](img/image-20250716134253461.png)	
+
+
 
 ------
 
 ### Additional Resources
 
-For more details on **connector orchestration in SAS ESP**, refer to the official documentation:
- 🔗 SAS ESP Documentation - Connector Orchestration
+For more details on **the filter window**, refer to the official documentation:  [Using Filter Windows](https://go.documentation.sas.com/doc/en/espcdc/v_061/espcreatewindows/p1laytbc862ix9n1w5rm9reywors.htm)
+
