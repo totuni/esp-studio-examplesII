@@ -1,15 +1,3 @@
-
-
-​	
-
-
-
-![image-20250721154943949](img/image-20250721154943949.png)	
-
-
-
-​	
-
 ## **SAS ESP Project: Object Tracker Window – Vehicle Counting at an Intersection**
 
 ### **Overview**
@@ -26,12 +14,12 @@ The **Object Tracker window** in SAS ESP enables the continuous **tracking of ob
 
 ![image-20250721161522090](img/image-20250721161522090.png)	
 
-The source data is a **video file** showing an intersection with frequent vehicle traffic. This video is published into ESP at a rate of **10 frames per second** using the `videocap` connector.
+The source data is a **video file** showing an intersection with frequent vehicle traffic. This video is published into ESP at a rate of **10 frames per second** using the videocap connector.
 
 Each event entering the system includes:
 
-- A unique `id`
-- A single frame represented as a binary large object (`blob`) in the `image` field
+- A unique **id**
+- A single frame represented as a binary large object (blob) in the image field
 
 ![image-20250721161717887](img/image-20250721161717887.png)	
 
@@ -45,20 +33,20 @@ Here's a summary of how the windows work together:
 
 ![image-20250721155412993](img/image-20250721155412993.png)	
 
-1. **`w_data` (Source Window)**
+1. **w_data (Source Window)**
     Ingests video frames from the intersection and publishes them into ESP.
 
-2. **`w_reader` (Model Reader Window)**
+2. **w_reader (Model Reader Window)**
     Loads and pre-processes the YOLOv7-tiny object detection model (ONNX format), resizing and normalizing the image for scoring.
 
-3. **`w_score` (Score Window)**
+3. **w_score (Score Window)**
     Runs inference on each frame using the loaded ONNX model and outputs bounding box tensors.
 
-4. **`w_postprocess` (Python Window)**
-    Converts model tensor output into readable object fields such as `Object_x`, `Object_y`, `Object_labels`, etc. Includes detected bounding boxes, class labels, and confidence scores.
+4. **w_postprocess (Python Window)**
+    Converts model tensor output into readable object fields such as Object_x, Object_y, Object_labels, etc. Includes detected bounding boxes, class labels, and confidence scores.
 
-5. **`w_object_tracker` (Object Tracker Window)**
-   **Tracks detected objects across multiple frames**, assigning a consistent `Object_id` to each object.
+5. **w_object_tracker (Object Tracker Window)**
+   **Tracks detected objects across multiple frames**, assigning a consistent Object_id to each object.
 
    - Uses the **IOU (Intersection Over Union)** method for tracking.
    - Ensures a car appearing in multiple frames is recognized as the *same* car.
@@ -67,24 +55,23 @@ Here's a summary of how the windows work together:
    **Why use it?**
     Without object tracking, a car detected in 30 different frames might be counted 30 times. With tracking, we get a **stable ID for each car**, so it is counted only once.
 
-6. **`w_count_cars` (Lua Window)**
+6. **w_count_cars (Lua Window)**
    Filters the object stream:
 
-   - Only cars (`label == car`)
+   - Only cars (label == car)
    - Confidence > 75%
-   - Never counted before (`car_id` not seen before)
-      Adds these to the count result.
-
-7. **`w_annotate` (Python Window)**
+   - Sum total count of cars only. 
+   
+7. **w_annotate (Python Window)**
     Annotates frames with bounding boxes and object IDs for visualization.
 
-8. **`w_counter` (Counter Window)**
+8. **w_counter (Counter Window)**
 
 9. Serves as a performance indicator or summary statistic sink.
 
 ### **Object Tracker Window Configuration (Detailed)**
 
-The **`w_object_tracker`** window is configured to use the **IOU (Intersection Over Union)** method to associate objects across frames. This window is responsible for assigning persistent IDs to detected objects (like cars) as they move across video frames, even if they're only partially visible or momentarily obscured.
+The **w_object_tracker** window is configured to use the **IOU (Intersection Over Union)** method to associate objects across frames. This window is responsible for assigning persistent IDs to detected objects (like cars) as they move across video frames, even if they're only partially visible or momentarily obscured.
 
 Below is a breakdown of the specific parameters used and what they do:
 
@@ -130,9 +117,9 @@ Below is a breakdown of the specific parameters used and what they do:
 
 
 
-- **count**: `_nObjects_` — number of detected objects per frame.
-- **score**: Confidence score per object (`Object_score`).
-- **label**: Comma-separated list of labels (`Object_labels`).
+- **count**: _nObjects_ — number of detected objects per frame.
+- **score**: Confidence score per object (Object_score).
+- **label**: Comma-separated list of labels (Object_labels).
 - **x, y, width, height**: Bounding box coordinates for each object, used for IOU calculation.
 - **coord-type="rect"**: Specifies rectangular bounding boxes.
 - **attributes**: (Optional) additional attributes per object, not used in this example but available if needed.
@@ -145,21 +132,26 @@ Each time a frame passes through:
 
 - The tracker looks at the current set of detected objects.
 - It compares them with previously tracked objects using IOU overlap.
-- If the overlap is high enough and the scores meet thresholds, it assigns or maintains an `Object_id`.
-- That ID is used downstream in the Lua window (`w_count_cars`) to ensure **cars are only counted once**.
+- If the overlap is high enough and the scores meet thresholds, it assigns or maintains an Object_id.
+- That ID is used downstream in the Lua window (w_count_cars) to ensure **cars are only counted once**.
 
 ------
 
 ### **Test the Project and View the Results**
 
-*(Placeholder: To be filled in later.)*
+When you test the project, the results for each window appear on separate tabs.  We selected array style output so each frame that is scored represents one line of output.   For example the event with id 614 detected 11 objects.  Each numerical output is represented by an array of data while string data, Object_label, is represented as a comma delimited string.  
+
+![image-20250721154943949](img/image-20250721154943949.png)
+
+The Lua window is used to filter the results and only list car ids excluding all other types of objects that are detected such as people or bikes.   Cars with a confidence below 75% are also excluded.  
+
+![image-20250722103933934](img/image-20250722103933934.png)	
 
 ------
 
 ### **Additional Resources**
 
-For full documentation on the **Object Tracker window**, including algorithm choices, parameters, and usage, visit the official SAS ESP documentation:
- 👉 SAS ESP Object Tracker Window Documentation
+For full documentation on the **Object Tracker window**, including algorithm choices, parameters, and usage, visit the official SAS ESP documentation:  [Using Object Tracker Windows](https://go.documentation.sas.com/doc/en/espcdc/v_057/espcreatewindows/titlepage.htm)
 
 
 
