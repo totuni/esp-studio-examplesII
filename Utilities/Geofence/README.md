@@ -80,7 +80,7 @@ Explore the settings for the CriticalInfrastructure window:
 2. Examine the window's output schema in the right pane. The fields relate to the location and characteristics of infrastructure sites.
 3. Click ![Properties](img/show-properties-icon.png "Properties"). 
    
-### Geofence
+### Geofence 
 
 The Geofence window performs geofencing on the matched vehicles.
 
