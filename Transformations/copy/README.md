@@ -92,6 +92,57 @@ In this case, the Copy window monitors the time based on the field specified. Fo
 
 NOTE: This kind of retention is very useful where events may not follow exact system time either because you are developing the model and passing the events very fast or in production there can be inconsistent delays in arrival of the events because of network issues. 
 
+## Test the Project and View the Results
+When you test the project, the results for each window appear on separate tabs.
+
+- Source tab lists raw events published into the project
+- Copy_SystemTime_Sliding tab lists insert and delete events generated because of system time based sliding retention
+- Copy_EventTime_Sliding tab lists insert and delete events generated because of event time based sliding retention
+- Copy_SystemTime_Jumping tab lists insert and delete events generated because of system time based jumping retention
+- Copy_Count_Sliding tab lists insert and delete events generated because of count based sliding retention
+- Copy_Count_Jumping tab lists insert and delete events generated because of count based jumping retention
+
+The following figure shows the results of the Source Window tab:
+
+![Results for Source window](img/source_window_result.png)
+
+Keep a note of the number of events published in to the project.
+
+The following figure shows the results of the Copy_SystemTime_Sliding window:
+
+![Results for Copy_SystemTime_Sliding window](img/copy_systemtime_sliding_result.png)
+
+Notice that for all events, deletes have been generated. You can also confirm this fact from the Current retained events value at the top which is 0.
+
+The following figure shows the results of the Copy_EventTime_Sliding window:
+
+![Results for Copy_EventTime_Sliding window](img/copy_eventtime_sliding_result.png)
+
+Notice that there are 2 deletes generated whose time field values are exactly 5 seconds less than the last event to be published. Because other events have time values less than 5 seconds from the last event, their deletes are not generated.
+
+The following figure shows the results of the Copy_SystemTime_Jumping window:
+
+![Results for Copy_SystemTime_Jumping window](img/copy_systemtime_jumping_result.png)
+
+Notice in this case as well all deletes are generated. However, a difference that you may notice from the Copy_SystemTime_Sliding is that in this case all deletes are generated at the same time.
+
+The following figure shows the results of the Copy_Count_Sliding tab:
+
+![Results for Copy_Count_Sliding window](img/copy_count_sliding_result.png)
+
+Notice that there is a single delete event generated because with the 11th insert event, the retention of 10 events was crossing leading to the deletion of the first event in the state. The number of retained events as seen at the top remains at 10.
+
+The following figure shows the results of the Copy_Count_Jumping tab:
+
+![Results for Copy_Count_Jumping window](img/copy_count_jumping_result.png)
+
+Notice here that only 1 event is being shows as Currently Retained events. This happened because as soon as the 11th event arrived, the retention of 10 events was crossed leading to deletion of all previous events.
+
+## Additional Resources
+For more information, see [SAS Help Center: Using Copy Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=n03rea4fhvohcgn15o9970mq9jea).
+
+
+
 
 
 
