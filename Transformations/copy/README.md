@@ -12,3 +12,8 @@ For more information about how to install and use example projects, see [Using t
 ## Source Data
 The file, input.csv, contains a dummy motor vibration data where the fields motor and time in microseconds together identify a unique event. The value here is dummy vibration data of motors which are emitting the events at a rate of 1 event per second.
 
+## Workflow
+The example shows what are the different retention options that you can use with Copy Window. The following figure shows the diagram of the project:
+
+![model](img/model.png)	
+
