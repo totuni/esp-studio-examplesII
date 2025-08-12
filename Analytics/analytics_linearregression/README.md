@@ -18,7 +18,7 @@ The project shows how to perform online training and scoring using linear regres
 
 ## Source Data
 
-The `input.csv` file is loaded through a file connector in the Source window. The stream of synthetic data includes the following:
+The `input.csv` file is loaded through a file and socket connector in the Source window. The stream of synthetic data includes the following:
   - `id`: Unique identifier
   - `y`: Target response variable
   - `x1` through `x784`: Input features
@@ -29,7 +29,7 @@ The following image shows the diagram of the project:
 
 ![Diagram of the project](img/diagram.png "Diagram of the project")
 
-- **w_data**: A Source window that ingests example data from a CSV file using the `fs` (file socket) connector.
+- **w_data**: A Source window that ingests example data from a CSV file using the `fs` (file and socket) connector.
 - **w_train**: A Train window that performs online linear regression, generating updated models as new data arrives.
 - **w_score**: A Score window that uses the current model to compute predictions on streaming data.
 
@@ -37,8 +37,8 @@ The following image shows the diagram of the project:
 
 Explore the settings for the w_data window by doing the following steps:
 1. Open the project in SAS Event Stream Processing Studio and select the w_data window.
-2. Expand the right pane. Notice that the window is configured with a file connector.
-3. Expand the **Retention** pane. Notice that the project only accepts Insert events.
+2. In the right pane, expad **Input Data (Publisher) Connectors**. Notice that the window is configured with a file and socket connector.
+3. Expand **Retention**. Notice that the project only accepts Insert events.
 <!-- is this how icons are typically done? it doesn't look great in the github -->
 5. Click ![Output Schema](img/output-schema-icon.png "Output Schema"). Fields include:
    - `id`: Primary key
@@ -101,4 +101,4 @@ You can enhance this project by doing any of the following:
 
 ## Additional Resources
 
-- [SAS Help Center: Training and Scoring with Streaming Linear Regression](https://go.documentation.sas.com/doc/en/espcdc/v_062/espan/p07btvrqyc27h0n106jmlsrfj053.htm#p0vhvkecejjsgkn1r6oxe1446bde)
+- [SAS Help Center: Training and Scoring with Streaming Linear Regression](https://go.documentation.sas.com/doc/en/espcdc/default/espan/p07btvrqyc27h0n106jmlsrfj053.htm#p0vhvkecejjsgkn1r6oxe1446bde)
