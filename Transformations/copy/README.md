@@ -79,8 +79,8 @@ The retention is set as **By time, sliding** with a time limit of 5 seconds and 
 
 In this case, there is an internal timer that starts with the project. At every heartbeat (which is by default 1 second), the Copy window generates Delete events for all the events in its state that are older than the specified time, which in this case is 5 seconds. For an event that comes before 5 seconds a Delete event is generated. In the next second, the window checks again for events older than 5 seconds and generates a Delete event for them. The timer is internal to SAS Event Stream Processing and is independent of the events being pushed.
 
-This type of retention is useful when you want to consistently manage the state of the window through time. The internal timer keeps running even when there are no events or more than average events.
-<!-- what does "more than average events" mean? the wording sounds odd here -->
+This type of retention is useful when you want to consistently manage the state of the window through time. The internal timer does not depend on the incoming events and keeps running even when there are no events or an influx of events.
+
 ### Copy_EventTime_Sliding
 Select the Copy_EventTime_Sliding window to see the properties of the window in the right pane.
 
