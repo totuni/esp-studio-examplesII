@@ -25,7 +25,7 @@ The `input.csv` file is loaded through a file and socket connector in the Source
 
 ## Workflow
 <!-- changed "figure" to "image" since an editor recently told me that the term "figure" is outdated -->
-The following image shows the diagram of the project:
+Here is a diagram of the project:
 
 ![Diagram of the project](img/diagram.png "Diagram of the project")
 
@@ -37,10 +37,9 @@ The following image shows the diagram of the project:
 
 Explore the settings for the w_data window by doing the following steps:
 1. Open the project in SAS Event Stream Processing Studio and select the w_data window.
-2. In the right pane, expad **Input Data (Publisher) Connectors**. Notice that the window is configured with a file and socket connector.
+2. In the right pane, expand **Input Data (Publisher) Connectors**. Notice that the window is configured with a file and socket connector.
 3. Expand **Retention**. Notice that the project only accepts Insert events.
-<!-- is this how icons are typically done? it doesn't look great in the github -->
-5. Click ![Output Schema](img/output-schema-icon.png "Output Schema"). Fields include:
+4. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
    - `id`: Primary key
    - `y`: Target variable
    - `x1` through `x784`: Predictor variables
@@ -51,22 +50,22 @@ This window uses the Streaming Linear Regression algorithm and periodically upda
 
 Explore the setting for the w_train window by doing the following steps:
 1. Select the w_train window.
-2. Expand **Settings** and then expand **Parameters**.
+2. Expand **Settings** and then expand **Parameters**.  
 Parameters:
-- `nInit`: `60000` (Number of events for initialization)
-- `commitInterval`: Model update frequency
-- `dampingFactor`: Controls the influence of older data
-- `centerFlag` / `scaleFlag`: Enable centering and scaling of dense data
-- `modelChoice`:
-- `batchSize`:
+    - `nInit`: `60000` (Number of events for initialization)
+    - `commitInterval`: Model update frequency
+    - `dampingFactor`: Controls the influence of older data
+    - `centerFlag` / `scaleFlag`: Enable centering and scaling of dense data
+    - `modelChoice`:
+    - `batchSize`:
 <!-- what is the significance of modelChoice as a number, and batchSize? -->
 
 <!-- this is not matching up with what's in the UI, I've updated it but let me know if it needs to be switched back -->
-3. Expand **Input Map**.
+3. Expand **Input Map**.  
 Input Map:
-- `inputs`: `y`, `x1` through `x784`
-- `target`: `y`
-- `sparse`: `Select an item`
+    - `inputs`: `y`, `x1` through `x784`
+    - `target`: `y`
+    - `sparse`: `Select an item`
 
 ### w_score
 <!-- same with this, not matching up with the UI -->
@@ -74,14 +73,14 @@ This window scores data using the model from w_train.
 
 Explore the setting for the w_score window by doing the following steps:
 1. Select the w_score window.
-2. Expand **Settings**, expand **Streaming Linear Regression**, then expand **Input Map**.
+2. Expand **Settings**, expand **Streaming Linear Regression**, then expand **Input Map**.  
 Input Map:
-- `inputs`: `y`, `x1` through `x784`
-3. Expand **Output Map**.
+    - `inputs`: `y`, `x1` through `x784`
+3. Expand **Output Map**.  
 Output Map:
-- `yPredictOut`: Field for predicted `y`
-- `modelIdOut`: Model version used for prediction
-- `yOut`
+    - `yPredictOut`: Field for predicted `y`
+    - `modelIdOut`: Model version used for prediction
+    - `yOut`:
   <!-- what is the significance of yOut? -->
 
 The scoring results are written to an output file called `result.out`.
@@ -94,7 +93,7 @@ When you test the project in SAS Event Stream Processing Studio, the results for
 - **w_train**: Displays model commit activity.
 - **w_score**: Displays predictions (`yPredictOut`) and associated model IDs (`modelIdOut`).
 
-The following image shows the results in the scoring window:
+Here are the results in the w_score window:
 
 ![w_score tab](img/w_score.png "w_score tab")
 
