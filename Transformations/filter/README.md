@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project demonstrates how Filter windows operate in SAS Event Stream Processing. This project shows how data streaming in from simulated sensors can be evaluated in real time, and how records meeting a condition are passed downstream for further action or analysis.
+This project demonstrates how Filter windows operate in SAS Event Stream Processing. This project shows how data from simulated sensors can be evaluated in real time, and how records that meet certain conditions are passed downstream for further action or analysis.
 
 ---
 
