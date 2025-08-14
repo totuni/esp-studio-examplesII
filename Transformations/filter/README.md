@@ -1,10 +1,8 @@
-# How do Filter windows work in SAS Event Stream Processing?
+# How do Filter Windows Work in SAS Event Stream Processing?
 
 ## Overview
 
 This project demonstrates how Filter windows operate in SAS Event Stream Processing. This project shows how data from simulated sensors can be evaluated in real time, and how records that meet certain conditions are passed downstream for further action or analysis.
-
----
 
 ## Source Data
 
@@ -24,7 +22,7 @@ This data is published at an interval of 500 milliseconds.
 This project contains two windows that are connected with a simple linear workflow:
 <!-- Wondering if these should be bullets instead of numbers -->
 1. **SourceWindow**: This is a Source window that receives data from the Lua connector. It defines the schema and structure for incoming events.
-2. **Filter**: This is a Filter window that contains logic to check if the temperature is above 75°F. If the temperate is over 75°F, the event is forwarded; otherwise, the event is discarded.  Filter logic can be coded in Lua, Python, C, or Expression Language. The following figure shows how the Filter window is configured to filter the temperatures:
+2. **Filter**: This is a Filter window that contains logic to check if the temperature is above 75°F. If the temperate is over 75°F, the event is forwarded; otherwise, the event is discarded.  Filter logic can be coded in Lua, Python, C, or Expression Engine Language. The following figure shows how the Filter window is configured to filter the temperatures:
 ![image-20250716132959551](img/image-20250716132959551.png)
 
 
@@ -43,5 +41,5 @@ When you test the project, the results for each window appear on separate tabs:
 
 ## Additional Resources
 
-For more information about Filter windows, see:  [Using Filter Windows](https://go.documentation.sas.com/doc/en/espcdc/v_061/espcreatewindows/p1laytbc862ix9n1w5rm9reywors.htm).
+For more information about Filter windows, see:  [Using Filter Windows](https://go.documentation.sas.com/doc/en/espcdc/default/espcreatewindows/p1laytbc862ix9n1w5rm9reywors.htm).
 
