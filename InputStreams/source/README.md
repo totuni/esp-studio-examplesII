@@ -1,90 +1,67 @@
-# Exploring ESP Source Connectors
+# Exploring Connectors in Source Windows
 ## Overview
 
-In SAS Event Stream Processing (ESP), connectors which run inside the ESP server and adapters which run in their own address space serve as the vital interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources — whether that's sensors via MQTT, logs via Kafka, files on disk, or live video streams over RTSP.
+In SAS Event Stream Processing (ESP), connectors that run inside ESP servers and adapters that run inside address spaces are vital. They serve as an interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources. These sources might be sensors through MQTT, logs through Kafka, files on disk, or live video streams over RTSP.
+<!-- is RTSP real-time streaming protocol? if so, we need to expand the abbreviation -->
+Understanding connectors is important for new users of SAS Event Stream Processing. Nearly every real-world application begins with loading data into the system. This example project is designed to help new users visualize and explore how SAS Event Stream Processing handles this through a set of connector configurations. You can load this project into SAS Event Stream Processing Studio or deploy it directly through XML.
 
-Understanding connectors is fundamental for anyone getting started with ESP, as nearly every real-world application begins with getting data into the system. This example project is designed to help new users visualize and explore how ESP handles this through a set of simple, illustrative connector configurations. You can load this project into ESP Studio or deploy it via the XML directly to see how data flows into a source window from different origins.
-
-For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
+For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).  
 
 ## Workflow
 
 The following figure shows the diagram of the project:
 
-![image-20250708160552348](img/image-20250708160552348.png)	
+![image-20250708160552348](img/image-20250708160552348.png)	  
 
-This project is designed to showcase how different types of source windows can be used to ingest data into a SAS Event Stream Processing (ESP) project. Each source window demonstrates a unique input method—such as reading from a CSV file, consuming messages from Kafka or MQTT, streaming from a video file, receiving events from Azure Event Hub, or generating data on a timed interval. In the sections that follow, I will walk through each source window separately, highlighting the connector class it uses, key configuration properties, and any special considerations for activating or customizing the data feed.  
+Source windows:
+- The Source_MQTT window consumes messages from MQTT. 
+- The Source_Eventhub window recieves events from Azure Event Hub.
+- The Source_Kafka window consumes messages from Kafka.
+- The Source_CSV window reads data from a CSV file.
+- The Source_video window streams data in from a video file.
+- The Source_timed window generates data on a timed interval.  
+<!-- fill in the descriptions of all the windows below -->
+Counter windows:
+- The Counter_MQTT window...
+- The Counter_Eventhub window...
+- The Counter_Kafka window...
+- The Counter_CSV window...
+- The Counter_video window...
+- The Counter_timed window...
 
-Connectors in this project are turned off by default and should be turned on as each example is explored.  Connector examples which require external messaging environments to be configured and active will not execute when activated and are shown here purely to aide in future configurations. 
+Connectors are turned off by default in this project and should be turned on as each example is explored. Some examples that require configured and active external messaging environments will not execute when activated. These examples are only shown to help with future configurations. 
 
-### File/Socket Connector (Source_CSV)
+### Source_CSV
 
-The  Source_CSV window demonstrates how to ingest data into ESP using the File/Socket connector, which is one of the most common and flexible ways to bring in structured data from a flat file. In this example, the input is a CSV file containing timestamped geographic data points, such as longitude and latitude.
+The Source_CSV window shows how to ingest data into SAS Event Steam Processing using the File and Socket connector. This is one of the most common and flexible ways to bring in structured data from a flat file. In this example, the input is a CSV file containing timestamped geographic data points such as longitude and latitude.
 
-![image-20250709103953958](img/image-20250709103953958.png)	
+Explore the settings for the Source_CSV window by doing the following steps:
+1. Open the project in SAS Event Stream Processing Studio and select the Source_CSV window.
+2. In the right pane, expand **State and Event Type**. Notice that **Automatically generate the key field** is selected.   
+![image-20250709130543764](img/image-20250709130543764.png)  
+**NOTE:** Automatically generated keys simplify data preparation by guaranteeing uniqueness without manual oversight. All key fields must be unique within a SAS Event Stream Processing project. Duplicate key fields can corrupt data and result in unpredictable behavior.
+3. Expand **Input Data (Publisher) Connectors**. Notice the different types of connectors:
+      - `iss_input`: Reads the file from beginning to end once. This connector is useful for batch-style loading.
+      - `iss_input_repeat`: Repeats the file input a specified number of times (for example, repeatcount = 100).This connector is useful for simulations or testing with looped input data.
+      - `iss_input_rate`: Adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). This connector is useful for...FILL THIS IN  
+**NOTE:** You can view a connector's configuration by selecting the connector from the table, and then clicking edit. These connectors are set to inactive by default. You can enable one or more connectors depending on your scenario.
+<!-- ideally have the edit icon here, not sure where to get that image -->
+4. Expand **Subscriber Connectors**. Notice that this window includes a different type of connector. The MQTToutput connector is configured as a subscriber connector. Subscriber connectors output data from a project to an external file or system. The MQTToutput connector should only be activated when testing the Source_MQTT example.
+5. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
+      - `key`: A unique identifier for each record.
+      - `dt`: A date field parsed using a specified format.
+      - `long`: Longitude.
+      - `lat`: Latitude.
 
-#### Schema
+## Use Case
 
-The schema for the Source_CSV window includes:
-
-- key  (int64, key field): A unique identifier for each record.
-- dt  (date): A date field parsed using a specified format.
-- long (double): Longitude.
-- lat (double): Latitude.
-
-These fields correspond to columns in the source CSV file and are expected to be present in every record.
-
-**Note about event keys**
-
-![image-20250709130543764](img/image-20250709130543764.png)	 
-
-When working with window schemas, you can either include the key field in your CSV file or let SAS ESP auto-generate keys. Manual keys from your CSV provide consistent record identity across runs and enable traceability back to source systems, but require you to ensure all key values are unique in your dataset. Auto-generated keys simplify data preparation by guaranteeing uniqueness without manual oversight. Regardless of approach, all keys must be absolutely unique within the ESP project, as duplicates cause data corruption and unpredictable behavior.  Uniqueness, can also be achieved by selecting multiple schema fields as keys.
-
-#### Connector Variants
-
-Multiple connectors are defined for this window to illustrate different ingestion behaviors:
-
-1. **iss_input**
-
-   - Reads the file once from beginning to end.
-
-   - Useful for batch-style loading.
-
-   - Configured with:
-
-     - ![image-20250709105132718](img/image-20250709105132718.png)	
-
-       - Under All properties the dateformat is set. ![image-20250709110103940](img/image-20250709110103940.png)
-
-       
-
-2. **iss_input_repeat**
-
-   - Repeats the file input a specified number of times (repeatcount=100).
-   - Good for simulation or testing with looping input data.
-
-3. **iss_input_rate**
-
-   - Adds a pacing mechanism to simulate streaming input (rate=1 record per second).
-   - Also includes repeatcount=100 to provide enough data over time.
-
-These connectors are declared but set to inactive by default, allowing the user to manually enable one or more depending on the testing or demo scenario.
-
-#### MQTT Connector Note
-
-Interestingly, this source window also includes a connector of a different class MQTToutput configured as a subscriber.  Connectors can be used to ingest data into a project, pub, short for publisher.  Or sub which is short for subscriber.  Subscriber connectors output data from a project to an external file or system.  The MQTT subscriber connector should only be activated when testing the MQTT source example.  This connector adds ISS data to an MQTT topic so that it can be read of the MQTT example.  
-
-  
-
-#### Use Cases
-
-The file/socket connector is ideal for:
+The File and Socket connector is ideal for the following scenarios:
 
 - Loading historical data during development.
 - Simulating real-time feeds using repeat and rate options.
 - Testing schemas and downstream logic before deploying with live connectors.
 
-#### Testing the Source_timed Window and View the Results	
+## Test the Source_CSV Window and View the Results	
 
 Activate your desired connector as follows and then run the project. 
 
@@ -92,9 +69,7 @@ Activate your desired connector as follows and then run the project.
 
 Output is as follows: 
 
-![image-20250709151235772](img/image-20250709151235772.png)	
-
-------
+![image-20250709151235772](img/image-20250709151235772.png)
 
 ### 2. Timed Source Window (Source_timed)
 
