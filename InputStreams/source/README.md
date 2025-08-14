@@ -40,6 +40,7 @@ Explore the settings for the Source_CSV window by doing the following steps:
 2. In the right pane, expand **State and Event Type**. Notice that **Automatically generate the key field** is selected.   
 ![image-20250709130543764](img/image-20250709130543764.png)  
 **NOTE:** Automatically generated keys simplify data preparation by guaranteeing uniqueness without manual oversight. All key fields must be unique within a SAS Event Stream Processing project. Duplicate key fields can corrupt data and result in unpredictable behavior.
+
 3. Expand **Input Data (Publisher) Connectors**. Notice the different types of connectors:
       - `iss_input`: Reads the file from beginning to end once. This connector is useful for batch-style loading.
       - `iss_input_repeat`: Repeats the file input a specified number of times (for example, repeatcount = 100).This connector is useful for simulations or testing with looped input data.
