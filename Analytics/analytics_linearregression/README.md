@@ -57,7 +57,8 @@ Parameters:
     - `dampingFactor`: Controls the influence of older data
     - `centerFlag` / `scaleFlag`: Enable centering and scaling of dense data
     - `modelChoice`:
-    - `batchSize`:
+    - `batchSize`: Specifies the batch size in processing the training samples. The specified value must be a positive integer. This property affects how much memory is used to buffer data events. If you have sufficient memory, set this to the maximum of nInit and commitInterval.
+    - `maxSparseIndex`: Specifies the number of predictor variables contained in the sparse variable, if it exists. The value should be a nonnegative integer.
 <!-- what is the significance of modelChoice as a number, and batchSize? -->
 
 <!-- this is not matching up with what's in the UI, I've updated it but let me know if it needs to be switched back -->
