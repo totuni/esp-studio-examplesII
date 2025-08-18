@@ -81,7 +81,7 @@ Input Map:
 Output Map:
     - `yPredictOut`: Field for predicted `y`
     - `modelIdOut`: Model version used for prediction
-    - `yOut`:
+    - `yOut`: Field for original `y`
   <!-- what is the significance of yOut? -->
 
 The scoring results are written to an output file called `result.out`.
