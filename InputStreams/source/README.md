@@ -254,17 +254,17 @@ Explore the settings for the Source_Eventhub window by doing the following steps
 1. Open the project in SAS Event Stream Processing Studio and select the Source_video window.
 2. Expand **Input Data (Pubisher) Connectors**.
 3. Select video_publisher from the table, and then click ![edit](img/edit.png). In the **Connector Configuration** window, notice the following properties:
-- `Connector type`: The type is **Video Capture Connector**.
-- `Filename`: This is set to **@ESP_PROJECT_HOME@/test_files/intersection.mp4**, which is the path to the input video file.
-- `Publishformat`: This is set to **wide**, which formats each frame as a single record with the entire image in the blob field.
+      - `Connector type`: The type is **Video Capture Connector**.
+      - `Filename`: This is set to **@ESP_PROJECT_HOME@/test_files/intersection.mp4**, which is the path to the input video file.
+      - `Publishformat`: This is set to **wide**, which formats each frame as a single record with the entire image in the blob field.
 4. Click **All properties...**
-- `inputrate`: This is set to **10** and specifies the desired frame rate in units of frames per second.
-- `repeatcount`: This is set to **999**, which makes the video file repeat multiple times to simulate a continuous feed.
-- `resize_x` and `resize_y`: Resizes each frame to a resolution of `resize_x` by `resize_y` pixels before it is published.
-- `blocksize`: This is set to **1**, which means that one frame is published per batch.
+      - `inputrate`: This is set to **10** and specifies the desired frame rate in units of frames per second.
+      - `repeatcount`: This is set to **999**, which makes the video file repeat multiple times to simulate a continuous feed.
+      - `resize_x` and `resize_y`: Resizes each frame to a resolution of `resize_x` by `resize_y` pixels before it is published.
+      - `blocksize`: This is set to **1**, which means that one frame is published per batch.  
 5 Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
-- `id`: A unique identifier for each frame.
-- `image`: A large, binary object containing the raw video frame data.
+      - `id`: A unique identifier for each frame.
+      - `image`: A large, binary object containing the raw video frame data.
 
 ### Use Cases
 
