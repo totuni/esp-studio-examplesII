@@ -275,7 +275,7 @@ Video capture connectors are used for the following scenarios:
 - Simulating video input using repeatable file-based sources for development and testing.
 - Demonstrating computer vision models and their deployment in an event stream processing pipeline.
 
-### Testing the Source_video Window and View the Results
+### Test the Source_video Window and View the Results
 
 The video connector is declared but set to inactive by default. This allows users to enable it manually when they are ready to run the window. The connector expects that the specified video file exists at the given path and is accessible to the ESP server.
 
