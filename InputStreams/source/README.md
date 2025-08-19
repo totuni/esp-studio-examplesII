@@ -266,7 +266,7 @@ Explore the settings for the Source_Eventhub window by doing the following steps
       - `id`: A unique identifier for each frame.
       - `image`: A large, binary object containing the raw video frame data.
 
-### Use Cases
+### Use Case
 
 Video capture connectors are used for the following scenarios:
 
