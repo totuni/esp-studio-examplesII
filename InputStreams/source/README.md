@@ -29,7 +29,7 @@ Counter windows:
 - The Counter_video window...
 - The Counter_timed window...
 
-Connectors are turned off by default in this project and should be turned on as each example is explored. Some examples that require configured and active external messaging environments will not execute when activated. These examples are only shown to help with future configurations. 
+Some connectors are turned off by default in this project and should be turned on as each example is explored. Some examples that require configured and active external messaging environments will not execute when activated. These examples are only shown to help with future configurations. 
 
 ### Source_CSV
 
@@ -45,9 +45,9 @@ Explore the settings for the Source_CSV window by doing the following steps:
       - `iss_input`: Reads the file from beginning to end once. This connector is useful for batch-style loading.
       - `iss_input_repeat`: Repeats the file input a specified number of times (for example, repeatcount = 100).This connector is useful for simulations or testing with looped input data.
       - `iss_input_rate`: Adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). This connector is useful for...FILL THIS IN  
-**NOTE:** You can view a connector's configuration by selecting the connector from the table, and then clicking edit. These connectors are set to inactive by default. You can enable one or more connectors depending on your scenario.
-<!-- ideally have the edit icon here, not sure where to get that image -->
-4. Expand **Subscriber Connectors**. Notice that this window includes a different type of connector. The MQTToutput connector is configured as a subscriber connector. Subscriber connectors output data from a project to an external file or system. The MQTToutput connector should only be activated when testing the Source_MQTT example.
+      **NOTE:** You can view a connector's configuration by selecting the connector from the table, and then clicking edit. These connectors are set to inactive by default. You can enable one or more connectors depending on your scenario.
+      <!-- ideally have the edit icon here, not sure where to get that image -->
+4. Expand **Subscriber Connectors**. Notice that this window includes a different type of connector. The MQTToutput connector is configured as a subscriber connector. Subscriber connectors output data from a project to an external file or system. The MQTToutput connector should only be activated when testing the Source_MQTT example.  Please note that TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
 5. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
       - `key`: A unique identifier for each record.
       - `dt`: A date field parsed using a specified format.
@@ -179,7 +179,7 @@ Results will be similar to the following:
 
 ### 4. MQTT Source Window (Source_MQTT)
 
-The Source_MQTT window demonstrates how to configure SAS Event Stream Processing (ESP) to receive messages over the MQTT protocol. MQTT is a lightweight publish/subscribe messaging protocol commonly used in IoT applications due to its low overhead and ease of use. This source window is useful for streaming data into ESP from MQTT-compatible devices, brokers, or simulated publishers.
+The Source_MQTT window demonstrates how to configure SAS Event Stream Processing (ESP) to receive messages over the MQTT protocol. MQTT is a lightweight publish/subscribe messaging protocol commonly used in IoT applications due to its low overhead and ease of use. This source window is useful for streaming data into ESP from MQTT-compatible devices, brokers, or simulated publishers.  Please note that TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
 
 **Schema**
 
@@ -352,3 +352,15 @@ Ensure that the Video Capture Connector is activated and run the project.
 
 ## Additional Resources
 For more information, see [SAS Help Center: Using Remove State Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0usk3uf3bcnebn1m99g1jbvvhxu).
+
+### Video Credits and Copyright
+
+
+
+| File Name          | Copyright                                      | Notes                                        |
+| ------------------ | ---------------------------------------------- | -------------------------------------------- |
+| `intersection.mp4` | © 2024 SAS Institute Inc. All Rights Reserved. | To be used only in the context of this demo. |
+
+### Video and Image Restrictions
+
+The videos and images provided in this example are to be used only with the project provided. Using or altering these videos and images beyond the example for any other purpose is prohibited.
