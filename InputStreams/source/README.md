@@ -92,7 +92,7 @@ Explore the settings for the Source_timed window by doing the following steps:
 
 ### Use Case
 
-The timed source window is used for:
+The Source_timed window is used for the following scenarios:
 
 - Testing logic in pattern windows, aggregations, and joins that depend on event timing.
 - Monitoring latency or throughput using predictable input rates.
@@ -127,7 +127,7 @@ Explore the settings for the Source_Kafka window by doing the following steps:
 
 ### Use Case
 
-Kafka source connectors are used for:
+The Kafka source connectors are used for the following scenarios:
 
 - Ingesting large-scale event data from operational systems.
 - Streaming logs, sensor readings, financial transactions, or telemetry data.
@@ -171,7 +171,7 @@ Explore the settings for the Source_MQTT window by doing the following steps:
 
 ### Use Case
 
-MQTT source connectors are used for:  
+MQTT source connectors are used for the following scenarios:  
 - Ingesting IoT sensor data from edge devices.
 - Receiving telemetry from low-power, intermittently connected clients.
 - Demonstrating event flow in low-bandwidth scenarios.
@@ -222,7 +222,7 @@ Explore the settings for the Source_Eventhub window by doing the following steps
 
 ### Use Case
 
-Event Hub connectors are used for:
+Event Hub connectors are used for the following scenarios:
 
 - Connecting to high-volume telemetry or log data pipelines hosted in Azure.
 - Integrating ESP with cloud-first applications or IoT deployments using Azure IoT Hub (which can route data into Event Hubs).
@@ -268,7 +268,7 @@ Explore the settings for the Source_Eventhub window by doing the following steps
 
 ### Use Cases
 
-Video capture connectors are used for:
+Video capture connectors are used for the following scenarios:
 
 - Real-time video analytics such as object detection, motion tracking, or license plate recognition.
 - Streaming camera feeds from RTSP-compatible devices like IP cameras.
