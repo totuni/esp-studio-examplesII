@@ -9,7 +9,7 @@ For more information about how to install and use example projects, see [Using t
 
 ## Workflow
 
-The following figure shows the diagram of the project:
+The following figure shows the workflow diagram of the project:
 
 ![image-20250708160552348](img/image-20250708160552348.png)	  
 
@@ -29,37 +29,38 @@ Counter windows:
 - The Counter_video window...
 - The Counter_timed window...
 
-Some connectors are turned off by default in this project and should be turned on as each example is explored. Some examples that require configured and active external messaging environments will not execute when activated. These examples are only shown to help with future configurations. 
+Some connectors are turned off by default in this project and should be turned on as each example is explored. Examples that require configured and active external messaging environments will not execute when activated. These examples are only shown to help with future configurations. 
 
 ### Source_CSV
 
-The Source_CSV window shows how to ingest data into SAS Event Steam Processing using the File and Socket connector. This is one of the most common and flexible ways to bring in structured data from a flat file. In this example, the input file is a CSV file containing timestamped geographic data points such as longitude and latitude.
+The Source_CSV window shows how to ingest data into SAS Event Steam Processing using the file and socket connector. This is one of the most common and flexible ways to bring in structured data from a flat file. In this example, the input file is a CSV file containing timestamped geographic data points such as longitude and latitude.
 
 Explore the settings for the Source_CSV window by doing the following steps:
+
 1. Open the project in SAS Event Stream Processing Studio and select the Source_CSV window.
 2. In the right pane, expand **State and Event Type**. Notice that **Automatically generate the key field** is selected.   
 ![image-20250709130543764](img/image-20250709130543764.png)  
 **NOTE:** Automatically generated keys simplify data preparation by guaranteeing uniqueness without manual oversight. All key fields must be unique within a SAS Event Stream Processing project. Duplicate key fields can corrupt data and result in unpredictable behavior.
 
 3. Expand **Input Data (Publisher) Connectors**. Notice the different types of connectors:
-      - `iss_input`: Reads the file from beginning to end once. This connector is useful for batch-style loading.
-      - `iss_input_repeat`: Repeats the file input a specified number of times (for example, repeatcount = 100). This connector is useful for simulations or testing with looped input data.
-      - `iss_input_rate`: Adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). This connector is useful for...FILL THIS IN  
+      - `iss_input`: This connector reads the file from beginning to end once. It is useful for batch-style loading.
+      - `iss_input_repeat`: This connector repeats the file input a specified number of times (for example, repeatcount = 100). It is useful for simulations or testing with looped input data.
+      - `iss_input_rate`: This connector adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). It is useful for...FILL THIS IN  
 **NOTE:** You can view a connector's configuration by selecting the connector from the table, and then clicking ![edit](img/edit.png). These connectors are set to inactive by default. You can enable one or more connectors depending on your scenario.
 4. Expand **Subscriber Connectors**. Notice that this window includes a different type of connector. The MQTToutput connector is configured as a subscriber connector. Subscriber connectors output data from a project to an external file or system. The MQTToutput connector should only be activated when testing the Source_MQTT example. TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
 6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
-      - `key`: A unique identifier for each record.
-      - `dt`: A date field parsed using a specified format.
-      - `long`: Longitude.
-      - `lat`: Latitude.
+      - `key`: A unique identifier for each record
+      - `dt`: A date field parsed using a specified format
+      - `long`: Longitude
+      - `lat`: Latitude
 
 ### Use Case
 
-The File and Socket connector is used for the following scenarios:
+The file and socket connector is used for the following scenarios:
 
-- Loading historical data during development.
-- Simulating real-time feeds using repeat and rate options.
-- Testing schemas and downstream logic before deploying with live connectors.
+- Loading historical data during development
+- Simulating real-time feeds using repeat and rate options
+- Testing schemas and downstream logic before deploying with live connectors
 
 ### Test the Source_CSV Window and View the Results	
 1. Activate the connector(s) that you want to use.
@@ -83,21 +84,22 @@ Explore the settings for the Source_timed window by doing the following steps:
    - `Basetime`: This property is set to **2020-06-08 00:56:00**, which is the starting point for the simulated time field. This is helpful for repeatable tests.
    - `Interval`: The interval is set to **60**, which means that events are generated every 60 seconds.
    - `Unit`: The unit is **second**, which works conjointly with the set interval to specify its units.
-4. Click **All properties...** Notice the `label` value is set to **minutely**. This is a fixed string value for the label field in each record.  
-5. Click **OK** to exit the **Connector Configuration** window.
-6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
-    - `id`: A unique identifier for each generated record.
-    - `time`: A timestamp value associated with the generated event.
-    - `label`: A string label that describes of categorizes the event.   
+4. Click **All properties...**
+   - `label`: This is set to **minutely**. This is a fixed string value for the label field in each record.  
+6. Click **OK** to exit the **Connector Configuration** window.
+7. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
+    - `id`: A unique identifier for each generated record
+    - `time`: A timestamp value associated with the generated event
+    - `label`: A string label that describes of categorizes the event   
 
 ### Use Case
 
 The Source_timed window is used for the following scenarios:
 
-- Testing logic in pattern windows, aggregations, and joins that depend on event timing.
-- Monitoring latency or throughput using predictable input rates.
-- Simulating heartbeat events for pipeline activity verification.
-- Driving scheduled processing in demonstrations or training sessions when no live data is available.
+- Testing logic in pattern windows, aggregations, and joins that depend on event timing
+- Monitoring latency or throughput using predictable input rates
+- Simulating heartbeat events for pipeline activity verification
+- Driving scheduled processing in demonstrations or training sessions when no live data is available
 
 ### Test the Source_timed Window and View the Results
 
@@ -115,6 +117,7 @@ The output tab should look similar to the figure below:
 The Source_Kafka window shows how to configure a Source window to receive streaming messages from an external Apache Kafka system. Kafka is a widely used messaging platform designed for high-throughput, fault-tolerant, real-time data streams. This connector is useful for integrating SAS Event Stream Processing with enterprise-grade streaming pipelines where Kafka acts as the central event broker.
 
 Explore the settings for the Source_Kafka window by doing the following steps:
+
 1. Open the project in SAS Event Stream Processing Studio and select the Source_Kafka window.
 2. Expand **Input Data (Publisher) Connectors**. Notice there are two connectors that are both inactive by default:
    <!-- what is a consumer group? is 'lastread' the name of the consumer group? -->
@@ -129,10 +132,10 @@ Explore the settings for the Source_Kafka window by doing the following steps:
 
 The Kafka source connectors are used for the following scenarios:
 
-- Ingesting large-scale event data from operational systems.
-- Streaming logs, sensor readings, financial transactions, or telemetry data.
-- Integrating with enterprise pipelines already built on Kafka or Azure Event Hubs.
-- Supporting real-time analytics on live data as it flows through the Kafka stream.
+- Ingesting large-scale event data from operational systems
+- Streaming logs, sensor readings, financial transactions, or telemetry data
+- Integrating with enterprise pipelines already built on Kafka or Azure Event Hubs
+- Supporting real-time analytics on live data as it flows through the Kafka stream
 
 ### Test the Source_Kafka Window and View the Results  
 
@@ -153,9 +156,10 @@ The output tab should look similar to the figure below:
 
 ### Source_MQTT
 
-The Source_MQTT window demonstrates how to configure SAS Event Stream Processing (ESP) to receive messages over the MQTT protocol. MQTT is a lightweight publish/subscribe messaging protocol commonly used in IoT applications due to its low overhead and ease of use. This source window is useful for streaming data into ESP from MQTT-compatible devices, brokers, or simulated publishers.  Please note that TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
+The Source_MQTT window demonstrates how to configure SAS Event Stream Processing (ESP) to receive messages over the MQTT protocol. MQTT is a lightweight publish/subscribe messaging protocol commonly used in IoT applications due to its low overhead and ease of use. This source window is useful for streaming data into ESP from MQTT-compatible devices, brokers, or simulated publishers. TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
 
 Explore the settings for the Source_MQTT window by doing the following steps:
+
 1. Open the project in SAS Event Stream Processing Studio and select the Source_MQTT window.
 2. Expand **Input Data (Publisher) Connectors**. Notice the connector named MQTTinput.
 3. Select MQTTinput from the table, and then click ![edit](img/edit.png). In the **Connector Configuration** window, notice the following properties:
@@ -172,17 +176,16 @@ Explore the settings for the Source_MQTT window by doing the following steps:
 ### Use Case
 
 MQTT source connectors are used for the following scenarios:  
-- Ingesting IoT sensor data from edge devices.
-- Receiving telemetry from low-power, intermittently connected clients.
-- Demonstrating event flow in low-bandwidth scenarios.
-- Learning or testing publish/subscribe patterns using public or local brokers.
+- Ingesting IoT sensor data from edge devices
+- Receiving telemetry from low-power, intermittently connected clients
+- Demonstrating event flow in low-bandwidth scenarios
+- Learning or testing publish/subscribe patterns using public or local brokers
 
 ### Test the Source_MQTT Window and View the Results
 
 This source window alone will not display any data unless a publisher is actively sending messages to the ExampleforESP topic on the public broker at `test.mosquitto.org`. This project includes a built-in MQTT subscriber connector attached to the CSV source window, which acts as a publisher.
 
 To see data flow through the MQTT topic and into this window, do the following:
-<!-- what do you mean by MQTT topic? -->
 1. Select the Source_CSV window.
 2. Expand **Input Data (Publisher) Connectors**.
 3. Activate the iss_input_repeat connector by selecting the check box under the **Active** column. This connector enables you to observe individual messages that flow through the system. The pacing of the connector is helpful for debugging, demonstrations, and learning.
@@ -204,21 +207,23 @@ The output tab should look similar to the figure below:
 The Source_Eventhub window shows how to receive streaming data from Azure Event Hubs. Azure Event Hubs is a highly scalable, cloud-based data streaming platform. Azure Event Hubs is designed for ingesting millions of events per second from connected devices, services, or applications. Its design makes it an excellent source for real-time analytics pipelines in SAS Event Stream Processing. This window is useful when integrating SAS Event Stream Processing with cloud-hosted event sources, such as IoT telemetry, application logs, or metrics produced by Azure-native services.
 
 Explore the settings for the Source_Eventhub window by doing the following steps:
+
 1. Open the project in SAS Event Stream Processing Studio and select the Source_Eventhub window.
 2. Expand **Input Data (Publisher) Connectors**. Notice the connector named EventhubInput.
 3. Select EventhubInput from the table, and then click ![edit](img/edit.png). In the **Connector Configuration** window, notice the following properties:
    - `Connector type`: The type is **Microsoft Azure Event Hubs Connector**.
-   - `Eventhubsincludeindex` = true — Ensures that the message index is included in the stream. <!-- not sure where to see this? can't find it in the UI -->
    - `Eventhubsconnectionstring`: Contains the full connection string needed to authenticate and connect to the Azure Event Hub instance.
    - `Eventhubspath`: This is set to **lorahub**, which specifies the Azure Event Hub namespace or entity path to consume messages from.
    - `Eventhubsconsumergroup`: This is set to **esp** and designates the consumer group to track offset and session state.
    - `Eventhubspartition`: = This is set to **0**, which specifies the partition to read from.
-   - `Eventhubsformat`: = This is set to **opaque** so that the connector treats incoming data as unparsed strings.  
+   - `Eventhubsformat`: = This is set to **opaque** so that the connector treats incoming data as unparsed strings.
+4. Click **All properties...**
+   - `Eventhubsincludeindex`: This is set to **true**, which ensures that the message index is included in the stream.
   **NOTE:** These settings are designed to work with an Azure Event Hub that has been pre-configured to stream data into the `lorahub` namespace, which uses shared access credentials provided in the connection string.  
-
-4. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
-      - `index`: A numeric identifier that typically corresponds to the event's position in the Event Hub stream. <!-- is there a case in which it doesn't correspond? -->
-      - `message`: The raw message content from the event that is treated as a plain string.
+5. Click **OK** to exit the **Connector Configuration** window.
+6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
+      - `index`: A numeric identifier that typically corresponds to the event's position in the Event Hub stream <!-- is there a case in which it doesn't correspond? -->
+      - `message`: The raw message content from the event that is treated as a plain string
 
 ### Use Case
 
@@ -261,10 +266,11 @@ Explore the settings for the Source_Eventhub window by doing the following steps
       - `inputrate`: This is set to **10** and specifies the desired frame rate in units of frames per second.
       - `repeatcount`: This is set to **999**, which makes the video file repeat multiple times to simulate a continuous feed.
       - `resize_x` and `resize_y`: Resizes each frame to a resolution of `resize_x` by `resize_y` pixels before it is published.
-      - `blocksize`: This is set to **1**, which means that one frame is published per batch.  
-5 Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
-      - `id`: A unique identifier for each frame.
-      - `image`: A large, binary object containing the raw video frame data.
+      - `blocksize`: This is set to **1**, which means that one frame is published per batch.
+5. Click **OK** to exit the **Connector Configuration** window. 
+6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
+      - `id`: A unique identifier for each frame
+      - `image`: A large, binary object containing the raw video frame data
 
 ### Use Case
 
