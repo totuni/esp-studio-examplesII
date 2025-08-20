@@ -4,9 +4,6 @@
 
 This example demonstrates how to use SAS Event Stream Processing to build and continuously update a linear regression model on a high-dimensional stream of data in real time. It includes a Source window that ingests streaming data, a Training window that updates a regression model, and a Scoring window that applies the model to incoming data points.
 
-**NOTE:**  
-Only use this example with SAS Event Stream Processing 2024.01 and later.
-
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
@@ -56,7 +53,6 @@ Parameters:
     - `commitInterval`: Model update frequency
     - `dampingFactor`: Controls the influence of older data
     - `centerFlag` / `scaleFlag`: Enable centering and scaling of dense data
-    - `modelChoice`:
     - `batchSize`: Specifies the batch size in processing the training samples. The specified value must be a positive integer. This property affects how much memory is used to buffer data events. If you have sufficient memory, set this to the maximum of nInit and commitInterval.
     - `maxSparseIndex`: Specifies the number of predictor variables contained in the sparse variable, if it exists. The value should be a nonnegative integer.
 <!-- what is the significance of modelChoice as a number, and batchSize? -->
@@ -82,7 +78,6 @@ Output Map:
     - `yPredictOut`: Field for predicted `y`
     - `modelIdOut`: Model version used for prediction
     - `yOut`: Field for original `y`
-  <!-- what is the significance of yOut? -->
 
 The scoring results are written to an output file called `result.out`.
 
@@ -90,9 +85,9 @@ The scoring results are written to an output file called `result.out`.
 <!-- Not sure if we should include language telling the user to let the project run until it hits the 70000th id, otherwise the w_train and w_score tabs are empty -->
 When you test the project in SAS Event Stream Processing Studio, the results for each window appear in separate tabs:
 
-- **w_data**: Displays incoming data.
-- **w_train**: Displays model commit activity.
-- **w_score**: Displays predictions (`yPredictOut`) and associated model IDs (`modelIdOut`).
+- **w_data**: Displays incoming data
+- **w_train**: Displays model commit activity
+- **w_score**: Displays predictions (`yPredictOut`) and associated model IDs (`modelIdOut`)
 
 Here are the results in the w_score window:
 
@@ -101,10 +96,10 @@ Here are the results in the w_score window:
 ## Next Steps
 
 You can enhance this project by doing any of the following:
-- Replacing the CSV source with a live sensor feed.
-- Adding filters or aggregations before training.
-- Incorporating Grafana to visualize predicted versus actual values over time.
-- Experimenting with different feature sets or preprocessing methods.
+- Replacing the CSV source with a live sensor feed
+- Adding filters or aggregations before training
+- Incorporating Grafana to visualize predicted versus actual values over time
+- Experimenting with different feature sets or preprocessing methods
 
 ## Additional Resources
 
