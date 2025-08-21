@@ -3,9 +3,13 @@
 ## Overview
 This example demonstrates all the various ways to use SAS ESP join windows with two sample data sources. Join windows in SAS ESP allow you to combine streaming data from multiple sources based on specified join conditions.
 
-**Dimensions** = Small, reference/lookup tables (naturally use all their few keys)
+### Understanding Fact and Dimension Inputs
 
-**Facts** = Large, transactional streams (naturally use only some of their many keys)
+In SAS ESP streaming analytics, understanding the distinction between facts and dimensions is crucial for designing effective join operations.
+
+**Dimensions** = Small to large, reference/lookup tables. When tables are large, indexing may provide improved performance.
+
+**Facts** = Large, transactional streams.
 
 In a **join window** in SAS ESP:
 
@@ -13,11 +17,11 @@ In a **join window** in SAS ESP:
 - The **left (fact) input** is usually the stream of events you want to enrich — e.g., sensor readings, transactions, clickstream.
 - The **right (dimension) input** is typically a lookup or reference stream with the fields you’ll use to join on — e.g., customer master data, machine configuration.
 
-
+This fundamental difference in data characteristics drives how SAS ESP optimizes join operations and determines which stream should be assigned to which input for best performance.
 
 ## Sample Data Sources
 
-talk about input files.  orders and customers
+In this example, two input sources are used. These being orders and customers.  The CustomerID column will be used as the common key linking the two tables. 
 
 ## Join Window Types and Configurations
 
