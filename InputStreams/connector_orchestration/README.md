@@ -8,10 +8,10 @@ This SAS Event Stream Processing project demonstrates connector orchestration. C
 
 There are two primary data sources in this project:
 
-- `Employee Data`: Static reference data about employees (for example, name or position) published via a Python connector. This acts as metadata for enriching swipe data.
-- `Badge Swipes`: Simulated streaming data representing badge swipes at different buildings, generated using a Python-based publisher that emits random events over time.
+- `Employee Data`: Static reference data about employees (for example, name or position) published via a Python connector. This acts as metadata for enriching the swipe data.
+- `Badge Swipes`: Simulated streaming data that represents badge swipes at different buildings. This data is generated using a Python-based publisher that emits random events over time.
 
-The project assumes that badge swipe data is enriched with employee information before being used for pattern detection.
+**NOTE:** The project assumes that badge swipe data is enriched with employee information before being used for pattern detection.
 
 ### Workflow
 
@@ -21,7 +21,7 @@ The project consists of the following windows:
 - `Employee_Data`: A Source window that ingests static employee records using a Python connector named campus_metadata.
 - `badge_swipes`: A Source window that ingests simulated streaming badge swipe events using a Python connector named card_reader.
 - `Enriched_Data`: A Join window that performs a left outer join of badge_swipes with Employee_Data on employee ID. This window combines real-time badge activity with descriptive metadata.
-- `Pattern_2_buildings`: A Pattern window that detects cases where employees badge into two different buildings within five minutes, which indicates suspicious behavior. It outputs these violations to a local file using a file system connector named record_violations.
+- `Pattern_2_buildings`: A Pattern window that detects cases where employees badge into two different buildings within five minutes. It outputs these violations to a local file using a file system connector named record_violations.
 
 ### Orchestration
 
@@ -29,7 +29,7 @@ The project consists of the following windows:
 
 To access the project's connector orchestration, do the following steps:
 1. Click *add button image here*.
-2. In the right side pane, expand **Connector Orchestration**.
+2. In the right pane, expand **Connector Orchestration**.
 
 Rather than starting all the connectors simultaneously, this project uses connector groups and edges to define dependencies between them. Here is how the orchestration logic works:
 
