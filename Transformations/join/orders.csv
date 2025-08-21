@@ -1,0 +1,5 @@
+opcode,type,OrderID,CustomerID,Product,Amount
+i,n,ORD-001,111,Laptop,$1200
+i,n,ORD-002,222,Phone,$800
+i,n,ORD-003,222,Tablet,$600
+i,n,ORD-004,555,Monitor,$300
