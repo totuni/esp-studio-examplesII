@@ -28,7 +28,7 @@ The project consists of the following windows:
 ![image-20250714140753097](img/image-20250714140753097.png)	
 
 To access the project's connector orchestration, do the following steps:
-1. Click *add button image here*.
+1. Click ![Project button](img/project-properties-button.png "Project button").
 2. In the right pane, expand **Connector Orchestration**.
 
 Rather than starting all the connectors simultaneously, this project uses connector groups and edges to define dependencies between them. Here is how the orchestration logic works:
@@ -55,19 +55,19 @@ This orchestration ensures the following:
 
 ### Test the Project and View the Results
 
-When you test the project, the results for each window appear on separate tabs. The following figure shows the results for the Employee_Data tab, which represents the campus metadata:
+When you test the project, the results for each window appear on separate tabs. The following figure shows the results for the **Employee_Data** tab, which represents the campus metadata:
 
 ![image-20250714143637846](img/image-20250714143637846.png)
 
-The following figure shows the simulated badge reader data as it loads into the project: 	
+The following figure shows the **badge_swipes** tab, which contains simulated badge reader data: 	
 
 ![image-20250714143851929](img/image-20250714143851929-1752518701832-1.png)	
 
-Once both sets of data are loaded, they are combined using a Join window, which creates the enriched data:
+Once both sets of data are loaded, they are combined using a Join window. The combined data is displayed in the **Enriched_Data** tab:
 
 ![image-20250714143916171](img/image-20250714143916171.png)
 
-A Pattern window is used to detect if an employee badges into two buildings in a short period of time. Assuming a person cannot be in two places at once, a potential security violation is detected and the two buildings in question are logged: 
+A Pattern window is used to detect if an employee badges into two different buildings in a short period of time. Assuming a person cannot be in two places at once, a potential security violation is detected and the two buildings in question are logged in the **Pattern_2_buildings** tab: 
 
 ![image-20250714143941993](img/image-20250714143941993.png)
 
@@ -79,5 +79,5 @@ The results of the security audit are logged to a time stamped file and written 
 
 For more information about SAS Event Stream Processing connector orchestration, see the official documentation:  
 
-For more information, see [SAS Help Center: Orchestrating Connectors](https://helpcenter.unx.sas.com/test/doc/en/espcdc/v_061/espca/p1nhdjrc9n0nnmn1fxqnyc0nihzz.htm#p00oj8brm4320nn1h6fjuxz8ayd4).
+For more information, see [SAS Help Center: Orchestrating Connectors](https://helpcenter.unx.sas.com/test/doc/en/espcdc/default/espca/p1nhdjrc9n0nnmn1fxqnyc0nihzz.htm#p00oj8brm4320nn1h6fjuxz8ayd4).
 
