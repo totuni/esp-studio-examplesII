@@ -35,7 +35,7 @@ Rather than starting all the connectors simultaneously, this project uses connec
 
 1. **First_EmployeeData**
    - This connector group contains the campus_metadata connector for loading employee metadata.
-   - It is required to finish before other connectors begin, ensuring that reference data is available for joins.   <!-- finish what? -->
+   - The connector must reach its target state of **Finished** before other connectors begin. This ensures that reference data is available for joins.
 2. **Second_OutputViolations**
    - This connector group contains the record_violations file system connector that outputs detected violations.
    - Employee data must finish loading before this group starts.
