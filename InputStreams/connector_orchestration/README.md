@@ -38,7 +38,7 @@ Rather than starting all the connectors simultaneously, this project uses connec
    - It is required to finish before other connectors begin, ensuring that reference data is available for joins.   <!-- finish what? -->
 2. **Second_OutputViolations**
    - This connector group contains the record_violations file system connector that outputs detected violations.
-   - This group depends on the completion of employee data loading before it starts.
+   - Employee data must finish loading before this group starts.
 3. **Third_badgereaderdata**
    - This connector group contains the card_reader connector that generates swipe data.
    - It waits until the output connector is running to ensure that the system is ready to process and capture violations as they occur.
