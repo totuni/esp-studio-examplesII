@@ -21,9 +21,11 @@ This fundamental difference in data characteristics drives how SAS ESP optimizes
 
 ## Sample Data Sources
 
-In this example, two input sources are used. These being orders and customers.  The CustomerID column will be used as the common key linking the two tables. 
+In this example, we’re working with two data sources: **Orders** and **Customers**. The **CustomerID** column connects the two, serving as the common key. Here, the **Customers** table provides additional information to enrich the data, while the **Orders** table represents the continuous stream of events that we want to enhance with that information.
 
 ## Join Window Types and Configurations
+
+In this section, we’ll explore four common types of joins: **Inner Join, Left Outer Join, Right Outer Join, and Full Outer Join**. Joins are used to combine data from multiple sources based on a shared key, allowing us to bring together related information in meaningful ways. Each join type determines which records from the input tables are included in the result, and understanding the differences is key to choosing the right approach for your data.
 
 ### Inner Join
 **Purpose**: Shows only records where CustomerID exists in both tables. Records are matched based on the CustomerID key (shown in colors).
