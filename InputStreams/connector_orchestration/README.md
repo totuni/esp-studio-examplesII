@@ -50,7 +50,7 @@ Rather than starting all the connectors simultaneously, this project uses connec
 This orchestration ensures the following:
 
 - Joins are not attempted until reference data is loaded.
-- Violations can be written before swipe events are processed. <!-- can or cannot? is it fair to say "are"? -->
+- Violations cannot be written before swipe events are processed.
 - Simulated data is not lost or processed prematurely.
 
 ### Test the Project and View the Results
