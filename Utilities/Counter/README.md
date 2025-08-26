@@ -82,3 +82,15 @@ By comparing the **event rates across the counter windows**, this project gives 
 For more information on the counter window and how to configure it, refer to the official SAS documentation:
 
 📘 [SAS ESP Counter Window Documentation](https://go.documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/titlepage.htm)
+
+### Video Credits and Copyright
+
+
+
+| File Name          | Copyright                                      | Notes                                        |
+| ------------------ | ---------------------------------------------- | -------------------------------------------- |
+| `intersection.mp4` | © 2024 SAS Institute Inc. All Rights Reserved. | To be used only in the context of this demo. |
+
+### Video and Image Restrictions
+
+The videos and images provided in this example are to be used only with the project provided. Using or altering these videos and images beyond the example for any other purpose is prohibited.
