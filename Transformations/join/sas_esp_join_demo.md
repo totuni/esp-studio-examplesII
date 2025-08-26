@@ -1,7 +1,7 @@
 # SAS ESP Join Window 
 
 ## Overview
-This example demonstrates all the various ways to use SAS ESP join windows with two sample data sources. Join windows in SAS ESP allow you to combine streaming data from multiple sources based on specified join conditions.
+This example demonstrates all the various ways to use SAS ESP join windows with three sample data sources. Join windows in SAS ESP allow you to combine streaming data from multiple sources based on specified join conditions.
 
 ### Understanding Fact and Dimension Inputs
 
@@ -19,15 +19,67 @@ In a **join window** in SAS ESP:
 
 This fundamental difference in data characteristics drives how SAS ESP optimizes join operations and determines which stream should be assigned to which input for best performance.
 
+## Workflow
+
+![image-20250826155440672](img/image-20250826155440672.png)
+
+The project shown above will be used to show how different join types behave when combining a streaming fact table with dimension/lookup tables.
+
+------
+
+### **Top part: Dimension (lookup) tables**
+
+- **Customers** → static (lookup) info about customers (e.g., ID, name, city).
+- **Loyalty** → static (lookup) info about loyalty status (e.g., Silver, Gold, Bronze).
+
+These are *dimension windows*, meaning they provide reference data to enrich the fact stream.
+
+------
+
+### **Middle part: Fact (streaming) table**
+
+- **Orders** → the *fact window*, which receives a continuous stream of events (e.g., new customer orders).
+
+This is the “driver” stream that you want to enrich with data from Customers and Loyalty.
+
+------
+
+### **Join windows**
+
+#### **Why FullOuterJoin is used in the middle**
+
+**FullOuterJoin**: combines **Customers** + **Loyalty**, so that downstream you have a unified view of customer + loyalty info. This is often used as a *pre-join step* to simplify your pipeline.   That way, instead of joining Orders against two tables separately, you have a single unified dimension table containing all the info. Then you can test different join strategies between streaming orders and this dimension.   It should also be noted that the Full outer joins only can only combine two dimension tables.  Therefore, it is not possible to show the full outer join using the orders fact table.  
+
+#### **Bottom part: Different join types**
+
+From there, the **Orders** fact stream is joined with the customer+loyalty data using all three join types, so you can compare behavior:
+
+1. **InnerJoin**
+2. **LeftOuterJoin**
+3. **RightOuterJoin**
+
+
+
 ## Sample Data Sources
 
-In this example, we’re working with two data sources: **Orders** and **Customers**. The **CustomerID** column connects the two, serving as the common key. Here, the **Customers** table provides additional information to enrich the data, while the **Orders** table represents the continuous stream of events that we want to enhance with that information.
+In this example, we’re working with the following data sources: **Orders**, **Loyalty** and **Customers**. The **CustomerID** column serves as the common key. Here, the **Customers** and **Loyalty** tables provide additional information to enrich the data, while the **Orders** table represents the continuous stream of events that we want to enhance with that information.
 
 ## Join Window Types and Configurations
 
 In this section, we’ll explore four common types of joins: **Inner Join, Left Outer Join, Right Outer Join, and Full Outer Join**. Joins are used to combine data from multiple sources based on a shared key, allowing us to bring together related information in meaningful ways. Each join type determines which records from the input tables are included in the result, and understanding the differences is key to choosing the right approach for your data.
 
+### Full Outer Join
+
+**Purpose**:  A **full outer join** brings together **all rows from both tables**, matching them where keys line up, and filling in `NULL` (or blanks) where they don’t.  In our customer example, we want to include all customers whether they are part of the loyalty program or not.  
+
+**ESP Configuration**:
+
+![image-20250826163711614](img/image-20250826163711614.png)	
+
+
+
 ### Inner Join
+
 **Purpose**: Shows only records where CustomerID exists in both tables. Records are matched based on the CustomerID key (shown in colors).
 
 ![image-20250820132830786](img/image-20250820132830786.png)	
@@ -59,10 +111,6 @@ In this section, we’ll explore four common types of joins: **Inner Join, Left 
 ![image-20250820133746229](img/image-20250820133746229.png)	
 
 
-### Full Outer Join
-**Purpose**: Shows ALL customers and ALL orders. Missing data is filled with NULL values.
-
-**ESP Configuration**:
 
 ![image-20250820133851284](img/image-20250820133851284.png)	
 
