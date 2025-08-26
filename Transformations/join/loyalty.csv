@@ -1,0 +1,5 @@
+opcode,type,CustomerID,Loyalty
+i,n,111,Gold
+i,n,222,Silver
+i,n,333,Bronze
+i,n,444,Silver
