@@ -78,19 +78,19 @@ To test the project, do the following steps:
 
 When you test the project, the results for each window appear on separate tabs. The main idea of this project is how event volume and counter output vary significantly depending on the Source window type and connector configuration.
 
-The following figure shows the results for the Source_CSV tab:
+The following figure shows the results for the Counter_CSV tab:
 
 ![image-20250717102824215](img/image-20250717102824215.png)
 
 The Source_CSV window reads a file containing many rows of data. When using an unrestricted file connector (for example, `repeatcount` without throttling), it can emit hundreds or thousands of events rapidly. As a result, the Counter_CSV window often shows the highest count in the shortest time. This makes it ideal for stress testing or measuring batch ingestion rates.
 
-The following figure shows the results for the Source_video tab:
+The following figure shows the results for the Counter_video tab:
 
 ![image-20250717102847154](img/image-20250717102847154.png)
 
 The Source_video window reads a video file and emits one event per frame, based on the `inputrate` and `blocksize`. In this case, the video connector is configured to emit events at 10 frames per second. As a result, the Counter_video window reflects a moderate and consistent stream of events. The count increases at a steady rate that is also slower than the CSV source.
 
-The following figure shows the results for the Source_timed tab:
+The following figure shows the results for the Counter_timed tab:
 
 ![image-20250717102919833](img/image-20250717102919833.png)
 
