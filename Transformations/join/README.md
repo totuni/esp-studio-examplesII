@@ -62,6 +62,8 @@ From there, the **Orders** fact stream is joined with the customer+loyalty data 
 
 ## Sample Data Sources
 
+![image-20250902151250980](img/image-20250902151250980.png)
+
 In this example, we’re working with the following data sources: **Orders**, **Loyalty** and **Customers**. The **CustomerID** column serves as the common key. Here, the **Customers** and **Loyalty** tables provide additional information to enrich the data, while the **Orders** table represents the continuous stream of events that we want to enhance with that information.
 
 ## Join Window Types and Configurations
@@ -76,15 +78,26 @@ In this section, we’ll explore four common types of joins: **Inner Join, Left 
 
 ![image-20250826163711614](img/image-20250826163711614.png)	
 
+![image-20250902151811114](img/image-20250902151811114.png)		
 
+- **Matched records (111, 222, 333):** Both tables had these CustomerIDs, so all columns are populated
+- **Customer 555 (Diana):** Exists only in Customers table, so Loyalty is NULL
+- **Customer 666:** Exists only in Loyalty table, so CustomerName and Amount are NULL
+- This new combined table will be used for the remaining join examples.
 
 ### Inner Join
 
-**Purpose**: Shows only records where CustomerID exists in both tables. Records are matched based on the CustomerID key (shown in colors).
+**Purpose**: Shows only records where CustomerID exists in both tables. Records are matched based on the CustomerID key. 
 
-![image-20250820132830786](img/image-20250820132830786.png)	
+![image-20250902152326483](img/image-20250902152326483.png)
 
-![image-20250820132903526](img/image-20250820132903526.png)	
+![image-20250902155417514](img/image-20250902155417514.png)	
+
+With Orders acting as the **fact table** and Customers/Loyalty as the combined **dimension table**, a record is generated for each order received where the CustomerID matches. 
+
+- **Matched records (111, 222, 555):** Both tables had these CustomerIDs, so all columns are populated
+- **Customer 555 (Diana):** Loyalty is set to NULL
+- **Order 999 ** Does not exist in the dimension table and is therefore dropped
 
 
 
@@ -125,3 +138,4 @@ In this section, we’ll explore four common types of joins: **Inner Join, Left 
 
 
 This demo provides a comprehensive overview of all SAS ESP join window capabilities using realistic sample data that clearly demonstrates the differences between each join type.
+
