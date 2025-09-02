@@ -78,6 +78,12 @@ In this section, we’ll explore four common types of joins: **Inner Join, Left 
 
 ![image-20250826163711614](img/image-20250826163711614.png)	
 
+Note that the schema contains elements from the left and right side of the join and are denoted by a "l" or "r" in the Expression column of the schema. 
+
+![image-20250902171628292](img/image-20250902171628292.png)	
+
+Here you can see that Loyalty is coming from the right side of the join while CustomerName and City come from the left. 
+
 ![image-20250902151811114](img/image-20250902151811114.png)		
 
 - **Matched records (111, 222, 333):** Both tables had these CustomerIDs, so all columns are populated
@@ -85,11 +91,29 @@ In this section, we’ll explore four common types of joins: **Inner Join, Left 
 - **Customer 666:** Exists only in Loyalty table, so CustomerName and Amount are NULL
 - This new combined table will be used for the remaining join examples.
 
+**Test the Project and View the Results**:
+
+When running this project in test mode the FullOuterJoin tab shows the following: 
+
+![image-20250902160511702](img/image-20250902160511702.png)	
+
+Note the Customer table records are inserted first and later updated when the Loyalty data is received.  The deletes of the records before the update can be ignored.  	
+
 ### Inner Join
 
 **Purpose**: Shows only records where CustomerID exists in both tables. Records are matched based on the CustomerID key. 
 
-![image-20250902152326483](img/image-20250902152326483.png)
+**ESP Configuration**:
+
+![image-20250902171209414](img/image-20250902171209414.png)	
+
+Note that the schema contains elements from the left and right side of the join and are denoted by a "l" or "r" in the Expression column of the schema.
+
+![image-20250902171802303](img/image-20250902171802303.png)	
+
+
+
+![image-20250902162749219](img/image-20250902162749219.png)	
 
 ![image-20250902155417514](img/image-20250902155417514.png)	
 
@@ -99,41 +123,31 @@ With Orders acting as the **fact table** and Customers/Loyalty as the combined *
 - **Customer 555 (Diana):** Loyalty is set to NULL
 - **Order 999 ** Does not exist in the dimension table and is therefore dropped
 
+**Test the Project and View the Results**:
 
+![image-20250902163002309](img/image-20250902163002309.png)
 
 ### Left Outer Join
-**Purpose**: Returns all records from the left stream, with matching records from the right stream where available.
+**Purpose**: Returns all records from the fact stream, with matching records from the dimension stream where available.  
 
-![image-20250820133419283](img/image-20250820133419283.png)	
+![image-20250902163649185](img/image-20250902163649185.png)		
 
-![image-20250820133450163](img/image-20250820133450163.png)	
+![image-20250902163855496](img/image-20250902163855496.png)		
 
-**Result**:
+Here we create a record for every event which enters the steam on the fact side, which in this case is the left side.  Therefore, ORD005 creates a joined event even when all the dimension fields are NULL.
 
+**Test the Project and View the Results**:
 
+![image-20250902164233160](img/image-20250902164233160.png)
 
 ### Right Outer Join
 **Purpose**: Returns all records from the right stream, with matching records from the left stream where available.
 
-![image-20250820133715349](img/image-20250820133715349.png)	
+This join type is not compatible with our project because ESP joins Fact tables (streaming) with Dimension tables (lookup).  Since our Orders table is on the left side, when you try to pick the join type of Right Outer join ESP studio will give you the following error. 
 
+![image-20250902165914825](img/image-20250902165914825.png)	
 
-
-**Result**:
-
-![image-20250820133746229](img/image-20250820133746229.png)	
-
-
-
-![image-20250820133851284](img/image-20250820133851284.png)	
-
-**result:**
-
-![image-20250820133928451](img/image-20250820133928451.png)	
-
-
-
-
+The only way to fix this issue is to re-arrange the project so that the Fact tables are streaming in on the right side.  This or course makes no sense to do because when you do that you have logically created the same functionality as a left outer join.  Since it is logically equivalent to the left outer join there is no added functionality to used it over convenience.  
 
 
 
