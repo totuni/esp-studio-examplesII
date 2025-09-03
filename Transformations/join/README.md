@@ -21,7 +21,7 @@ This fundamental difference in data characteristics drives how SAS ESP optimizes
 
 ## Workflow
 
-![image-20250826155440672](img/image-20250826155440672.png)
+![image-20250903131648794](img/image-20250903131648794.png)	
 
 The project shown above will be used to show how different join types behave when combining a streaming fact table with dimension/lookup tables.
 
@@ -48,7 +48,7 @@ This is the “driver” stream that you want to enrich with data from Customers
 
 #### **Why FullOuterJoin is used in the middle**
 
-**FullOuterJoin**: combines **Customers** + **Loyalty**, so that downstream you have a unified view of customer + loyalty info. This is often used as a *pre-join step* to simplify your pipeline.   That way, instead of joining Orders against two tables separately, you have a single unified dimension table containing all the info. Then you can test different join strategies between streaming orders and this dimension.   It should also be noted that the Full outer joins only can only combine two dimension tables.  Therefore, it is not possible to show the full outer join using the orders fact table.  
+**FullOuterJoin**: combines **Customers** + **Loyalty**, so that downstream you have a unified view of customer + loyalty info. This is often used as a *pre-join step* to simplify your pipeline.   That way, instead of joining Orders against two tables separately, you have a single unified dimension table containing all the info. Then you can test different join strategies between streaming orders and this dimension.   It should also be noted that the Full outer joins only can only combine two dimension tables.  Therefore, it is not possible to show the full outer join using the Orders fact table.  
 
 #### **Bottom part: Different join types**
 
@@ -68,7 +68,7 @@ In this example, we’re working with the following data sources: **Orders**, **
 
 ## Join Window Types and Configurations
 
-In this section, we’ll explore four common types of joins: **Inner Join, Left Outer Join, Right Outer Join, and Full Outer Join**. Joins are used to combine data from multiple sources based on a shared key, allowing us to bring together related information in meaningful ways. Each join type determines which records from the input tables are included in the result, and understanding the differences is key to choosing the right approach for your data.
+In this section, we’ll explore four common types of joins: **Inner Join, Left Outer Join, Right Outer Join, and Full Outer Join**. Joins are used to combine data from multiple sources based on a shared key, allowing us to bring together related information in meaningful ways. Each join type determines which records from the input tables are included in the result, and understanding the differences is key to choosing the right approach for your data.  
 
 ### Full Outer Join
 
@@ -147,9 +147,41 @@ This join type is not compatible with our project because ESP joins Fact tables 
 
 ![image-20250902165914825](img/image-20250902165914825.png)	
 
-The only way to fix this issue is to re-arrange the project so that the Fact tables are streaming in on the right side.  This or course makes no sense to do because when you do that you have logically created the same functionality as a left outer join.  Since it is logically equivalent to the left outer join there is no added functionality to used it over convenience.  
+The only way to fix this issue is to re-arrange the project so that the Fact tables are streaming in on the right side.  In order to fix this we need to rebuild the schema entries so that the fact tables are coming from the right side.  Under settings for the RightOuterJoin you will see the following: 
+
+![image-20250903113545299](img/image-20250903113545299.png)	
+
+This clearly states that the left window is Orders while the right window is the FullOuterJoin.   We need to flip this around by clicking those double arrows between the two.  This will generate the following message: 
+
+![image-20250903113749133](img/image-20250903113749133.png)	
+
+After clicking yes you can now see that the Left and Right designations are reversed. In the version of the project you’re working with, this fix has already been implemented — the fact stream is on the right side and the schema rebuilt — so you can run the Right Outer Join without re-arranging anything yourself.
+
+![image-20250903113850309](img/image-20250903113850309.png)	
+
+This action also deletes the old schema so it will need to be rebuilt.  Once rebuilt the orders fact table are now prefixed with "r_" .
+
+![image-20250903114822704](img/image-20250903114822704.png)	
+
+This means the streaming or fact side is now on the right instead of the left.  Logically this is the same as doing a left outer join as show in the the results below: 
+
+![image-20250903130541976](img/image-20250903130541976.png)	
+
+## Join Window and State Management 
+
+In SAS Event Stream Processing (ESP), the concept of state typically refers to the stored event data that a window maintains in memory over time or by count.  When you see a lightning bolt in the lower right of the ESP project window it indicates that the window is storing events in memory or has become stateful. ![image-20250903133635158](img/image-20250903133635158.png)	In a production environment the fact side of the project is infinite.   No program can store an infinite amount of data therefore the size of the records maintained in memory needs to be managed.  The Join window in ESP allows you to set the state for the left and right inputs separately.  Under join criteria you will see the following: 
+
+![image-20250903135717569](img/image-20250903135717569.png)	
+
+The fact side of the window is set to stateless, meaning no events are stored except for the current record.   The only memory which will be used to store event data will be on the dimension  or right side in this case.  This effectively removes any unbounded memory growth issues from the project.  
+
+### Large lookup tables
+
+When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   If  the dimension table  is large this lookup can be sped up by creating a secondary index.  Therefore, when lookup tables are large check the Use a secondary index check box in the Join Criteria section.  
 
 
 
-This demo provides a comprehensive overview of all SAS ESP join window capabilities using realistic sample data that clearly demonstrates the differences between each join type.
+## Summary
+
+This demo shows how SAS Event Stream Processing (ESP) join windows let you **enrich live data streams with contextual information** from reference tables in real time. By combining fast-moving “fact” data (like orders, sensor readings, or transactions) with “dimension” data (like customer records or machine configurations), you can make decisions and detect patterns as events happen instead of after the fact. The walkthrough explains why to pre-join dimension tables, how to choose the right join type for your outcome, and how to configure state so only necessary records are held in memory. Following these practices yields lower latency, avoids unbounded memory growth, and makes streaming pipelines easier to maintain and scale.
 
