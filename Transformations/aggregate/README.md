@@ -3,7 +3,7 @@
 
 This SAS Event Stream Processing (ESP) project demonstrates how to use the Aggregate window and the different types of aggregation functions it supports. Aggregate windows allow you to add simple statistics such as sum, mean, and standard deviation to streaming data. Since these calculations are provided out of the box and implemented on streaming data, they are fast and match the rate of the incoming data. 
 
-Aggregate windows are always Stateful, which means they need to retain the events. Therefore, Aggregate windows are almost always paired with Copy windows that have retention to manage the size of the state. <!-- if you're going to say "almost" need to know when it's not the case>
+Aggregate windows are always Stateful, which means they need to retain the events. Therefore, Aggregate windows are almost always paired with Copy windows that have retention to manage the size of the state. <!-- if you're going to say "almost" need to know when it's not the case -->
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
@@ -15,7 +15,7 @@ Aggregate windows are useful for the following scenarios:
 
 ## Source Data
 
-The `input.csv` file contains dummy motor vibration data where the fields `motor` and `time` (in microseconds) together identify a unique event. The motors are emitting events at a rate of 1 event per second.
+The `input.csv` file contains dummy motor vibration data where the fields `motor` and `time` (in microseconds) together identify a unique event. The motors are emitting events at a rate of one event per second.
 
 ## Workflow
 This example shows the different aggregation functions that you can use with the Aggregate window. The following figure shows the workflow diagram of the project:
