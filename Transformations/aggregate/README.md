@@ -1,9 +1,9 @@
-# Introduction to Aggregate Windows and Aggregate Functions
+# Introduction to Aggregate Window and Aggregate Functions
 ## Overview
 
-This SAS Event Stream Processing (ESP) project demonstrates how to use the Aggregate window and the different types of aggregation functions it supports. Aggregate windows allow you to include simple statistics like sum, mean, and standard deviation to streaming data. Since these calculations are provided out of the box and implemented on streaming data, they are fast and match the rate of the incoming data. 
+This SAS Event Stream Processing (ESP) project demonstrates how to use the Aggregate window and the different types of aggregation functions it supports. Aggregate windows allow you to add simple statistics such as sum, mean, and standard deviation to streaming data. Since these calculations are provided out of the box and implemented on streaming data, they are fast and match the rate of the incoming data. 
 
-Aggregate windows are always Stateful, which means they need to retain the events. Therefore, Aggregate windows are almost always paired with Copy windows that have retention to manage the size of the state. <!-- if you're going to say "almost" need to know when it's not the case -->
+Aggregate windows are always Stateful, which means they need to retain the events. Therefore, Aggregate windows are almost always paired with Copy windows that have retention to manage the size of the state. <!-- if you're going to say "almost" need to know when it's not the case>
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
@@ -22,11 +22,11 @@ This example shows the different aggregation functions that you can use with the
 
 ![Diagram of the project](img/model.png)	
 
-You can see that two Aggregate windows are connected to two Copy windows.
+There are two Aggregate windows that are connected to two Copy windows.
 - Aggregate_Normal is an Aggregate window that has various normal aggregate functions.
 - Aggregate_Timed is in Aggregate window that has various time-based aggregate functions. 
-- Copy_SystemTime_Sliding is a Copy window that has a sliding system time-based retention of five seconds.
-- Copy_EventTime_Sliding is a Copy window that has a sliding system time-based retention of five seconds.
+- Copy_SystemTime_Sliding is a Copy window that has a retention type of **By time, sliding** with a time limit of five seconds.
+- Copy_EventTime_Sliding is a Copy window that has a retention type of **By time, sliding** with a time limit of ten seconds. <!-- I see 10 seconds in the UI, is it supposed to be 5? -->
 - Source is a Source window that reads the input.csv file using a Python connector and publishes the events at a rate of one event per second.
 
 ### Aggregate_Normal
@@ -61,21 +61,19 @@ Explore the settings for the Aggregate_Timed window:
 
 ![aggregate_timed_schema](img/aggregate_timed_schema.png)
 
-In this window, the `motor` field acts as the key. This means that the aggregation will happen for unique values of `motor`. When events arrive in the Aggregate window, they are placed into aggregate groups based on the value of `motor`.
-
 The descriptions of the aggregate functions are listed below:
-- **ESP_aAveTimed(vibration, 5)**: Calculates the average of the `vibration` field for all events in the aggregate group. The average calculation is cleared when a new event arrives after 5 seconds.
-- **ESP_aCountTimed(5)**: Returns the count of all events in the aggregate group. The count is cleared whenever a new event arrives after 5 seconds.
-- **ESP_aMaxTimed(vibration, 5)**: Returns the maximum value of the `vibration` field among the events in the aggregate group. The maximum is cleared whenever a new event arrives after 5 seconds.
-- **ESP_aMinTimed(vibration, 5)**: Returns the minimum value of the `vibration` field among the events in the aggregate group. The minimum is cleared whenever a new event arrives after 5 seconds.
-- **ESP_aSumTimed(vibration, 5)**: Calculates the sum of the `vibration` field for all events in the aggregate group. The sum is cleared whenever a new event arrives after 5 seconds.
+- **ESP_aAveTimed(vibration, 5)**: Calculates the average of the `vibration` field for all events in the aggregate group. The average calculation is cleared when a new event arrives after five seconds.
+- **ESP_aCountTimed(5)**: Returns the count of all events in the aggregate group. The count is cleared whenever a new event arrives after five seconds.
+- **ESP_aMaxTimed(vibration, 5)**: Returns the maximum value of the `vibration` field among the events in the aggregate group. The maximum is cleared whenever a new event arrives after five seconds.
+- **ESP_aMinTimed(vibration, 5)**: Returns the minimum value of the `vibration` field among the events in the aggregate group. The minimum is cleared whenever a new event arrives after five seconds.
+- **ESP_aSumTimed(vibration, 5)**: Calculates the sum of the `vibration` field for all events in the aggregate group. The sum is cleared whenever a new event arrives after five seconds.
 
 ## Test the Project and View the Results
 
-When you test the project, the results for each window appear on separate tabs.
+When you test the project, the results for each window appear on separate tabs:
 - **Source**: Lists raw events published into the project
-- **Copy_SystemTime_Sliding**: Lists Insert and Delete events generated because of system time based sliding retention
-- **Copy_EventTime_Sliding**: Lists Insert and Delete events generated because of event time based sliding retention
+- **Copy_SystemTime_Sliding**: Lists Insert and Delete events generated because of system time-based sliding retention
+- **Copy_EventTime_Sliding**: Lists Insert and Delete events generated because of event time-based sliding retention
 - **Aggregate_Normal**: Lists Insert, Delete, and Update events generated because of the aggregate group being updated with each incoming event
 - **Aggregate_Times**: Lists Insert, Delete, and Update events generated because of the aggregate group being updated with each incoming event along with calculated values clearing out due to timed function
 
@@ -93,3 +91,5 @@ This window displays timed calculations. These values are cleared without having
 
 ## Additional Resources
 For more information, see [SAS Help Center: Using Aggregate Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p1i6d35raag9lbn1512750fhhd1x).
+
+
