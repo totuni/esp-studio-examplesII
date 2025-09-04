@@ -50,7 +50,7 @@ The descriptions of the aggregate functions are listed below:
 - **ESP_aMax(vibration)**: Returns the maximum value of the `vibration` field among the events in the aggregate group.
 - **ESP_aMin(vibration)**: Returns the minimum value of `vibration` field among the events in the aggregate group.
 - **ESP_aStd(vibration)**: Calculates the standard deviation of the `vibration` field for all events in the aggregate group.
-- **ESP_aSum(vibration)**: Calculates the sum of the `vibration` for all events in the aggregate group.
+- **ESP_aSum(vibration)**: Calculates the sum of the `vibration` field for all events in the aggregate group.
 
 ### Aggregate_Timed
 
