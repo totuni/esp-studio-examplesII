@@ -1,7 +1,7 @@
 # Using Counter Windows to Compare Data Flow
 ## Overview
 
-This SAS Event Stream Processing project demonstrates the use of the Counter window. A Counter window is a simple but powerful analytic tool used to track the number of events passing through a data stream. This project showcases three different types of source connectors: CSV file, video input, and timed data stream. It pairs each source connector with a  Counter window to monitor throughput. The Counter window is useful for observing data flow rates, detecting anomalies (for example, data dropouts or surges), and measuring performance. It is commonly used in monitoring, debugging, and benchmarking real-time event pipelines.
+This SAS Event Stream Processing project demonstrates the use of the Counter window. A Counter window is a simple but powerful analytic tool used to track the number of events passing through a data stream. This project showcases three different types of source connectors: file and socket, video capture, and timer connector. It pairs each source connector with a  Counter window to monitor throughput. The Counter window is useful for observing data flow rates, detecting anomalies (for example, data dropouts or surges), and measuring performance. It is commonly used in monitoring, debugging, and benchmarking real-time event pipelines.
 
 ## Workflow
 
@@ -11,7 +11,7 @@ The following figure shows the workflow of this project:
 
 This project has three Source windows:
 
-- Source_CSV: Ingests location data from a CSV file using a file system connector. The schema includes a timestamped key along with latitude and longitude coordinates.
+- Source_CSV: Ingests location data from a CSV file using a file and socket connector. The schema includes a timestamped key along with latitude and longitude coordinates.
 - Source_video: Uses a videoc capture connector to load video frames from a sample video file. Each frame is treated as an event with an ID and image blob.
 - Source_timed: Uses a timer connector to emit synthetic events at fixed intervals. Each event includes an ID, timestamp, and label.
 
