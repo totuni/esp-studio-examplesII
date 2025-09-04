@@ -14,18 +14,18 @@ This project demonstrates how to perform insert, lookup, and aggregate operation
 
 ## Prerequisites
 
-This example requires [**Redis database**](https://redis.io/) to be installed and available in SAS ESP environment.
-Here is an example of setup steps for Redis.
+This example requires [**Redis database**](https://redis.io/) to be installed and available in the SAS ESP environment.
+Here is an example setup process for Redis.
 
 1)	First we will start the test Redis server. You can do that using the following command:
 ```bash
 sudo docker run --name test-redis -p 6379:6379 -d redis
 ```
-2)	Next we will start [RedisInsight](https://redis.io/insight/). This is a Redis client to browse the data in the Redis server and fire CLI commands for the server.
+2)	Next we will start [RedisInsight](https://redis.io/insight/). This is a Redis client to browse the data in the Redis server and run CLI commands for the server.
 ```bash
 sudo docker run -v /home/espuser/espstatedb_workshop/redisinsight:/db -p 8002:8001 -d redislabs/redisinsight:latest
 ```
-3)	You can point your browser to http://localhost:8002. This will open the RedisInsight client. Your local Redis instance is already added with the name “localRedis”. If you want to add a different Redis instance, you can do so as well.
+3)	You can point your browser to http://localhost:8002. This will open the RedisInsight client. Your local Redis instance is already added under the name 'localRedis'. If you want to add a different Redis instance, you can do so as well.
 4)	You can open the Browser by clicking the “Browser” option on the left side. Since nothing has run yet, this should be blank.
    
 > [!IMPORTANT]
@@ -56,7 +56,7 @@ Here is a diagram of the project:
 
 ### saveToRedis
 
-This StateDB RWriter window saves (or updates if  exist) key-value record in Redis table using incoming data from sensorsData window.
+This StateDB Writer window saves (or updates if  exist) key-value record in Redis table using incoming data from sensorsData window.
 
 Explore the settings for the saveToRedis window by doing the following steps:
 1. Open the project in SAS Event Stream Processing Studio and select the saveToRedis window.
@@ -66,7 +66,7 @@ Explore the settings for the saveToRedis window by doing the following steps:
    Here you can set up a unique prefix for the Redis hash table. For simplicity, you can think of it as the table name.
    - `Time to live`: 60
    
-   Here you can set the retention period (in seconds) for each Redis key-value record. This is useful for retention-based aggregations. For example, calculating the maximum value per group over the last 1 hour (you need to set `Time to live` equel 3600).
+   Here you can set the retention period (in seconds) for each Redis key-value record. This is useful for retention-based aggregations. For example, calculating the maximum value per group over the last 1 hour (you need to set `Time to live` equal 3600).
    - `Time field`: (use system clock)
    
    This defines the time reference used for retention counting. By default, the system clock is used, but you can also specify a timestamp field from the input event.
@@ -84,15 +84,15 @@ Explore the settings for the getSavedStamp window by doing the following steps:
    Here you can set up a unique prefix for the Redis hash table. For simplicity, you can think of it as the table name. When we write above we used `stream` prefix so you need to point the same one  here to be able to perform lookup.
    - `Query`: sensor_id == SENSOR_ID
         
-   Here you can set up query condition. In the example for input event we seach record in Redis Hash table where input field `sensor_id` equel to Data Store Field `SENSOR_ID`.
+   Here you can set up query condition. In this example, for each input event, we search the Redis hash table for a record where the input field `sensor_id` equals the Data Store field `SENSOR_ID`.
     - `Time field`: (use system clock)
    
    This defines the time reference used for retention counting. By default, the system clock is used, but you can also specify a timestamp field from the input event.
 3. In the right pane, click **Output schema** and click **Edit fields** pencil.
-    - `sensor_id` is mapped to Source=Input,  this  field  will be recieved from the event
-    - `sensor_group`: is mapped to Source=Input,  this  field  will be recieved from the event
-    - `sensor_stmp`: is mapped to Source=Input,  this  field  will be recieved from the event
-    - `sensor_saved_stmp`: new field which is mapped to Source=Query,  this  field  will be recieved from the Redis `SENSOR_STMP` value
+    - `sensor_id` is mapped to Source=Input,  this  field  will be received from the event
+    - `sensor_group`: is mapped to Source=Input,  this  field  will be received from the event
+    - `sensor_stmp`: is mapped to Source=Input,  this  field  will be received from the event
+    - `sensor_saved_stmp`: new field which is mapped to Source=Query,  this  field  will be received from the Redis `SENSOR_STMP` value
 
 ### getMaxByGroup
 
