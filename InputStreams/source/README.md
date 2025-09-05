@@ -39,7 +39,7 @@ Explore the settings for the Source_CSV window by doing the following steps:
 3. Expand **Input Data (Publisher) Connectors**. Notice the different types of connectors:
       - `iss_input`: This connector reads the file from beginning to end once. It is useful for batch-style loading.
       - `iss_input_repeat`: This connector repeats the file input a specified number of times (for example, repeatcount = 100). It is useful for simulations or testing with looped input data.
-      - `iss_input_rate`: This connector adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). It is useful for defining the rate in which events are injected into the stream. 
+      - `iss_input_rate`: This connector adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). It is useful for defining the rate in which events are injected into the stream.   
       **NOTE:** You can view a connector's configuration by selecting the connector from the table, and then clicking ![edit](img/edit.png). These connectors are set to inactive by default. You can enable one or more connectors depending on your scenario.
 4. Expand **Subscriber Connectors**. Notice that this window includes a different type of connector. The MQTToutput connector is configured as a subscriber connector. Subscriber connectors output data from a project to an external file or system. The MQTToutput connector should only be activated when testing the Source_MQTT example. TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
 6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
@@ -288,10 +288,6 @@ To run the Source_video window, do the following:
 The output tab should look similar to the figure below: 
 ![image-20250709143855068](img/image-20250709143855068.png)	
 
-## Additional Resources
-For more information, see [SAS Help Center: Using Remove State Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0usk3uf3bcnebn1m99g1jbvvhxu).
-
-
 ### Video Credits and Copyright
 
 
@@ -303,3 +299,6 @@ For more information, see [SAS Help Center: Using Remove State Windows](https://
 ### Video and Image Restrictions
 
 The videos and images provided in this example are to be used only with the project provided. Using or altering these videos and images beyond the example for any other purpose is prohibited.
+
+## Additional Resources
+For more information, see [SAS Help Center: Using Remove State Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0usk3uf3bcnebn1m99g1jbvvhxu).
