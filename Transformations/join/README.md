@@ -143,11 +143,7 @@ Here we create a record for every event which enters the steam on the fact side,
 ### Right Outer Join
 **Purpose**: Returns all records from the right stream, with matching records from the left stream where available.
 
-This join type is not compatible with our project because ESP joins Fact tables (streaming) with Dimension tables (lookup).  Since our Orders table is on the left side, when you try to pick the join type of Right Outer join ESP studio will give you the following error. 
-
-![image-20250902165914825](img/image-20250902165914825.png)	
-
-The only way to fix this issue is to re-arrange the project so that the Fact tables are streaming in on the right side.  In order to fix this we need to rebuild the schema entries so that the fact tables are coming from the right side.  Under settings for the RightOuterJoin you will see the following: 
+This join type is not compatible with our project because ESP joins Fact tables (streaming) with Dimension tables (lookup).  Since our Orders table is on the left side.  Therefore we must fix this issue by re-arranging the project so that the Fact tables are streaming in on the right side.  This is fixed by rebuilding the schema entries so that the fact tables are coming from the right side.  Under settings for the RightOuterJoin you will see the following: 
 
 ![image-20250903113545299](img/image-20250903113545299.png)	
 
@@ -177,7 +173,7 @@ The fact side of the window is set to stateless, meaning no events are stored ex
 
 ### Large lookup tables
 
-When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   If  the dimension table  is large this lookup can be sped up by creating a secondary index.  Therefore, when lookup tables are large check the Use a secondary index check box in the Join Criteria section.  
+When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   If  the dimension table  is large this lookup can be sped up by creating a secondary index.  Therefore, when lookup tables are large check the "Use a secondary index" check box in the Join Criteria section.  
 
 
 
