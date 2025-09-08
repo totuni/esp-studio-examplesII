@@ -1,8 +1,8 @@
 # Exploring Connectors in Source Windows
 ## Overview
 
-In SAS Event Stream Processing, connectors that run inside ESP servers and adapters that run inside address spaces are vital. They serve as an interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources. These sources might be sensors through MQTT, logs through Kafka, files on disk, or live video streams over real-tikme streaming protocal or RTSP.
-<!-- is RTSP real-time streaming protocol? if so, we need to expand the abbreviation -->
+In SAS Event Stream Processing, connectors that run inside ESP servers and adapters that run inside address spaces are vital. They serve as an interface between external data systems and your streaming analytics engine. They enable real-time ingestion of data from a wide variety of sources. These sources might be sensors through MQTT, logs through Kafka, files on disk, or live video streams over real-time streaming protocal or real-time streaming protocol.
+
 Understanding connectors is important for new users of SAS Event Stream Processing. Nearly every real-world application begins with loading data into the system. This example project is designed to help new users visualize and explore how SAS Event Stream Processing handles this through a set of connector configurations. You can load this project into SAS Event Stream Processing Studio or deploy it directly through XML.
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).  
@@ -20,14 +20,8 @@ Source windows:
 - The Source_CSV window reads data from a CSV file.
 - The Source_video window streams data in from a video file.
 - The Source_timed window generates data on a timed interval.  
-<!-- fill in the descriptions of all the windows below -->
+
 Counter windows have been added to verify how many events are flowing through the project based on each source window's settings. 
-- The Counter_MQTT window...
-- The Counter_Eventhub window...
-- The Counter_Kafka window...
-- The Counter_CSV window...
-- The Counter_video window...
-- The Counter_timed window...
 
 Some connectors are turned off by default in this project and should be turned on as each example is explored. Examples that require configured and active external messaging environments will not execute when activated. These examples are only shown to help with future configurations. 
 
@@ -45,7 +39,7 @@ Explore the settings for the Source_CSV window by doing the following steps:
 3. Expand **Input Data (Publisher) Connectors**. Notice the different types of connectors:
       - `iss_input`: This connector reads the file from beginning to end once. It is useful for batch-style loading.
       - `iss_input_repeat`: This connector repeats the file input a specified number of times (for example, repeatcount = 100). It is useful for simulations or testing with looped input data.
-      - `iss_input_rate`: This connector adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). It is useful for defining the rate in which events are injected into the stream. 
+      - `iss_input_rate`: This connector adds a pacing mechanism to simulate streaming input (for example, rate = 1 record per second). It is useful for defining the rate in which events are injected into the stream.   
       **NOTE:** You can view a connector's configuration by selecting the connector from the table, and then clicking ![edit](img/edit.png). These connectors are set to inactive by default. You can enable one or more connectors depending on your scenario.
 4. Expand **Subscriber Connectors**. Notice that this window includes a different type of connector. The MQTToutput connector is configured as a subscriber connector. Subscriber connectors output data from a project to an external file or system. The MQTToutput connector should only be activated when testing the Source_MQTT example. TCP/IP port 1883 must be open for communication on your system in order to connect to the MQTT broker.
 6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
@@ -121,13 +115,12 @@ Explore the settings for the Source_Kafka window by doing the following steps:
 
 1. Open the project in SAS Event Stream Processing Studio and select the Source_Kafka window.
 2. Expand **Input Data (Publisher) Connectors**. Notice there are two connectors that are both inactive by default:
-   <!-- what is a consumer group? is 'lastread' the name of the consumer group? -->
    - `kafkainCurrent`: This connector reads new messages available to the consumer group named lastread. 
    - `kafkainAll`: This connector starts reading all partitions from the beginning of the Kafka topic.  
    **NOTE:** Both of these connectors specify the Kafka host as `saslorahub.servicebus.windows.net:9093` and the topic as `lorahub`. These details are specific to Azure Event Hubs that are used in Kafka compatibility mode.    
 3. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
       - `index`: A unique identifier or offset for each Kafka message.
-      - `message`: The content of the Kafka message which is treated as an opaque string. The message is usually formatted in JSON. <!-- Should this be opaque string? or as it is? -->
+      - `message`: The content of the Kafka message which is treated as an opaque string. The message is usually formatted in JSON.
 
 ### Use Case
 
@@ -167,12 +160,12 @@ Explore the settings for the Source_MQTT window by doing the following steps:
    - `Connector type`: The type is **MQTT Connector**.
    - `Mqtthost`: This is set to **test.mosquitto.org**, which specifies the public MQTT broker that is being used.
    - `Mqtttopic`: This is set to **ExampleforESP**, which is the topic that the connector subscribes to.
-   - `Mqttqos`: This is set to **0**, which means the Service level is set to fire and forget. <!-- please make sure this is technically accurate with how I've reworded it -->
+   - `Mqttqos`: This is set to **0**, which means the Service level is set to fire and forget.
    - `Mqttmsgtype`: This is set to **opaquestring**, which makes the connector treat incoming messages as a raw string.  
 4. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
       - `key`: A unique identifier for each incoming message.
       - `topic`: The name of the MQTT topic on which the message was received.
-      - `message`: The payload of the message that is treated as an opaque string. <!--Should this be opaque OR string? -->
+      - `message`: The payload of the message that is treated as an opaque string.
 
 ### Use Case
 
@@ -223,7 +216,7 @@ Explore the settings for the Source_Eventhub window by doing the following steps
     **NOTE:** These settings are designed to work with an Azure Event Hub that has been pre-configured to stream data into the `lorahub` namespace, which uses shared access credentials provided in the connection string.  
 5. Click **OK** to exit the **Connector Configuration** window.
 6. Click ![Output Schema](/EndtoEndExamples/onnx_voice_transcription/img/output-schema-icon.png "Output Schema"). Fields include:
-      - `index`: A numeric identifier that corresponds to the event's position in the Event Hub stream <!-- is there a case in which it doesn't correspond? -->
+      - `index`: A numeric identifier that corresponds to the event's position in the Event Hub stream 
       - `message`: The raw message content from the event that is treated as a plain string
 
 ### Use Case
@@ -295,10 +288,6 @@ To run the Source_video window, do the following:
 The output tab should look similar to the figure below: 
 ![image-20250709143855068](img/image-20250709143855068.png)	
 
-## Additional Resources
-For more information, see [SAS Help Center: Using Remove State Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0usk3uf3bcnebn1m99g1jbvvhxu).
-
-
 ### Video Credits and Copyright
 
 
@@ -310,3 +299,6 @@ For more information, see [SAS Help Center: Using Remove State Windows](https://
 ### Video and Image Restrictions
 
 The videos and images provided in this example are to be used only with the project provided. Using or altering these videos and images beyond the example for any other purpose is prohibited.
+
+## Additional Resources
+For more information, see [SAS Help Center: Using Remove State Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0usk3uf3bcnebn1m99g1jbvvhxu).
