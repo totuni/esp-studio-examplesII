@@ -171,11 +171,9 @@ In SAS Event Stream Processing (ESP), the concept of state typically refers to t
 
 The fact side of the window is set to stateless, meaning no events are stored except for the current record.   The only memory which will be used to store event data will be on the dimension  or right side in this case.  This effectively removes any unbounded memory growth issues from the project.  
 
-### Large lookup tables
+### Secondary Indexes
 
-When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   If  the dimension table  is large this lookup can be sped up by creating a secondary index.  Therefore, when lookup tables are large check the "Use a secondary index" check box in the Join Criteria section.  
-
-
+When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   When a dimension table is large or is updated frequently, enabling a secondary index can improve lookup performance. To do this, select **Use a secondary index** in the Join Criteria section.
 
 ## Summary
 
