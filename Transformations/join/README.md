@@ -128,7 +128,7 @@ A right outer join returns all the records that match from the dimension table w
 
 ![image-20250903113545299](img/image-20250903113545299.png)	
 
-This clearly states that the left window is **Orders**, and the right window is **FullOuterJoin**. You need to change this by clicking ![double arrows](/join/img/doublearrows.png). This generates the following message: 
+This clearly states that the left window is **Orders**, and the right window is **FullOuterJoin**. You need to change this by clicking ![double arrows](/Transformations/join/img/doublearrows.png). This generates the following message: 
 
 ![image-20250903113749133](img/image-20250903113749133.png)	
 
