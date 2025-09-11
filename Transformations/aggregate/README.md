@@ -87,7 +87,7 @@ The following figure shows the results of the Aggregate_Timed window:
 
 ![aggregate_timed_output](img/aggregate_timed_output.png)
 
-This window displays timed calculations. These values are cleared without having to introduce event retention based on the time interval provided as the function argument. When a new event arrives, the previous calculated value is cleared. Notice the highlighted events. The Delete event is for the previous state of the group. The aggregate values for the Update Block event have been reset based on the time. As a result, the values for vibration, timed_average, timed_max, timed_min, and timed_sum are all the same for the Update block event. 
+This window displays timed calculations. These values are cleared without having to introduce event retention based on the time interval provided as the function argument. When a new event arrives, the previous calculated value is cleared. Notice the highlighted events. The Delete event is for the previous state of the group. The aggregate values for the Update Block event have been reset based on the time. As a result, the values for `vibration`, `timed_average`, `timed_max`, `timed_min`, and `timed_sum` are all the same for the Update block event. 
 
 ## Additional Resources
 For more information, see [SAS Help Center: Using Aggregate Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p1i6d35raag9lbn1512750fhhd1x).
