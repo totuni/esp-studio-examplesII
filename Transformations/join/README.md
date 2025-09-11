@@ -13,7 +13,6 @@ The example contains three source files: `orders.csv`, `loyalty.csv`, and `custo
 
 ## Prerequisites
 
-### Fact and Dimension Tables
 In SAS Event Stream Processing streaming analytics, you must understand the distinction between fact tables and dimension tables in order to design effective join operations.
 
 Join windows consist of the following:
@@ -53,14 +52,14 @@ Explore the settings for the FullOuterJoin window:
    - `City`
    - `Loyalty`
 
-Notice that `Loyalty` is coming from the right side of the join while `CustomerName` and `City` come from the left. 
+Notice that **Loyalty** is coming from the right side of the join while **CustomerName** and **City** come from the left. 
 
 ![image-20250902151811114](img/image-20250902151811114.png)		
 
 Results:
 - 111, 222, and 333: The first three rows are matched records, which means both tables contained these `CustomerIDs`.
-- 555: This record only exists in `customers.csv`, so `Loyalty` is `NULL`.
-- 666: This record only exists in `loyalty.csv`, so `CustomerName` and `Amount` are `NULL`.
+- 555: This record only exists in `customers.csv`, so `Loyalty` is **NULL**.
+- 666: This record only exists in `loyalty.csv`, so `CustomerName` and `Amount` are **NULL**.
 
 ### Inner Join
 
@@ -95,6 +94,8 @@ Explore the settings for the LeftOuterJoin window:
 
 ![Left Join](/Transformations/join/img/leftjoin.png)
 
+Notice that the Join window allows you to set the state for the left and right inputs separately. The left table state is set to **Stateless**, which means no events are stored except for the current record. This removes any unbounded memory growth issues from the project. When a dimension table is large or is updated frequently, you can select **Use a secondary index** to improve lookup performance.
+
 3. Click ![Output Schema](/Transformations/join/img/output-schema-icon.png "Output Schema"). Fields include:
    - `OrderID`
    - `CustomerID`
@@ -104,24 +105,13 @@ Explore the settings for the LeftOuterJoin window:
    - `City`
    - `Loyalty`
 
-The left outer join creates a record for every event which enters the data steam from the fact table, which in this case is the left side. Therefore, **ORD005** creates a joined event even when all the dimension fields are `NULL`:
+The left outer join creates a record for every event which enters the data steam from the fact table, which in this case is the left side. Therefore, **ORD005** creates a joined event even when all the dimension fields are **NULL**:
 
 ![image-20250902163855496](img/image-20250902163855496.png)		
 
-#### Join Window and State Management
-In SAS Event Stream Processing, "state" refers to the stored event data that a window maintains in memory. A window that store events in memory is marked with a lightning bolt. Here is an example:  
-![image-20250903133635158](img/image-20250903133635158.png)  
-A fact table has an infinite amount of data because it streams in events. Programs cannot store an infinite amount of data, so the size of the records that are maintained in memory need to be managed. The Join window allows you to set the state for the left and right inputs separately. Expand **Join Criteria** to see the following:
-
-![image-20250903135717569](img/image-20250903135717569.png)	
-
-The left table state is set to **Stateless**, which means no events are stored except for the current record. The only memory which will be used to store event data will be the dimension table. This removes any unbounded memory growth issues from the project. 
-<!-- this sentence makes no sense to me -->
-
 ### Right Outer Join
-A right outer join returns all the records that match from the dimension table with records from fact table.
 
-**NOTE:** This join type is not compatible with the project because orders.csv streams in from the left side. To fix this issue, the project was rearranged so that the fact table streams in from the right side. The schema entries were rebuilt. The project is already fixed for you, but if you encounter this error in another project, you can use the following steps to fix it.
+A right outer join returns all the records that match from the dimension table with records from the fact table. This join type is not compatible with the project because orders.csv streams in from the left side. To fix this issue, the project was rearranged so that the fact table streams in from the right side. The schema entries were rebuilt. The project is already fixed for you, but if you encounter this error in another project, you can use the following steps to fix it.
 
 1. Open the project in SAS Event Stream Processing Studio. 
 2. Select the RightOuterJoin window. The window looks like the figure below:
@@ -143,10 +133,10 @@ This clearly states that the left window is **Orders**, and the right window is 
 ## Test the Project and View the Results
 
 When you test the project, the results for each window appear on separate tabs:
-- The FullOuterJoin tab lists...
-- The InnerJoin tab lists...
-- The LeftOuterJoin tab...
-- The RightOuterJoin tab...
+- The FullOuterJoin tab lists the combination of the `customers.csv` and `loyalty.csv` tables.
+- The InnerJoin tab lists the results of an inner join performed on `orders.csv` and the full outer join tables.
+- The LeftOuterJoin tab lists the results of a left outer join performed on the `orders.csv` and the full outer join tables.
+- The RightOuterJoin tab lists the results of a right outer join join performed on the `orders.csv` and the full outer join tables.
 
 The following figure shows the results for the FullOuterJoin tab:
 
@@ -156,6 +146,10 @@ The following figure shows the results for the InnerJoin tab:
 
 ![image-20250902163002309](img/image-20250902163002309.png)
 
-### Secondary Indexes
+The following figure shows the results for the LeftOuterJoin tab:
 
-When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   When a dimension table is large or is updated frequently, enabling a secondary index can improve lookup performance. To do this, select **Use a secondary index** in the Join Criteria section.
+![left outer join](/Transformations/join/img/leftouterjoin.png)
+
+The following figure shows the results for the RightOuterJoin tab:
+
+![right outer join](/Transformations/join/img/rightouterjoin.png)
