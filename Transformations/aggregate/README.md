@@ -3,7 +3,7 @@
 
 This SAS Event Stream Processing (ESP) project demonstrates how to use the Aggregate window and the different types of aggregation functions it supports. Aggregate windows allow you to add simple statistics such as sum, mean, and standard deviation to streaming data. Since these calculations are provided out of the box and implemented on streaming data, they are fast and match the rate of the incoming data. 
 
-Aggregate windows are always Stateful, which means they need to retain the events. Therefore, Aggregate windows are almost always paired with Copy windows that have retention to manage the size of the state. If the Input event contains Insert, Update, and Delete events, then it does not need to be paired with a Copy window.
+Aggregate windows are always Stateful, which means they need to retain the events. Aggregate windows can be paired with Copy windows that have retention to manage the size of the state.
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
@@ -91,5 +91,3 @@ This window displays timed calculations. These values are cleared without having
 
 ## Additional Resources
 For more information, see [SAS Help Center: Using Aggregate Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p1i6d35raag9lbn1512750fhhd1x).
-
-
