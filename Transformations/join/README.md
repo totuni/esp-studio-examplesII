@@ -156,4 +156,4 @@ The following figure shows the results for the RightOuterJoin tab:
 
 ## Additional Resources
 
-For more information, see [SAS Help Center: Using Join Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0xru6q01dkxknn1t8gqo2q4zfu6).
+For more information, see [SAS Help Center: Using Join Windows](https://go.documentation.sas.com/doc/en/espcdc/v_063/espcreatewindows/n0suhocslptadgn10oh2htqnynr5.htm).
