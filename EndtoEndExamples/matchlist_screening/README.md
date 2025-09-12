@@ -72,7 +72,7 @@ The `data_quality` **Compute window** is responsible for initializing the SAS Qu
 
 #### Initialization
 
-An initializer block is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **Finland** (`FIFIN`):
+An initializer block is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **US English** (`ENUSA`):
 
 ```xml
 dq dataq
