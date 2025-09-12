@@ -133,7 +133,7 @@ As shown, the matchcode function standardizes the input, allowing both forms of 
 ### prepare\_list
 
 The `prepare_list` **Compute window** is responsible for initializing the SAS Quality Knowledge Base (QKB) and generating matchcodes for the `company_name` field in the watch list.
-
+It uses the same expressions.
 ```EEL
 string output_mc;
 dataq.matchcode("ORGANIZATION", 65, company_name, output_mc);
