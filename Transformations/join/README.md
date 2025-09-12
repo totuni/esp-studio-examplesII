@@ -153,3 +153,7 @@ The following figure shows the results for the LeftOuterJoin tab:
 The following figure shows the results for the RightOuterJoin tab:
 
 ![right outer join](/Transformations/join/img/rightouterjoin.png)
+
+## Additional Resources
+
+For more information, see [SAS Help Center: Using Join Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p0xru6q01dkxknn1t8gqo2q4zfu6).
