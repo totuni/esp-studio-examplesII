@@ -99,15 +99,13 @@ return output;
 
 Based on the entity type, the appropriate **matchcode** is generated using either the `NAME` or `ORGANIZATION` context with a sensitivity level of `70`:
 
-```xml
-<field-expr><![CDATA[
+```EEL
 string output2;
-if output == "INDIVIDUAL"
-    dataq.matchcode("NAME", 70, sender, output2);
-else
-    dataq.matchcode("ORGANIZATION", 70, sender, output2);
+if output=="INDIVIDUAL"   
+dataq.matchcode("NAME", 65, sender, output2);
+else 
+dataq.matchcode("ORGANIZATION", 65, sender, output2);
 return output2;
-]]></field-expr>
 ```
 
 A **matchcode** is a standardized textual representation of a name or organization that enables fuzzy matching. It accounts for variations in spelling, abbreviations, and common prefixes/suffixes.
@@ -125,23 +123,17 @@ As shown, the matchcode function standardizes the input, allowing both forms of 
 
 The `prepare_list` **Compute window** is responsible for initializing the SAS Quality Knowledge Base (QKB) and generating matchcodes for the `company_name` field in the watch list.
 
-```xml
-<field-expr><![CDATA[
+```EEL
 string output_mc;
-dataq.matchcode("ORGANIZATION", 70, company_name, output_mc);
+dataq.matchcode("ORGANIZATION", 65, company_name, output_mc);
 return output_mc;
-]]></field-expr>
 ```
 
 ### lookup\_sender
 
 The `lookup_sender` **Join window** performs a left join between the transactions and the watch list using the matchcode key.
 
-```xml
-<conditions>
-  <fields left="sender_matchcode" right="match_code"/>
-</conditions>
-```
+![join](img/join.png "join")
 
 ## Test the Project and View the Results
 
@@ -175,3 +167,4 @@ You can enhance this project by:
 ## Additional Resources
 
 - [SAS Help Center: Using Expression Engine Language (EEL)](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
+- [SAS Help Center: Quality Knowledge Base: User Guide:QKB Definition Types](https://go.documentation.sas.com/doc/en/sasadmincdc/v_067/qkb/p0013v6doxf8f1n12w81udna30gm.htm)
