@@ -56,7 +56,7 @@ For more details, refer to the official SAS documentation:
 
 The following figure shows the diagram of the project:
 
-![Diagram of the project](img/diagram.png "Diagram of the project")
+<img alt="Diagram of the project" src="img/diagram.png"  width="80%" height="80%">
 
 - **src_transactions**: A **Source** window that ingests synthetic transaction data using the Lua connector.
 - **watch_list**: A **Source** window that ingests synthetic watch list data using the Lua connector.
@@ -91,7 +91,7 @@ Once initialized, QKB-based data quality functions are available for use in fiel
 
 The first step is to identify whether the `sender` is an **individual** or an **organization** using the `IDENTIFY` function:
 
-![dq_schema](img/dq_schema.png "dq_schema")
+<img alt="Window schema" src="img/dq_schema.png"  width="60%" height="60%">
 
 ```EEL
 string output;
@@ -138,6 +138,7 @@ return output_mc;
 The `lookup_sender` **Join window** performs a left join between the transactions and the watch list using the matchcode key.
 
 ![join](img/join.png "join")
+<img alt="Join" src="img/join.png"  width="60%" height="60%">
 
 ## Test the Project and View the Results
 
