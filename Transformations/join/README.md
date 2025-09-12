@@ -38,7 +38,7 @@ The following figure shows the diagram of the project:
 
 ### Full Outer Join
 
-A full outer join brings together all rows from both tables, matching them where keys align. Otherwise, it fills in **NULL** where keys do not align. In the customer example, you want to include all customers whether they are part of the loyalty program or not.  
+A full outer join brings together all rows from both tables, matching them where keys align. Otherwise, it fills in **NULL** where keys do not align. In this example, you want to include all customers whether they are part of the loyalty program or not.  
 
 Explore the settings for the FullOuterJoin window:
 1. Open the project in SAS Event Stream Processing Studio. 
@@ -52,7 +52,7 @@ Explore the settings for the FullOuterJoin window:
    - `City`
    - `Loyalty`
 
-Notice that **Loyalty** is coming from the right side of the join while **CustomerName** and **City** come from the left. 
+Notice that **Loyalty** is coming from the right side of the join and **CustomerName** and **City** come from the left. 
 
 ![image-20250902151811114](img/image-20250902151811114.png)		
 
@@ -86,7 +86,7 @@ Explore the settings for the InnerJoin window:
 
 ### Left Outer Join
 
-A left outer join returns all the records that match from the fact table stream with records from the dimension table stream.	
+A left outer join returns all the records that match from the fact table with records from the dimension table.	
 
 Explore the settings for the LeftOuterJoin window:
 1. Open the project in SAS Event Stream Processing Studio. 
@@ -94,7 +94,7 @@ Explore the settings for the LeftOuterJoin window:
 
 ![Left Join](/Transformations/join/img/leftjoin.png)
 
-Notice that the Join window enables you to set the state for the left and right inputs separately. The left table state is set to **Stateless**, which means no events are stored except for the current record. This removes any unbounded memory growth issues from the project. When a dimension table is large or is updated frequently, you can select **Use a secondary index** to improve lookup performance.
+Notice that the Join window enables you to set the state for the left and right inputs separately. The left table state is set to **Stateless (pi_EMPTY)**, which means no events are stored except for the current record. This removes any unbounded memory growth issues from the project. When a dimension table is large or is updated frequently, you can select the **Use a secondary index** check box to improve lookup performance.
 
 3. Click ![Output Schema](/Transformations/join/img/output-schema-icon.png "Output Schema"). Fields include:
    - `OrderID`
@@ -105,7 +105,7 @@ Notice that the Join window enables you to set the state for the left and right 
    - `City`
    - `Loyalty`
 
-The left outer join creates a record for every event that enters the data steam from the fact table, which in this case is the left side. Therefore, **ORD005** creates a joined event even when all the dimension fields are **NULL**:
+The left outer join creates a record for every event that enters the data steam from the fact table. Therefore, **ORD005** creates a joined event even though all the dimension fields are **NULL**:
 
 ![image-20250902163855496](img/image-20250902163855496.png)		
 
@@ -122,7 +122,7 @@ This clearly states that the left window is **Orders**, and the right window is 
 
 ![image-20250903113749133](img/image-20250903113749133.png)	
 
-3. Click **Yes**. Now the left and right windows are reversed.
+3. Click **Yes**. Now the left and right windows are reversed:
 
 ![image-20250903113850309](img/image-20250903113850309.png)	
 
