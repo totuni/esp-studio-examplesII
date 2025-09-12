@@ -75,14 +75,12 @@ The `data_quality` **Compute window** is responsible for initializing the SAS Qu
 An initializer block is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **Finland** (`FIFIN`):
 
 ```xml
-<initializer type="string"><![CDATA[
 dq dataq
 string error
 dataq = DQ_INITIALIZE()
 print("DQ init value:" & dataq)
-error = dataq.LOADQKB("FIFIN")
+error=dataq.LOADQKB("ENUSA")
 print("DQ locale read:" & error)
-]]></initializer>
 ```
 
 Once initialized, QKB-based data quality functions are available for use in field expressions.
@@ -91,12 +89,10 @@ Once initialized, QKB-based data quality functions are available for use in fiel
 
 The first step is to identify whether the `sender` is an **individual** or an **organization** using the `IDENTIFY` function:
 
-```xml
-<field-expr><![CDATA[
+```EEL
 string output;
-dataq.IDENTIFY("Individual/Organization", sender, output);
+dataq.IDENTIFY("Field Content", sender, output);
 return output;
-]]></field-expr>
 ```
 
 #### Matchcode Generation
