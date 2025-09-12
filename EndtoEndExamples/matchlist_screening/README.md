@@ -56,7 +56,7 @@ For more details, refer to the official SAS documentation:
 
 The following figure shows the diagram of the project:
 
-<img alt="Diagram of the project" src="img/diagram.png"  width="60%" height="60%">
+![Diagram of the project](img/diagram.png){ width=60% }
 
 - **src_transactions**: A **Source** window that ingests synthetic transaction data using the Lua connector.
 - **watch_list**: A **Source** window that ingests synthetic watch list data using the Lua connector.
