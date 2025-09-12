@@ -1,5 +1,13 @@
 # Fuzzy Lookup of Organization names in transactions using SAS Data Quality
 
+## Vocabulary
+
+| Term | Definition |
+|------|------------|
+| **QKB**  | [SAS Quality Knowledge Base](https://go.documentation.sas.com/doc/en/sasadmincdc/v_067/qkbwlcm/home.htm) is a collection of files that store data and logic that define data management operations, focused on data quality improvement. |
+| **matchcode**  |A [matchcode](https://go.documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n1qhuuigq8u8ten1dqopa1e4ktbm.htm) is a standardized textual representation of a name or organization that enables fuzzy matching. It accounts for variations in spelling, abbreviations, and common prefixes/suffixes. |
+| **EEL**  |[Expression Engine Language](https://go.documentation.sas.com/doc/en/espcdc/v_062/engelref/titlepage.htm) is used for event processing and for accessing Data Quality functionality.|
+
 ## Overview
 
 This example demonstrates how to use **SAS Event Stream Processing (ESP)** to perform fuzzy lookups on streaming data using **SAS Data Quality**.
@@ -112,8 +120,6 @@ dataq.matchcode("ORGANIZATION", 65, sender, output2);
 return output2;
 ```
 
-A **matchcode** is a standardized textual representation of a name or organization that enables fuzzy matching. It accounts for variations in spelling, abbreviations, and common prefixes/suffixes.
-
 #### Example
 
 | Input Name         | Matchcode                         |
@@ -171,4 +177,4 @@ You can enhance this project by:
 ## Additional Resources
 
 - [SAS Help Center: Using Expression Engine Language (EEL)](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
-- [SAS Help Center: Quality Knowledge Base: User Guide:QKB Definition Types](https://go.documentation.sas.com/doc/en/sasadmincdc/v_067/qkb/p0013v6doxf8f1n12w81udna30gm.htm)
+- [SAS Help Center: Quality Knowledge Base: User Guide: QKB Definition Types](https://go.documentation.sas.com/doc/en/sasadmincdc/v_067/qkb/p0013v6doxf8f1n12w81udna30gm.htm)
