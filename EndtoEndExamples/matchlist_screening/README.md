@@ -74,6 +74,8 @@ The `data_quality` **Compute window** is responsible for initializing the SAS Qu
 
 An initializer block is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **US English** (`ENUSA`):
 
+![dq_init](img/dq_init.png "dq_init")
+
 ```xml
 dq dataq
 string error
@@ -88,6 +90,8 @@ Once initialized, QKB-based data quality functions are available for use in fiel
 #### Entity Type Detection
 
 The first step is to identify whether the `sender` is an **individual** or an **organization** using the `IDENTIFY` function:
+
+![dq_schema](img/dq_schema.png "dq_schema")
 
 ```EEL
 string output;
