@@ -78,10 +78,10 @@ The following figure shows the diagram of the project:
 
 The `data_quality` **Compute window** is responsible for initializing the SAS Quality Knowledge Base (QKB) and applying data quality functions for entity identification and matchcode generation.
 
-#### Initialization
+#### Initialization expression
 
-An initializer block is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **US English** (`ENUSA`):
-
+An initializer expression is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **US English** (`ENUSA`):
+You can find it by click on the data_quality window, then navigating to the Properties panel on the right and looking under the `Compute Settings` section:
 ![dq_init](img/dq_init.png "dq_init")
 
 ```xml
