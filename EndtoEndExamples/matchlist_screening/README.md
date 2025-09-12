@@ -82,6 +82,7 @@ The `data_quality` **Compute window** is responsible for initializing the SAS Qu
 
 An initializer expression is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **US English** (`ENUSA`):
 You can find it by click on the data_quality window, then navigating to the Properties panel on the right and looking under the `Compute Settings` section:
+
 ![dq_init](img/dq_init.png "dq_init")
 
 ```xml
@@ -96,7 +97,7 @@ print("DQ locale read:" & error)
 Once initialized, QKB-based data quality functions are available for use in field expressions.
 
 #### Entity Type Detection
-
+To write expressions, go to the Schema panel in the data_quality window and click the Edit icon.
 The first step is to identify whether the `sender` is an **individual** or an **organization** using the `IDENTIFY` function:
 
 <img alt="Window schema" src="img/dq_schema.png"  width="60%" height="60%">
