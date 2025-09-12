@@ -137,7 +137,7 @@ return output_mc;
 
 The `lookup_sender` **Join window** performs a left join between the transactions and the watch list using the matchcode key.
 
-<img alt="Join" src="img/join.png"  width="60%" height="60%">
+<img alt="Join" src="img/join.png"  width="400" >
 
 ## Test the Project and View the Results
 
