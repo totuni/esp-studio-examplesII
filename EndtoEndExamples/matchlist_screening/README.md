@@ -107,11 +107,11 @@ string output;
 dataq.IDENTIFY("Field Content", sender, output);
 return output;
 ```
+The `output` will be saved into `sender_type` field in the Output schema according to fields mapping.
 
 #### Matchcode Generation
 
-Based on the entity type, the appropriate **matchcode** is generated using either the `NAME` or `ORGANIZATION` context with a sensitivity level of `65`:
-
+The `sender_matchcode` field in the Output schema will be calculated based on the entity type. The appropriate **matchcode** is generated using either the `NAME` or `ORGANIZATION` context, with a sensitivity level of `65`:
 ```EEL
 string output2;
 if output=="INDIVIDUAL"   
