@@ -97,7 +97,7 @@ print("DQ locale read:" & error)
 Once initialized, QKB-based data quality functions are available for use in field expressions.
 
 #### Entity Type Detection
-To write expressions, go to the Schema panel in the data_quality window and click the Edit icon.
+To write expressions, go to the Output schema panel in the data_quality window and click the Edit icon.
 The first step is to identify whether the `sender` is an **individual** or an **organization** using the `IDENTIFY` function:
 
 <img alt="Window schema" src="img/dq_schema.png"  width="60%" height="60%">
