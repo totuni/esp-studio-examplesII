@@ -143,6 +143,7 @@ return output_mc;
 ### lookup\_sender
 
 The `lookup_sender` **Join window** performs a left join between the transactions and the watch list using the matchcode key.
+To view or modify lookup criteria, click on the `lookup_sender` window, go to the Properties panel, and locate the **Join Conditions** section.
 
 <img alt="Join" src="img/join.png"  width="400" >
 
