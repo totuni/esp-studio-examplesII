@@ -101,7 +101,7 @@ return output;
 
 #### Matchcode Generation
 
-Based on the entity type, the appropriate **matchcode** is generated using either the `NAME` or `ORGANIZATION` context with a sensitivity level of `70`:
+Based on the entity type, the appropriate **matchcode** is generated using either the `NAME` or `ORGANIZATION` context with a sensitivity level of `65`:
 
 ```EEL
 string output2;
