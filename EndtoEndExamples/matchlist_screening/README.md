@@ -17,8 +17,6 @@ It includes examples of:
 - Building match codes
 - Performing lookups using an ESP Join Window
 ---
-**NOTE:**  
-Use this example with **SAS Event Stream Processing 2024.01** and later.
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
