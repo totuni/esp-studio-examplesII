@@ -1,6 +1,5 @@
-<project name='project_01' pubsub='auto' threads='1' use-tagged-token='true'> 
-<description> 
-	This example project is a basic demonstration of using the Short-Time
+<project name="analytics_STFT" pubsub="auto" threads="1" use-tagged-token="true" heartbeat-interval="1">
+  <description><![CDATA[This example project is a basic demonstration of using the Short-Time
 	Fourier Transform (STFT) algorithm. A Fourier transform decomposes a
 	function of time into its underlying frequencies. The amplitude, offset,
 	and rotation speed of every underlying cycle is returned by the function.
@@ -11,42 +10,47 @@
 	This project contains a single continuous query consisting of the following: 
 	1.	A source window that receives the data to be analyzed 
 	2.	A calculate window that calculates STFTs on incoming data and publishes
-		the results
-</description>
-<contqueries>
-  <contquery name='cq_01' include-singletons='true' trace='w_calculate'>
-   <windows>
-    <window-source name='w_source' insert-only='true' autogen-key='true' index='pi_EMPTY'> 
-     <description> 
-	This source window receives the included example input data file via a file
+		the results]]></description>
+  <metadata>
+    <meta id="studioUploadedBy">anmatv</meta>
+    <meta id="studioUploaded">1757949959995</meta>
+    <meta id="studioModifiedBy">anmatv</meta>
+    <meta id="studioModified">1757950208742</meta>
+    <meta id="layout">{"cq_01":{"w_calculate":{"x":50,"y":175},"w_source":{"x":50,"y":50}}}</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="cq_01" include-singletons="true" trace="w_calculate">
+      <windows>
+        <window-source insert-only="true" autogen-key="true" index="pi_EMPTY" name="w_source">
+          <description><![CDATA[This source window receives the included example input data file via a file
 	socket connector.The input stream is placed into two fields for each observation:
 	an ID that acts as the data stream's key, named ID; and a y coordinate of data
-	named y.
-     </description>
-     <schema>
-      <fields>
-       <field name='ID'  type='int64' key='true'/>
-       <field name='y' type='double'/>
-      </fields>
-     </schema>
-     <connectors>
-      <connector class='fs' name='publisher'>
-       <properties>
-        <property name='type'>pub</property>
-        <property name='fstype'>csv</property>
-        <property name='fsname'>input.csv</property>
-        <property name='transactional'>true</property>
-        <property name='blocksize'>1</property>
-        <property name='addcsvopcode'>true</property> 
-        <property name='addcsvflags'>normal</property> 
-        <property name='noautogenfield'>true</property>
-       </properties>
-      </connector>
-     </connectors>
-    </window-source>
-    <window-calculate name="w_calculate" algorithm="STFT" index='pi_EMPTY'>
-      <description> 
-	The calculate window, w_calculate receives data events from the source window. It
+	named y.]]></description>
+          <schema>
+            <fields>
+              <field name="ID" type="int64" key="true"/>
+              <field name="y" type="double"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector class="fs" name="input_Connector">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="transactional"><![CDATA[true]]></property>
+                <property name="blocksize"><![CDATA[1]]></property>
+                <property name="rate"><![CDATA[100]]></property>
+                <property name="header"><![CDATA[1]]></property>
+                <property name="noautogenfield"><![CDATA[true]]></property>
+                <property name="addcsvopcode"><![CDATA[true]]></property>
+                <property name="addcsvflags"><![CDATA[normal]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+                <property name="fsname"><![CDATA[@ESP_PROJECT_HOME@/files/input.csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-calculate algorithm="STFT" index="pi_EMPTY" name="w_calculate">
+          <description><![CDATA[The calculate window, w_calculate receives data events from the source window. It
 	publishes calculated transforms according to the STFT algorithm properties. In this
 	example, the following algorithm parameters govern the STFT algorithm: 
 
@@ -84,55 +88,55 @@
 	For this example, the output mapping is using a non-list format. An output-mapping that uses a list
 	output is also supported for this algorithm. 
 
-	The resulting calculated transforms are written to the file result.out via a file socket connector
-      </description>
-      <schema>
-        <fields>
-          <field name='time' type='int64' key='true'/>
-          <field name='bin' type='int64' key='true'/>       
-          <field name='power' type='double'/>
-          <field name='phase' type='double'/>
-        </fields>
-      </schema>
-        <parameters>
-          <properties>
-           <property name="windowLength">64</property>
-           <property name="windowType">12</property>
-           <property name="fftLength">256</property>
-           <property name="binsInSchema">256</property>
-           <property name="overlap">32</property>
-          </properties>
-        </parameters>
-        <input-map>
-          <properties>
-           <property name="input">y</property>
-           <property name="timeId">ID</property>
-          </properties>
-        </input-map>
-        <output-map>
-          <properties>
-           <property name="timeIdOut">time</property>
-           <property name="binOut">bin</property>
-           <property name="powerOut">power</property>
-           <property name="phaseOut">phase</property>
-          </properties>
-        </output-map>
-     <connectors>
-      <connector class='fs' name='sub'>
-       <properties>
-        <property name='type'>sub</property>
-        <property name='fstype'>csv</property>
-        <property name='fsname'>result.out</property>
-        <property name='snapshot'>true</property> 
-   	<property name='header'>true</property>
-       </properties>
-      </connector>
-     </connectors>
-    </window-calculate>
-   </windows>
-   <edges>
-    <edge source='w_source' target='w_calculate' role='data'/>
-   </edges>
-  </contquery>
-</contqueries>
+	The resulting calculated transforms are written to the file result.out via a file socket connector]]></description>
+          <schema>
+            <fields>
+              <field name="time" type="int64" key="true"/>
+              <field name="bin" type="int64" key="true"/>
+              <field name="power" type="double"/>
+              <field name="phase" type="double"/>
+            </fields>
+          </schema>
+          <parameters>
+            <properties>
+              <property name="windowLength"><![CDATA[64]]></property>
+              <property name="windowType"><![CDATA[12]]></property>
+              <property name="windowParam"><![CDATA[-1.0]]></property>
+              <property name="fftLength"><![CDATA[256]]></property>
+              <property name="overlap"><![CDATA[32]]></property>
+              <property name="binsInSchema"><![CDATA[256]]></property>
+            </properties>
+          </parameters>
+          <input-map>
+            <properties>
+              <property name="input"><![CDATA[y]]></property>
+              <property name="timeId"><![CDATA[ID]]></property>
+            </properties>
+          </input-map>
+          <output-map>
+            <properties>
+              <property name="timeIdOut"><![CDATA[time]]></property>
+              <property name="binOut"><![CDATA[bin]]></property>
+              <property name="powerOut"><![CDATA[power]]></property>
+              <property name="phaseOut"><![CDATA[phase]]></property>
+            </properties>
+          </output-map>
+          <connectors>
+            <connector class="fs" name="result_Connector">
+              <properties>
+                <property name="type"><![CDATA[sub]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+                <property name="fsname"><![CDATA[@ESP_PROJECT_OUTPUT@/result.out]]></property>
+                <property name="snapshot"><![CDATA[true]]></property>
+                <property name="header"><![CDATA[true]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-calculate>
+      </windows>
+      <edges>
+        <edge source="w_source" target="w_calculate" role="data"/>
+      </edges>
+    </contquery>
+  </contqueries>
 </project>
