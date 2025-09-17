@@ -65,7 +65,7 @@ print("DQ locale read:" & error)
 ```
 Notice that the locale is set to English with the line `error=dataq.LOADQKB("ENUSA")`.  
 
-5. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output_schema.png).
+5. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
 6. Click <!-- need edit icon -->. In the **Expression** column, you see: 
 
 ```EEL
@@ -101,7 +101,7 @@ This window is responsible for initializing the SAS Quality Knowledge Base (QKB)
 Explore the settings for the prepare_list window:
 1. Open the project in SAS Event Stream Processing Studio.
 2. Select the prepare_list window.
-3. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output_schema.png).
+3. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
 4. Click <!-- need edit icon -->. In the **Expression** column, you see:  
 
 ```EEL
