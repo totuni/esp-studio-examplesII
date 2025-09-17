@@ -1,62 +1,36 @@
-# Fuzzy Lookup of Organization names in transactions using SAS Data Quality
-
-## Vocabulary
-
-| Term | Definition |
-|------|------------|
-| **QKB**  | [SAS Quality Knowledge Base](https://go.documentation.sas.com/doc/en/sasadmincdc/v_067/qkbwlcm/home.htm) is a collection of files that store data and logic that define data management operations, focused on data quality improvement. |
-| **matchcode**  |A [matchcode](https://go.documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n1qhuuigq8u8ten1dqopa1e4ktbm.htm) is a standardized textual representation of a name or organization that enables fuzzy matching. It accounts for variations in spelling, abbreviations, and common prefixes/suffixes. |
-| **EEL**  |[Expression Engine Language](https://go.documentation.sas.com/doc/en/espcdc/v_062/engelref/titlepage.htm) is used for event processing and for accessing Data Quality functionality.|
+# Fuzzy Lookup of Organization Names in Transactions Using SAS Data Quality
 
 ## Overview
 
-This example demonstrates how to use **SAS Event Stream Processing (ESP)** to perform fuzzy lookups on streaming data using **SAS Data Quality**.
+This example demonstrates how to use SAS Event Stream Processing (ESP) to perform fuzzy lookups on streaming data using SAS Data Quality. This project uses Expression Engine Language (EEL) to load the SAS Quality Knowledge Base (QKB). The SAS Quality Knowledge Base is a collection of files that stores data and logic that define data management operations. This example also builds match codes, which are necessary to enable fuzzy matching, and performs lookups using a Join window.
 
-It includes examples of:
-- EEL syntax to load the Quality Knowledge Base (QKB)
-- Building match codes
-- Performing lookups using an ESP Join Window
----
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
-## Use Case
+## Source Data
 
-This project illustrates how to perform **watch list screening** on transaction data using fuzzy matching.
+This example has two Source windows called src_transactions and watch_list. Both windows ingest synthetic data records that act as the streaming data for this project.
 
-The workflow includes:
-- Loading the watch list
-- Preparing match codes from the watch list
-- Ingesting transactional data
-- Generating match codes for the `sender` field in transactions
-- Matching the transaction `sender` against the watch list
-- Retrieving and assigning the corresponding **risk score** based on the matched entity
-
-## Source Data and Other Files
-
-- The source window named `watch_list` uses the **Lua connector** to ingest synthetic data records with the following fields:
+- The Source window named `watch_list` uses the Lua connector to ingest synthetic data records with the following fields:
   - `company_name`: The registered name of the company
   - `risk_level`: An integer indicating the associated risk level
 
-- The source window named `src_transactions` also uses the **Lua connector** to ingest synthetic transaction records with the following fields:
+- The Source window named `src_transactions` also uses the Lua connector to ingest synthetic transaction records with the following fields:
   - `tran_id`: A unique card transaction ID
   - `sum`: The transaction amount
   - `currency`: The transaction currency
-  - `sender`: The sender's name — which may be an individual or an organization, with various spelling formats
+  - `sender`: The sender's name, which might be an individual or an organization
 
 ## Prerequisites
 
-This example requires **SAS Data Quality** to be installed and two environment variables to be configured in **ESP Studio**:
+This example requires you to install SAS Data Quality. You must also configure two environment variables in SAS Event Stream Processing Studio. 
 
 - `DFESP_QKB`: Set this to the shared folder under the SAS Data Quality installation.  
-  On Linux systems, this typically looks like:  
-  `/QKB/data/ci/<qkb_version_number>`  
-  For example: `/QKB/data/ci/22`
+  On Linux systems, this typically looks like: `/QKB/data/ci/<qkb_version_number>`  
 
 - `DFESP_QKB_LIC`: Set this to the full path of the SAS Data Quality license file.
 
 For more details, refer to the official SAS documentation:  
-🔗 [Setting Up SAS Data Quality in ESP](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
-
+🔗 [Setting Up SAS Data Quality in ESP](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
 
 ## Workflow
 
@@ -64,24 +38,22 @@ The following figure shows the diagram of the project:
 
 <img alt="Diagram" src="img/diagram.png" width="300">
 
-- **src_transactions**: A **Source** window that ingests synthetic transaction data using the Lua connector.
-- **watch_list**: A **Source** window that ingests synthetic watch list data using the Lua connector.
-- **data_quality**: A **Compute** window that loads data quality functions from the QKB and performs identification and matchcode generation for the sender name.
-- **prepare_list**: A **Compute** window that loads data quality functions from the QKB and performs identification and matchcode generation for watch list items.
-- **change_key**: A **Compute** window that modifies the primary key of each event to enable use in a **Left Join** operation.
-- **lookup_sender**: A **Join** window that performs a fuzzy lookup by matching the sender’s matchcode from the transaction stream against the watch list.
+- src_transactions: A Source window that ingests synthetic transaction data using the Lua connector.
+- watch_list: A Source window that ingests synthetic watch list data using the Lua connector.
+- data_quality: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for the sender name.
+- prepare_list: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for watch list items.
+- change_key: A Compute window that modifies the primary key of each event to enable a Left Join operation.
+- lookup_sender: A Join window that performs a fuzzy lookup by matching the sender’s match code from the transaction stream against the watch list.
 
+### Data_quality
 
-### data\_quality
+This window is responsible for initializing the SAS Quality Knowledge Base and applying data quality functions for entity identification and match code generation.
 
-The `data_quality` **Compute window** is responsible for initializing the SAS Quality Knowledge Base (QKB) and applying data quality functions for entity identification and matchcode generation.
-
-#### Initialization expression
-
-An initializer expression is used to set up the QKB and load the appropriate locale. In this example, the locale is set to **US English** (`ENUSA`):
-You can find it by click on the data_quality window, then navigating to the Properties panel on the right and looking under the `Compute Settings` section:
-
-![dq_init](img/dq_init.png "dq_init")
+Explore the settings for the data_quality window:
+1. Open the project in SAS Event Stream Processing Studio.
+2. Select the data_quality window.
+3. Expand **Compute Settings**.
+4. Click ![xyz](/EndtoEndExamples/matchlist_screening/img/xyz.png). You should see the following code in the **Expression Editor**:
 
 ```xml
 dq dataq
@@ -91,25 +63,20 @@ print("DQ init value:" & dataq)
 error=dataq.LOADQKB("ENUSA")
 print("DQ locale read:" & error)
 ```
+Notice that the locale is set to English with the line `error=dataq.LOADQKB("ENUSA")`.  
 
-Once initialized, QKB-based data quality functions are available for use in field expressions.
-
-#### Entity Type Detection
-To write expressions, go to the Output schema panel in the data_quality window and click the Edit icon.
-The first step is to identify whether the `sender` is an **individual** or an **organization** using the `IDENTIFY` function:
-
-<img alt="Window schema" src="img/dq_schema.png"  width="60%" height="60%">
+5. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output_schema.png).
+6. Click <!-- need edit icon -->. In the **Expression** column, you see: 
 
 ```EEL
 string output;
 dataq.IDENTIFY("Field Content", sender, output);
 return output;
 ```
-The `output` will be saved into `sender_type` field in the Output schema according to fields mapping.
+When you run the project, either **INDIVIDUAL** or **ORGANIZATION** is displayed next to each record.  
 
-#### Matchcode Generation
+7. In the **Expression** column for `sender_matchcode` field, you see: 
 
-The `sender_matchcode` field in the Output schema will be calculated based on the entity type. The appropriate **matchcode** is generated using either the `NAME` or `ORGANIZATION` context, with a sensitivity level of `65`:
 ```EEL
 string output2;
 if output=="INDIVIDUAL"   
@@ -118,48 +85,53 @@ else
 dataq.matchcode("ORGANIZATION", 65, sender, output2);
 return output2;
 ```
+The appropriate match code is generated using either the NAME or ORGANIZATION context with a sensitivity level of 65.
 
-#### Example
+The match code function standardizes the input so that any form of the name is treated as equivalent. The table below shows an example:
 
-| Input Name         | Matchcode                         |
+| Input Name         | Match Code                         |
 | ------------------ | --------------------------------- |
 | Mr Alex Smith      | 4B7\~2\$\$\$\$\$\$&W\_3\$\$\$\$\$ |
 | Dr Alexander Smith | 4B7\~2\$\$\$\$\$\$&W\_3\$\$\$\$\$ |
 
-As shown, the matchcode function standardizes the input, allowing both forms of the name to be treated as equivalent.
+### Prepare_list
 
-### prepare\_list
+This window is responsible for initializing the SAS Quality Knowledge Base (QKB) and generating match codes for the `company_name` field in the watch list.
 
-The `prepare_list` **Compute window** is responsible for initializing the SAS Quality Knowledge Base (QKB) and generating matchcodes for the `company_name` field in the watch list.
-It uses the same expressions.
+Explore the settings for the prepare_list window:
+1. Open the project in SAS Event Stream Processing Studio.
+2. Select the prepare_list window.
+3. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output_schema.png).
+4. Click <!-- need edit icon -->. In the **Expression** column, you see:  
+
 ```EEL
 string output_mc;
 dataq.matchcode("ORGANIZATION", 65, company_name, output_mc);
 return output_mc;
 ```
+It uses the same match code expression as the `sender_matchcode` field in the data_quality window.
 
-### lookup\_sender
+<!-- what happened to change_key? it's odd that you talk about every window except for this one. -->
+### Lookup_sender
 
-The `lookup_sender` **Join window** performs a left join between the transactions and the watch list using the matchcode key.
-To view or modify lookup criteria, click on the `lookup_sender` window, go to the Properties panel, and locate the **Join Conditions** section.
+This window performs a left join between the transactions and the watch list using the match code key.
 
-<img alt="Join" src="img/join.png"  width="400" >
+Explore the settings for the lookup_sender window:
+1. Open the project in SAS Event Stream Processing Studio.
+2. Select the lookup_sender window.
+3. Expand **Join Conditions**. You can change the lookup criteria by selecting a different key from the drop down list for the left or right sides.
 
 ## Test the Project and View the Results
 
-When you test the project in **SAS Event Stream Processing Studio**, the results of the fuzzy lookup will appear in the `lookup_sender` window tab:
+When you test the project in SAS Event Stream Processing Studio, the results of the fuzzy lookup will appear in the lookup_sender tab:
 
 ![w_score tab](img/output.png "output")
 
-As shown above, the system successfully matches the `sender` organization name with the watch list entry, even when different spellings are used. This demonstrates the effectiveness of using match codes for fuzzy matching.
-
-
+As shown above, the system successfully matches the `sender` name with the watch list entry, even when different spellings are used. This demonstrates the effectiveness of using match codes for fuzzy matching.
 
 ## Next Steps
 
-You can enhance this project by:
-
-- **Incorporating additional Data Quality functions**, such as:
+You can enhance this project by incorporating additional SAS Data Quality function such as the functions below:
   - `DQ.CASE`
   - `DQ.EXTRACT`
   - `DQ.GENDER`
@@ -168,11 +140,7 @@ You can enhance this project by:
   - `DQ.STANDARDIZE`
   - `DQ.TOKEN`
 
-  Refer to the full list of supported functions in the SAS documentation:  
-  🔗 [SAS Data Quality Functions in ESP](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n0qr20xa01a5kcn1kvk185dzgnpt.htm)
-- **Applying additional business rules** on transaction data, beyond watch list matching. For example, flag high-value transactions or unusual currency usage.
-- **Experimenting with different matchcode sensitivities** in the `DQ.MATCHCODE` method to fine-tune the balance between false positives and false negatives.
-
+ For more information about all the supported functions, see: 🔗 [SAS Data Quality Functions in ESP](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n0qr20xa01a5kcn1kvk185dzgnpt.htm).
 
 ## Additional Resources
 
