@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example demonstrates how to use SAS Event Stream Processing (ESP) to perform fuzzy lookups on streaming data using SAS Data Quality. This project uses Expression Engine Language (EEL) to load the SAS Quality Knowledge Base (QKB). The SAS Quality Knowledge Base is a collection of files that stores data and logic that define data management operations. This example also builds match codes, which are necessary to enable fuzzy matching, and performs lookups using a Join window.
+This example demonstrates how to use SAS Event Stream Processing (ESP) to perform fuzzy lookups on streaming data using SAS Data Quality. This project uses Expression Engine Language (EEL) to load the SAS Quality Knowledge Base (QKB). The SAS Quality Knowledge Base is a collection of files that stores data and logic that define data management operations. This example also builds match codes, which are necessary to enable fuzzy matching. Then, it performs lookups using a Join window.
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
@@ -25,12 +25,11 @@ This example has two Source windows called src_transactions and watch_list. Both
 This example requires you to install SAS Data Quality. You must also configure two environment variables in SAS Event Stream Processing Studio. 
 
 - `DFESP_QKB`: Set this to the shared folder under the SAS Data Quality installation.  
-  On Linux systems, this typically looks like: `/QKB/data/ci/<qkb_version_number>`  
+  On Linux systems, this typically looks similar to the following path: `/QKB/data/ci/<qkb_version_number>`  
 
 - `DFESP_QKB_LIC`: Set this to the full path of the SAS Data Quality license file.
 
-For more details, refer to the official SAS documentation:  
-🔗 [Setting Up SAS Data Quality in ESP](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
+For more information, see: 🔗 [Setting Up SAS Data Quality in ESP](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
 
 ## Workflow
 
@@ -38,16 +37,16 @@ The following figure shows the diagram of the project:
 
 <img alt="Diagram" src="img/diagram.png" width="300">
 
-- src_transactions: A Source window that ingests synthetic transaction data using the Lua connector.
-- watch_list: A Source window that ingests synthetic watch list data using the Lua connector.
-- data_quality: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for the sender name.
-- prepare_list: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for watch list items.
-- change_key: A Compute window that modifies the primary key of each event and builds an in-memory hash index to enable a left join operation.
-- lookup_sender: A Join window that performs a fuzzy lookup by matching the sender’s match code from the transaction stream against the watch list.
+- Src_transactions: A Source window that ingests synthetic transaction data using the Lua connector.
+- Watch_list: A Source window that ingests synthetic watch list data using the Lua connector. A watch list is a list of individuals or organizations that require further risk assessment.
+- Data_quality: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for the sender name.
+- Prepare_list: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for watch list items.
+- Change_key: A Compute window that modifies the primary key of each event and builds an in-memory hash index to enable a left join operation.
+- Lookup_sender: A Join window that performs a fuzzy lookup by matching the sender’s match code from the transaction stream against the watch list.
 
 ### Data_quality
 
-This window is responsible for initializing the SAS Quality Knowledge Base and applying data quality functions for entity identification and match code generation.
+This window is responsible for initializing the SAS Quality Knowledge Base and applying data quality functions in order to identify entities and generate match codes.
 
 Explore the settings for the data_quality window:
 1. Open the project in SAS Event Stream Processing Studio.
@@ -66,7 +65,7 @@ print("DQ locale read:" & error)
 Notice that the locale is set to English with the line `error=dataq.LOADQKB("ENUSA")`.  
 
 5. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
-6. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). In the **Expression** column, you see: 
+6. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). In the **Expression** column for `sender_type`, you see: 
 
 ```EEL
 string output;
@@ -113,12 +112,14 @@ It uses the same match code expression as the `sender_matchcode` field in the da
 
 ### Change_key
 
+Once the SAS Quality Knowledge Base is initialized and the match codes are generated, the change_key window uses the newly generated match codes as the new key. The `match_code` field becomes the new key and sets the index.
+
 Explore the settings for the change_key window:
 1. Open the project in SAS Event Stream Processing Studio.
 2. Select the change_key window.
-3. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
-4. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). In the Key column, we changed the key field to `match_code` (instead of `company_name` from the previous step). Defining the key is a prerequisite for creating the index.
-5. Click ![properties](/EndtoEndExamples/matchlist_screening/img/properties-icon.png). In the State section, we selected pi_HASH to build an index on the `match_code` field. This allows us to make Left Join operation with this window in the next `lookup_sender` window.
+3. Expand **State**. Notice that the window state is set to **Stateful (pi_HASH)**. This means pi_HASH builds an index on the `match_code` field, which enables a left join operation between change_key and lookup_sender.
+4. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
+5. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). Notice that the key field is `match_code` instead of `company_name` like it was in the prepare_list window. Defining the key is a prerequisite for creating the index. <!-- why does the key need to be changed? it was defined before, was it not? -->
 
 ### Lookup_sender
 
@@ -127,15 +128,15 @@ This window performs a left join between the transactions and the watch list usi
 Explore the settings for the lookup_sender window:
 1. Open the project in SAS Event Stream Processing Studio.
 2. Select the lookup_sender window.
-3. Expand **Join Conditions**. You can change the lookup criteria by selecting a different key from the drop down list for the left or right sides.
+3. Expand **Join Conditions**. You can change the lookup criteria by selecting a different key from the drop-down list for the left or right sides.
 
 ## Test the Project and View the Results
 
-When you test the project in SAS Event Stream Processing Studio, the results of the fuzzy lookup will appear in the lookup_sender tab:
+When you test the project in SAS Event Stream Processing Studio, the results of the fuzzy lookup appear in the **lookup_sender** tab:
 
 ![w_score tab](img/output.png "output")
 
-As shown above, the system successfully matches the `sender` name with the watch list entry, even when different spellings are used. This demonstrates the effectiveness of using match codes for fuzzy matching.
+In the figure above, the system successfully matches the `sender` name with the watch list entry, even when different spellings are used. This demonstrates the effectiveness of using match codes for fuzzy matching.
 
 ## Next Steps
 
@@ -148,9 +149,9 @@ You can enhance this project by incorporating additional SAS Data Quality functi
   - `DQ.STANDARDIZE`
   - `DQ.TOKEN`
 
- For more information about all the supported functions, see: 🔗 [SAS Data Quality Functions in ESP](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n0qr20xa01a5kcn1kvk185dzgnpt.htm).
+ For more information about all the supported functions, see: 🔗 [SAS Data Quality Functions in ESP](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n0qr20xa01a5kcn1kvk185dzgnpt.htm).
 
 ## Additional Resources
 
-- [SAS Help Center: Using Expression Engine Language (EEL)](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
-- [SAS Help Center: Quality Knowledge Base: User Guide: QKB Definition Types](https://go.documentation.sas.com/doc/en/sasadmincdc/v_067/qkb/p0013v6doxf8f1n12w81udna30gm.htm)
+- [SAS Help Center: Using Expression Engine Language (EEL)](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
+- [SAS Help Center: Quality Knowledge Base: User Guide: QKB Definition Types](https://go.documentation.sas.com/doc/en/sasadmincdc/default/qkb/p0013v6doxf8f1n12w81udna30gm.htm)
