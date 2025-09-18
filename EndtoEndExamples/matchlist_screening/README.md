@@ -42,7 +42,7 @@ The following figure shows the diagram of the project:
 - watch_list: A Source window that ingests synthetic watch list data using the Lua connector.
 - data_quality: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for the sender name.
 - prepare_list: A Compute window that loads data quality functions from the SAS Quality Knowledge Base and performs identification and match code generation for watch list items.
-- change_key: A Compute window that modifies the primary key of each event to enable a Left Join operation.
+- change_key: A Compute window that modifies the primary key of each event and builds an in-memory hash index to enable a left join operation.
 - lookup_sender: A Join window that performs a fuzzy lookup by matching the sender’s match code from the transaction stream against the watch list.
 
 ### Data_quality
@@ -66,7 +66,7 @@ print("DQ locale read:" & error)
 Notice that the locale is set to English with the line `error=dataq.LOADQKB("ENUSA")`.  
 
 5. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
-6. Click <!-- need edit icon -->. In the **Expression** column, you see: 
+6. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). In the **Expression** column, you see: 
 
 ```EEL
 string output;
@@ -102,7 +102,7 @@ Explore the settings for the prepare_list window:
 1. Open the project in SAS Event Stream Processing Studio.
 2. Select the prepare_list window.
 3. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
-4. Click <!-- need edit icon -->. In the **Expression** column, you see:  
+4. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). In the **Expression** column, you see:  
 
 ```EEL
 string output_mc;
@@ -111,7 +111,15 @@ return output_mc;
 ```
 It uses the same match code expression as the `sender_matchcode` field in the data_quality window.
 
-<!-- what happened to change_key? it's odd that you talk about every window except for this one. -->
+### Change_key
+
+Explore the settings for the change_key window:
+1. Open the project in SAS Event Stream Processing Studio.
+2. Select the change_key window.
+3. Click ![output schema](/EndtoEndExamples/matchlist_screening/img/output-schema-icon.png).
+4. Click ![edit](/EndtoEndExamples/matchlist_screening/img/edit-icon.png). In the Key column, we changed the key field to `match_code` (instead of `company_name` from the previous step). Defining the key is a prerequisite for creating the index.
+5. Click ![properties](/EndtoEndExamples/matchlist_screening/img/properties-icon.png). In the State section, we selected pi_HASH to build an index on the `match_code` field. This allows us to make Left Join operation with this window in the next `lookup_sender` window.
+
 ### Lookup_sender
 
 This window performs a left join between the transactions and the watch list using the match code key.
