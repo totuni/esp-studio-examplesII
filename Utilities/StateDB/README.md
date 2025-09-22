@@ -15,18 +15,19 @@ This project demonstrates how to perform insert, lookup, and aggregate operation
 ## Prerequisites
 
 This example requires [**Redis database**](https://redis.io/) to be installed and available in the SAS ESP environment.
-Here is an example setup process for Redis.
-
-1)	First we will start the test Redis server. You can do that using the following command:
+To install and start Redis server use the following command:
 ```bash
 sudo docker run --name test-redis -p 6379:6379 -d redis
 ```
-2)	Next we will start [RedisInsight](https://redis.io/insight/). This is a Redis client to browse the data in the Redis server and run CLI commands for the server.
+For more details, please refer to the documentation [**Redis docker**](https://hub.docker.com/_/redis) 
+
+<!-- OPTIONAL steps to setup Redis client  -->
+-	Next we will start [RedisInsight](https://redis.io/insight/). This is a Redis client to browse the data in the Redis server and run CLI commands for the server.
 ```bash
 sudo docker run -v /home/espuser/espstatedb_workshop/redisinsight:/db -p 8002:8001 -d redislabs/redisinsight:latest
 ```
-3)	You can point your browser to http://localhost:8002. This will open the RedisInsight client. Your local Redis instance is already added under the name 'localRedis'. If you want to add a different Redis instance, you can do so as well.
-4)	You can open the Browser by clicking the “Browser” option on the left side. Since nothing has run yet, this should be blank.
+-	You can point your browser to http://localhost:8002. This will open the RedisInsight client. Your local Redis instance is already added under the name 'localRedis'. If you want to add a different Redis instance, you can do so as well.
+-	You can open the Browser by clicking the “Browser” option on the left side. Since nothing has run yet, this should be blank.
    
 > [!IMPORTANT]
 > After the Redis setup is finished and running, two variables must be configured in **ESP Studio**
