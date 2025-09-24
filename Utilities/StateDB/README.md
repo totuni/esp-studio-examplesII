@@ -11,7 +11,8 @@ For more information about installing and using example projects, see [Using the
 This project demonstrates how to perform Insert, Lookup, and Aggregate operations on an in-memory Redis hash table. This is useful in the following scenarios:
 - Performing fast lookups against large tables with many records
 - Reducing the startup time of SAS Event Stream Processing projects by minimizing the container’s memory footprint
-- Buiding a ESP compute cluster where ESP pods share common data
+- Buiding an ESP compute cluster where multiple SAS ESP k8s Pods run as replicas of the same project in parallel, sharing and aggregating different parts of the input stream in a distributed way
+
 <!-- is ESP okay to be abbreviated here? -->
 ## Prerequisites
 
