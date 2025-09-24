@@ -15,7 +15,7 @@ The project shows how to perform real-time spectral analysis on continuous signa
 
 An example of a potential application is the detection of breathing patterns in healthcare:
 ![Asthma breath pattern](img/asthma.png "Asthma breath pattern")
-For more details, see [Time-Frequency Analysis Using SAS®](https://support.sas.com/resources/papers/proceedings17/SAS0585-2017.pdf)
+For more details, see [Time-Frequency Analysis Using SAS®](https://support.sas.com/resources/papers/proceedings17/SAS0585-2017.pdf).
 
 
 ## Source Data
