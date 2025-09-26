@@ -81,7 +81,7 @@ Explore the settings for this window:
       if (event.symbol=="GMTC") then
         return true,{p0=event.price,q0=event.quant}
       end
-
+    
       return false
     end
     ```
@@ -93,7 +93,8 @@ Explore the settings for this window:
     <td>The second EOI function, f2, identifies re-occurrences of the stock symbol GMTC where the price and quantity of the stock has gone up 50% compared to events identified by f1.</td>
     <td>
 
-      
+
+​      
     ```
     function f2(event,context)
       if (context.data.p0<event.price*1.5 and 
@@ -101,12 +102,13 @@ Explore the settings for this window:
       then
         return true,{p1=event.price,q1=event.quant}
       end
-
+    
       return false
     end
     ```
 
-      
+
+​      
     </td>
     </tr>
     <tr>
@@ -166,7 +168,7 @@ The following figure shows the results for the patternWindow01 tab:
 
 ![Results for the patternWindow01 tab](img/patternWindow01.png "Results for the patternWindow01 tab")
 
-You might see warnings in the Log pane about the sourceWindow_01 window being throttled. You can ignore these warnings.
+
 
 ## Additional Resources
 For more information, see [SAS Help Center: Using Lua in a Pattern Window](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=n1rj6nmwuzuxisn12tjeu0o336tt.htm#n18zvo8e3r6y9fn1i5twt2mxease).
