@@ -16,8 +16,9 @@ This project demonstrates how to perform Insert, Lookup, and Aggregate operation
 ## Prerequisites
 
 This example requires [**Redis database**](https://redis.io/) to be installed and available in the SAS Event Stream Processing environment.
-To install and start Redis server, copy and paste the following command into your terminal:
+To install and start Redis server, copy and paste the following command into your terminal and run it:
 <!-- is this correct? I changed the original language to "copy and paste the following command into your terminal"-->
+<!-- Andrey: I think its  fine now -->
 ```bash
 sudo docker run --name test-redis -p 6379:6379 -d redis
 ```
@@ -29,6 +30,7 @@ After the Redis setup is finished and running, two variables must be configured 
 - `REDIS_PORT`: Set this to Redis database connection port. The default value is **6379**. You don’t need to change it unless you modified it during the Redis installation.
 
 <!-- How did you get to this screenshot in the ESP UI? -->
+<!-- Andrey: added above -->
 The figure below shows the **User-Defined Properties**:  
 ![Properties for Redis connection](img/properties.png "Properties for Redis connection").
 
