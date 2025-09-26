@@ -82,7 +82,7 @@ Explore the settings for the getMaxByGroup window:
     - `sensor_id`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_group`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_stmp`: This field is mapped to **Input, so it is received from the Input event.
-    - `sensor_group_max_id`: This field is mapped to **Query**, which means it is calculated based on data from the Redis <!-- Redis what? Redis hash table? Redis value? -->. Notice that the **Source Field** value is set to **SENSOR_ID** and the **Aggregate Function** value is **ESP_aMax**. This means that for each input event for a `sensor_group`, it returns the value of the `SENSOR_ID` that is stored in Redis for 60 seconds according to the retention policy.
+    - `sensor_group_max_id`: This field is mapped to **Query**, which means it is calculated based on data from the Redis hash table <!-- Redis what? Redis hash table? Redis value? --><!-- Andrey: table -->. Notice that the **Source Field** value is set to **SENSOR_ID** and the **Aggregate Function** value is **ESP_aMax**. This means that for each input event for a `sensor_group`, it returns the value of the `SENSOR_ID` that is stored in Redis for 60 seconds according to the retention policy.
   
 ### getSavedStamp
 
