@@ -68,7 +68,10 @@ Explore the settings for the w_calculate window by doing the following steps:
     - `binOut`: This role specifies the frequency bin variable name in the output stream. It is associated with `bin`.
     - `powerOut`: This role specifies the name of the power variable in the output stream. It is associated with `power`. 
     - `phaseOut`: This role specifies the name of the phase variable in the output stream. It is associated with `phase`.
-<!-- what about keyOut, powerListOut, and phaseListOut? -->
+    - `keyOut`: This role specifies key variable name (unique for each output event) in the output stream. This field is not used in this example.
+    - `powerListOut`: This role specifies the list of power variables in the output stream. This field is not used in this example.
+    - `phaseListOut`: This role specifies the list of phase variables in the output stream. It is associated with `phase`. This field is not used in this example.
+
 ## Test the Project and View the Results
 
 When you test the project in SAS Event Stream Processing Studio, the results for each window appear in separate tabs:
