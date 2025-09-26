@@ -95,25 +95,25 @@ Explore the settings for this window:
 
 
 ​      
-    ```
-    function f2(event,context)
-      if (context.data.p0<event.price*1.5 and 
-      context.data.q0<event.quant*1.5)
-      then
-        return true,{p1=event.price,q1=event.quant}
-      end
-    
+​    ```
+​    function f2(event,context)
+​      if (context.data.p0<event.price*1.5 and 
+​      context.data.q0<event.quant*1.5)
+​      then
+​        return true,{p1=event.price,q1=event.quant}
+​      end
+​    
       return false
     end
     ```
 
 
 ​      
-    </td>
-    </tr>
-    <tr>
-    <td> The third EOI function, f3, identifies re-occurrences of the stock symbol GMTC where the price and quantity of the stock has gone up 50% compared to events identified by f2.</td>
-    <td>
+​    </td>
+​    </tr>
+​    <tr>
+​    <td> The third EOI function, f3, identifies re-occurrences of the stock symbol GMTC where the price and quantity of the stock has gone up 50% compared to events identified by f2.</td>
+​    <td>
 
 
     ```
@@ -162,7 +162,7 @@ If you do not use the **Install example** button in SAS Event Stream Processing 
 
 When you test the project, the results for each window appear on separate tabs.
 - The **sourceWindow_01** tab lists the stock trades that are received from the input file.
-- The **patternWindow_01** tab lists the matched patterns. After a while, a total of 23 rows appear in this tab.
+- The **patternWindow_01** tab lists the matched patterns. After a while, a total of 23 rows appear in this tab. 
 
 The following figure shows the results for the patternWindow01 tab:
 
