@@ -26,6 +26,7 @@ For more information, see: [**Redis Docker**](https://hub.docker.com/_/redis).
 
 After the Redis setup is finished and running, two variables must be configured in SAS Event Stream Processing Studio. To do this, navigate to Project ![project icon](/Utilities/StateDB/img/project-icon.png) > Properties ![properties icon](/Utilities/StateDB/img/properties-icon.png), scroll down, and expand the User-Defined Properties section:
 <!-- where can the reader find the server IP, hostname, or connection port in the UI? -->
+<!-- Andrey: added -->
 - `REDIS_HOST`: Set this to Redis database server IP or host name. The default value is **127.0.0.1**. You need to specify the IP address of the Redis host that can be resolved from the SAS ESP container.
 - `REDIS_PORT`: Set this to Redis database connection port. The default value is **6379**. You don’t need to change it unless you modified it during the Redis installation.
 
@@ -50,8 +51,8 @@ Here is a diagram of the project:
 - InputRate is a Source window that ingests dummy events using a Timer Connector.
 - SensorsData is a Lua window that generates dummy sensor events.
 - SaveToRedis is a StateDB Writer window that saves and updates records in Redis hash tables.
-- GetSavedStamp is a StateDB Reader window that performs lookups by key in Redis hash tables and selects value. <!-- is "value" what you see or should is be "a value" or even "the value"? -->
-- GetMaxByGroup is a StateDB Reader window that performs aggregate functions on Redis hash tables by selected group value and selects result. <!-- same question here for result. Is result something that appears in the UI or should it be "the results"? -->
+- GetSavedStamp is a StateDB Reader window that looks up keys in Redis hash tables and retrieves the saved timestamp value for each key. <!-- is "value" what you see or should is be "a value" or even "the value"? --><!-- Andrey: rephrased -->
+- GetMaxByGroup is a StateDB Reader window that performs aggregate functions on Redis hash tables by a selected group value and returns the result. <!-- same question here for result. Is result something that appears in the UI or should it be "the results"? --><!-- Andrey: rephrased -->
 
 ### saveToRedis
 
