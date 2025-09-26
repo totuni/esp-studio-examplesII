@@ -74,7 +74,7 @@ Explore the settings for the getMaxByGroup window:
 1. Open the project in SAS Event Stream Processing Studio and select the getMaxByGroup window.
 2. In the right pane, expand **Database Query**.
    - `Redis prefix`: Enables you to set a unique prefix for the Redis hash table. The prefix must be the same as the prefix that you set in the saveToRedis window so that it can perform a lookup. The default value is **stream**.
-  <!-- you originally wrote "above" so I'm assuming that means the getSaveStamp window, but please verify --><!-- Andrey: no, i meant above window - saveToRedis .`Secondary Indexes` will be used for  aggregation here-->
+  <!-- you originally wrote "above" so I'm assuming that means the getSaveStamp window, but please verify --><!-- Andrey: no, i meant above window - saveToRedis . Should be used the same `Redis prefix`. Also `Secondary Indexes` from that window will be used for  aggregation here-->
    - `Query`: This table sets the query condition. In this example, you need to set a group key in order to perform aggregation. The project performs aggregation by the `sensor_group` value as the key. <!-- unclear what this means. is there a different/better way to explain this? -->
    - `Time field`: Defines the time reference used for retention counting. The default value is **(use system clock)**, but you can change it and specify a timestamp field from the Input event.
 3. Click ![output schema](/Utilities/StateDB/img/output-schema-icon.png). 
