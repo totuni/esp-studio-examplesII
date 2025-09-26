@@ -100,7 +100,7 @@ Explore the settings for the getSavedStamp window:
     - `sensor_group`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_stmp`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_saved_stmp`: This field is mapped to **Query**. Notice the **Source Field** column value is set to **SENSOR_STMP**, which means this field is received from the Redis `SENSOR_STMP` value. 
-<!-- typically with fields, we describe their significance, not just where they come from -->
+<!-- typically with fields, we describe their significance, not just where they come from --><!-- The getSavedStamp window is used only for receiving data from Redis. What matters here is identifying which fields are propagated from the previous ESP event and which fields are newly queried from Redis.-->
 
 ## Test the Project and View the Results
 
@@ -111,8 +111,8 @@ When you test the project in SAS Event Stream Processing Studio, the results for
 - The **getSavedStamp** tab lists incoming data and data from Redis. In the **sensors_saved_stmp** column, you can see fetched data for the `sensor_id` key, which is currently stored in the Redis hash. At the beginning of the test, no data is cached. As the saveToRedis window starts to run, the data appears. The following figure shows the results for the **getSavedStamp** tab:
   ![getSavedStamp window output](img/getSavedStamp.png "getSavedStamp window output")
 
-- The **getMaxByGroup** tab lists incoming data and data from Redis. In the **sensor_group_max_id** column, you can see aggregated data from Redis - maximum saved `SENSOR_ID` for the `sensor_group` value in the incoming event, where all records limited by 60 seconds of retention. The following figure shows the results for the **getMaxByGroup** tab:
-<!-- I don't understand this sentence at all. Can you rework the sentence above please? -->
+- The **getMaxByGroup** tab lists the results of the aggregation. For each input event, a new field called `sensor_group_max_id` is calculated. It represents the maximum `SENSOR_ID` value stored in Redis within the last 60 seconds for the specific `sensor_group` of the input event. The following figure shows the results for the **getMaxByGroup** tab:
+<!-- I don't understand this sentence at all. Can you rework the sentence above please? --> <!-- Andrey: how about this?  -->
   ![getMaxByGroup window output](img/getMaxByGroup.png "getMaxByGroup window output")
 
 ## Next Steps
