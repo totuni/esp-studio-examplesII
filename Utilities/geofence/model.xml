@@ -1,7 +1,7 @@
 <project name="geofence" threads="8" pubsub="auto" heartbeat-interval="1" luaroot="@ESP_PROJECT_OUTPUT@/luaroot">
   <description><![CDATA[This example creates a model that displays a list of wanted vehicles found in close proximity of critical infrastructure sites. The model performs the following actions:
 
-streams a list of vehicles, including vehicle locations
+streams a list  of vehicles, including vehicle locations
 streams a list of vehicles that are included on a vehicle watch list
 streams a list of critical infrastructure sites, including site locations
 processes the list of vehicles and attempts to match any wanted vehicles that are in close proximity to critical infrastructure sites
