@@ -28,7 +28,7 @@
             <connector class="videocap" name="video_publisher">
               <properties>
                 <property name="type"><![CDATA[pub]]></property>
-                <property name="inputrate"><![CDATA[10]]></property>
+                <property name="inputrate"><![CDATA[4]]></property>
                 <property name="repeatcount"><![CDATA[999]]></property>
                 <property name="resize_x"><![CDATA[@PUBLISH_WIDTH@]]></property>
                 <property name="resize_y"><![CDATA[@PUBLISH_HEIGHT@]]></property>
