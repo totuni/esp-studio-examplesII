@@ -1,181 +1,159 @@
-# SAS ESP Join Window 
+# SAS Event Stream Processing Join Window 
 
 ## Overview
-This example demonstrates all the various ways to use SAS ESP join windows with three sample data sources. Join windows in SAS ESP allow you to combine streaming data from multiple sources based on specified join conditions.
+This example demonstrates the various ways to use SAS Event Stream Processing Join windows. Join windows in SAS Event Stream Processing enable you to combine streaming data from multiple sources based on specific join conditions. By combining fast-moving fact data and dimension data, you can make decisions and detect patterns as events happen. This example explains how to pre-join dimension tables, choose the correct join type for your outcome, and configure state. These practices help lower latency, avoid unbounded memory growth, and make streaming pipelines easier to maintain and scale.
 
-### Understanding Fact and Dimension Inputs
+For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
-In SAS ESP streaming analytics, understanding the distinction between facts and dimensions is crucial for designing effective join operations.
-
-**Dimensions** = Small to large, reference/lookup tables. When tables are large, indexing may provide improved performance.
-
-**Facts** = Large, transactional streams.
-
-In a **join window** in SAS ESP:
-
-- The join window has a **left input** (often called the *fact* table) and a **right input** (often called the *dimension* table).
-- The **left (fact) input** is usually the stream of events you want to enrich — e.g., sensor readings, transactions, clickstream.
-- The **right (dimension) input** is typically a lookup or reference stream with the fields you’ll use to join on — e.g., customer master data, machine configuration.
-
-This fundamental difference in data characteristics drives how SAS ESP optimizes join operations and determines which stream should be assigned to which input for best performance.
-
-## Workflow
-
-![image-20250903131648794](img/image-20250903131648794.png)	
-
-The project shown above will be used to show how different join types behave when combining a streaming fact table with dimension/lookup tables.
-
-------
-
-### **Top part: Dimension (lookup) tables**
-
-- **Customers** → static (lookup) info about customers (e.g., ID, name, city).
-- **Loyalty** → static (lookup) info about loyalty status (e.g., Silver, Gold, Bronze).
-
-These are *dimension windows*, meaning they provide reference data to enrich the fact stream.
-
-------
-
-### **Middle part: Fact (streaming) table**
-
-- **Orders** → the *fact window*, which receives a continuous stream of events (e.g., new customer orders).
-
-This is the “driver” stream that you want to enrich with data from Customers and Loyalty.
-
-------
-
-### **Join windows**
-
-#### **Why FullOuterJoin is used in the middle**
-
-**FullOuterJoin**: combines **Customers** + **Loyalty**, so that downstream you have a unified view of customer + loyalty info. This is often used as a *pre-join step* to simplify your pipeline.   That way, instead of joining Orders against two tables separately, you have a single unified dimension table containing all the info. Then you can test different join strategies between streaming orders and this dimension.   It should also be noted that the Full outer joins only can only combine two dimension tables.  Therefore, it is not possible to show the full outer join using the Orders fact table.  
-
-#### **Bottom part: Different join types**
-
-From there, the **Orders** fact stream is joined with the customer+loyalty data using all three join types, so you can compare behavior:
-
-1. **InnerJoin**
-2. **LeftOuterJoin**
-3. **RightOuterJoin**
-
-
-
-## Sample Data Sources
+## Source Data
 
 ![image-20250902151250980](img/image-20250902151250980.png)
 
-In this example, we’re working with the following data sources: **Orders**, **Loyalty** and **Customers**. The **CustomerID** column serves as the common key. Here, the **Customers** and **Loyalty** tables provide additional information to enrich the data, while the **Orders** table represents the continuous stream of events that we want to enhance with that information.
+The example contains three source files: `orders.csv`, `loyalty.csv`, and `customers.csv`. The **CustomerID** column is the common key. The `customers.csv` and `loyalty.csv` files provide additional information to enrich the data, and the `orders.csv` file represents the continuous stream of events that enhance the information.
 
-## Join Window Types and Configurations
+## Prerequisites
 
-In this section, we’ll explore four common types of joins: **Inner Join, Left Outer Join, Right Outer Join, and Full Outer Join**. Joins are used to combine data from multiple sources based on a shared key, allowing us to bring together related information in meaningful ways. Each join type determines which records from the input tables are included in the result, and understanding the differences is key to choosing the right approach for your data.  
+In SAS Event Stream Processing streaming analytics, it is important to understand the distinction between fact tables and dimension tables in order to design effective join operations.
+
+Join windows consist of the following:
+
+- The Join window has a left input, which is called a fact table. It also has a right input, which is called a dimension table. 
+- The left input is the stream of events that you want to enrich (for example, sensor readings, transactions, and clickstreams).
+- The right input is a lookup or reference stream with the fields that you use to create a join (for example, customer master data or machine configuration).
+
+## Workflow
+
+The following figure shows the diagram of the project:
+
+![image-20250903131648794](img/image-20250903131648794.png)	
+
+- The Customers window is a Source window that contains a dimension table with information about customers (for example, ID, name, and city).
+- The Loyalty window is a Source window that contains a dimension table with information about loyalty status (for example, Silver, Gold, or Bronze).
+- The Orders window is a Source window that contains a fact table that receives a continuous stream of events (for example, new customer orders).
+- The FullOuterJoin window is a Join window that combines the tables in Customers and Loyalty. This helps create a unified view of all the information. This is used as a pre-join step to simplify your pipeline. Note that full outer joins can be used only with two dimension tables. It is not possible to full outer join a fact table.
+- The InnerJoin window is a Join window that performs an inner join of the tables.
+- The LeftOuterJoin window is a Join window that performs a left outer join of the tables.
+- The RightOuterJoin window is a Join window that performs a right outer join of the tables.
+<!-- So aren't they techinically Source windows that contain dimension and fact tables? -->
 
 ### Full Outer Join
 
-**Purpose**:  A **full outer join** brings together **all rows from both tables**, matching them where keys line up, and filling in `NULL` (or blanks) where they don’t.  In our customer example, we want to include all customers whether they are part of the loyalty program or not.  
+A full outer join brings together all rows from both tables, matching them where keys align. Otherwise, it fills in **NULL** where keys do not align. In this example, you want to include all customers whether they are part of the loyalty program or not.  
 
-**ESP Configuration**:
+Explore the settings for the FullOuterJoin window:
+1. Open the project in SAS Event Stream Processing Studio. 
+2. Select the FullOuterJoin window. The window should look like the figure below:
 
 ![image-20250826163711614](img/image-20250826163711614.png)	
 
-Note that the schema contains elements from the left and right side of the join and are denoted by a "l" or "r" in the Expression column of the schema. 
+3. Click ![Output Schema](/Transformations/join/img/output-schema-icon.png "Output Schema"). Fields include:
+   - `CustomerID`
+   - `CustomerName`
+   - `City`
+   - `Loyalty`
 
-![image-20250902171628292](img/image-20250902171628292.png)	
-
-Here you can see that Loyalty is coming from the right side of the join while CustomerName and City come from the left. 
+Notice that **Loyalty** is coming from the right side of the join and **CustomerName** and **City** come from the left. 
 
 ![image-20250902151811114](img/image-20250902151811114.png)		
 
-- **Matched records (111, 222, 333):** Both tables had these CustomerIDs, so all columns are populated
-- **Customer 555 (Diana):** Exists only in Customers table, so Loyalty is NULL
-- **Customer 666:** Exists only in Loyalty table, so CustomerName and Amount are NULL
-- This new combined table will be used for the remaining join examples.
-
-**Test the Project and View the Results**:
-
-When running this project in test mode the FullOuterJoin tab shows the following: 
-
-![image-20250902160511702](img/image-20250902160511702.png)	
-
-Note the Customer table records are inserted first and later updated when the Loyalty data is received.  The deletes of the records before the update can be ignored.  	
+Results:
+- 111, 222, and 333: The first three rows are matched records, which means both tables contained these `CustomerIDs`.
+- 555: This record exists only in `customers.csv`, so `Loyalty` is **NULL**.
+- 666: This record exists only in `loyalty.csv`, so `CustomerName` and `Amount` are **NULL**.
 
 ### Inner Join
 
-**Purpose**: Shows only records where CustomerID exists in both tables. Records are matched based on the CustomerID key. 
+An inner join shows only records where `CustomerID` exists in both tables. Records are matched based on the `CustomerID` key. 
 
-**ESP Configuration**:
+Explore the settings for the InnerJoin window:
+1. Open the project in SAS Event Stream Processing Studio. 
+2. Select the InnerJoin window. The window should look like the figure below:
 
 ![image-20250902171209414](img/image-20250902171209414.png)	
 
-Note that the schema contains elements from the left and right side of the join and are denoted by a "l" or "r" in the Expression column of the schema.
+3. Click ![Output Schema](/Transformations/join/img/output-schema-icon.png "Output Schema"). Fields include:
+   - `OrderID`
+   - `CustomerID`
+   - `Product`
+   - `Amount`
+   - `CustomerName`
+   - `City`
+   - `Loyalty`
 
-![image-20250902171802303](img/image-20250902171802303.png)	
-
-
-
-![image-20250902162749219](img/image-20250902162749219.png)	
+`Orders.csv` acts as the fact table and the table created from the full outer join is the dimension table. A record is generated for each order received where the `CustomerID` matches. 
 
 ![image-20250902155417514](img/image-20250902155417514.png)	
 
-With Orders acting as the **fact table** and Customers/Loyalty as the combined **dimension table**, a record is generated for each order received where the CustomerID matches. 
-
-- **Matched records (111, 222, 555):** Both tables had these CustomerIDs, so all columns are populated
-- **Customer 555 (Diana):** Loyalty is set to NULL
-- **Order 999 ** Does not exist in the dimension table and is therefore dropped
-
-**Test the Project and View the Results**:
-
-![image-20250902163002309](img/image-20250902163002309.png)
-
 ### Left Outer Join
-**Purpose**: Returns all records from the fact stream, with matching records from the dimension stream where available.  
 
-![image-20250902163649185](img/image-20250902163649185.png)		
+A left outer join returns all the records that match from the fact table with records from the dimension table.	
+
+Explore the settings for the LeftOuterJoin window:
+1. Open the project in SAS Event Stream Processing Studio. 
+2. Select the LeftOuterJoin window. The window should look like the figure below:
+
+![Left Join](/Transformations/join/img/leftjoin.png)
+
+Notice that the Join window enables you to set the state for the left and right inputs separately. The left table state is set to **Stateless (pi_EMPTY)**, which means no events are stored except for the current record. This removes any unbounded memory growth issues from the project. When a dimension table is large or is updated frequently, you can select the **Use a secondary index** check box to improve lookup performance.
+
+3. Click ![Output Schema](/Transformations/join/img/output-schema-icon.png "Output Schema"). Fields include:
+   - `OrderID`
+   - `CustomerID`
+   - `Product`
+   - `Amount`
+   - `CustomerName`
+   - `City`
+   - `Loyalty`
+
+The left outer join creates a record for every event that enters the data steam from the fact table. Therefore, **ORD005** creates a joined event even though all the dimension fields are **NULL**:
 
 ![image-20250902163855496](img/image-20250902163855496.png)		
 
-Here we create a record for every event which enters the steam on the fact side, which in this case is the left side.  Therefore, ORD005 creates a joined event even when all the dimension fields are NULL.
-
-**Test the Project and View the Results**:
-
-![image-20250902164233160](img/image-20250902164233160.png)
-
 ### Right Outer Join
-**Purpose**: Returns all records from the right stream, with matching records from the left stream where available.
 
-This join type is not compatible with our project because ESP joins Fact tables (streaming) with Dimension tables (lookup).  Since our Orders table is on the left side.  Therefore we must fix this issue by re-arranging the project so that the Fact tables are streaming in on the right side.  This is fixed by rebuilding the schema entries so that the fact tables are coming from the right side.  Under settings for the RightOuterJoin you will see the following: 
+A right outer join returns all the records that match from the dimension table with records from the fact table. This join type is not compatible with the project because `orders.csv` streams in from the left side. To fix this issue, the project was rearranged so that the fact table streams in from the right side. The schema entries were rebuilt. The project is already fixed for you, but if you encounter this error in another project, you can use the following steps to fix it:
+
+1. Open the project in SAS Event Stream Processing Studio. 
+2. Select the RightOuterJoin window. The window looks like the figure below:
 
 ![image-20250903113545299](img/image-20250903113545299.png)	
 
-This clearly states that the left window is Orders while the right window is the FullOuterJoin.   We need to flip this around by clicking those double arrows between the two.  This will generate the following message: 
+This clearly states that the left window is **Orders**, and the right window is **FullOuterJoin**. You need to change this by clicking ![double arrows](/Transformations/join/img/doublearrows.png). This generates the following message: 
 
 ![image-20250903113749133](img/image-20250903113749133.png)	
 
-After clicking yes you can now see that the Left and Right designations are reversed. In the version of the project you’re working with, this fix has already been implemented — the fact stream is on the right side and the schema rebuilt — so you can run the Right Outer Join without re-arranging anything yourself.
+3. Click **Yes**. Now the left and right windows are reversed:
 
 ![image-20250903113850309](img/image-20250903113850309.png)	
 
-This action also deletes the old schema so it will need to be rebuilt.  Once rebuilt the orders fact table are now prefixed with "r_" .
+4. Click ![Output Schema](/Transformations/join/img/output-schema-icon.png "Output Schema"). The schema has been rebuilt and the fact table expressions are now prefixed with **r_**.
 
 ![image-20250903114822704](img/image-20250903114822704.png)	
 
-This means the streaming or fact side is now on the right instead of the left.  Logically this is the same as doing a left outer join as show in the the results below: 
+## Test the Project and View the Results
 
-![image-20250903130541976](img/image-20250903130541976.png)	
+When you test the project, the results for each window appear on separate tabs:
+- The FullOuterJoin tab lists the combination of the `customers.csv` and `loyalty.csv` tables.
+- The InnerJoin tab lists the results of an inner join performed on `orders.csv` and the full outer join tables.
+- The LeftOuterJoin tab lists the results of a left outer join performed on the `orders.csv` and the full outer join tables.
+- The RightOuterJoin tab lists the results of a right outer join performed on the `orders.csv` and the full outer join tables.
 
-## Join Window and State Management 
+The following figure shows the results for the FullOuterJoin tab:
 
-In SAS Event Stream Processing (ESP), the concept of state typically refers to the stored event data that a window maintains in memory over time or by count.  When you see a lightning bolt in the lower right of the ESP project window it indicates that the window is storing events in memory or has become stateful. ![image-20250903133635158](img/image-20250903133635158.png)	In a production environment the fact side of the project is infinite.   No program can store an infinite amount of data therefore the size of the records maintained in memory needs to be managed.  The Join window in ESP allows you to set the state for the left and right inputs separately.  Under join criteria you will see the following: 
+![image-20250902160511702](img/image-20250902160511702.png)	
 
-![image-20250903135717569](img/image-20250903135717569.png)	
+The following figure shows the results for the InnerJoin tab:
 
-The fact side of the window is set to stateless, meaning no events are stored except for the current record.   The only memory which will be used to store event data will be on the dimension  or right side in this case.  This effectively removes any unbounded memory growth issues from the project.  
+![image-20250902163002309](img/image-20250902163002309.png)
 
-### Secondary Indexes
+The following figure shows the results for the LeftOuterJoin tab:
 
-When a record is received in the orders window it will need to be matched to a corresponding record in the dimension data.  A lookup is issued for the CustomerID to see if there is a match in the dimension table.   When a dimension table is large or is updated frequently, enabling a secondary index can improve lookup performance. To do this, select **Use a secondary index** in the Join Criteria section.
+![left outer join](/Transformations/join/img/leftouterjoin.png)
 
-## Summary
+The following figure shows the results for the RightOuterJoin tab:
 
-This demo shows how SAS Event Stream Processing (ESP) join windows let you **enrich live data streams with contextual information** from reference tables in real time. By combining fast-moving “fact” data (like orders, sensor readings, or transactions) with “dimension” data (like customer records or machine configurations), you can make decisions and detect patterns as events happen instead of after the fact. The walkthrough explains why to pre-join dimension tables, how to choose the right join type for your outcome, and how to configure state so only necessary records are held in memory. Following these practices yields lower latency, avoids unbounded memory growth, and makes streaming pipelines easier to maintain and scale.
+![right outer join](/Transformations/join/img/rightouterjoin.png)
 
+## Additional Resources
+
+For more information, see [SAS Help Center: Using Join Windows](https://go.documentation.sas.com/doc/en/espcdc/v_063/espcreatewindows/n0suhocslptadgn10oh2htqnynr5.htm).

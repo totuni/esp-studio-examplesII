@@ -3,7 +3,7 @@
 
 This SAS Event Stream Processing (ESP) project demonstrates how to use the Aggregate window and the different types of aggregation functions it supports. Aggregate windows allow you to add simple statistics such as sum, mean, and standard deviation to streaming data. Since these calculations are provided out of the box and implemented on streaming data, they are fast and match the rate of the incoming data. 
 
-Aggregate windows are always Stateful, which means they need to retain the events. Therefore, Aggregate windows are almost always paired with Copy windows that have retention to manage the size of the state. <!-- if you're going to say "almost" need to know when it's not the case -->
+Aggregate windows are always Stateful, which means they need to retain the events. Aggregate windows can be paired with Copy windows that have retention to manage the size of the state.
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
@@ -26,7 +26,7 @@ There are two Aggregate windows that are connected to two Copy windows.
 - Aggregate_Normal is an Aggregate window that has various normal aggregate functions.
 - Aggregate_Timed is in Aggregate window that has various time-based aggregate functions. 
 - Copy_SystemTime_Sliding is a Copy window that has a retention type of **By time, sliding** with a time limit of five seconds.
-- Copy_EventTime_Sliding is a Copy window that has a retention type of **By time, sliding** with a time limit of ten seconds. <!-- I see 10 seconds in the UI, is it supposed to be 5? -->
+- Copy_EventTime_Sliding is a Copy window that has a retention type of **By time, sliding** with a time limit of ten seconds.
 - Source is a Source window that reads the input.csv file using a Python connector and publishes the events at a rate of one event per second.
 
 ### Aggregate_Normal
@@ -87,9 +87,7 @@ The following figure shows the results of the Aggregate_Timed window:
 
 ![aggregate_timed_output](img/aggregate_timed_output.png)
 
-This window displays timed calculations. These values are cleared without having to introduce event retention based on the time interval provided as the function argument. When a new event arrives, the previous calculated value is cleared. Notice the highlighted events. The Delete event is for the previous state of the group. The aggregate values for the Update Block event have been reset based on the time. As a result, the values for vibration, timed_average, timed_max, timed_min, and timed_sum are all the same for the Update block event. 
+This window displays timed calculations. These values are cleared without having to introduce event retention based on the time interval provided as the function argument. When a new event arrives, the previous calculated value is cleared. Notice the highlighted events. The Delete event is for the previous state of the group. The aggregate values for the Update Block event have been reset based on the time. As a result, the values for `vibration`, `timed_average`, `timed_max`, `timed_min`, and `timed_sum` are all the same for the Update block event. 
 
 ## Additional Resources
 For more information, see [SAS Help Center: Using Aggregate Windows](https://documentation.sas.com/?cdcId=espcdc&cdcVersion=default&docsetId=espcreatewindows&docsetTarget=p1i6d35raag9lbn1512750fhhd1x).
-
-
