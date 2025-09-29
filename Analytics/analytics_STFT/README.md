@@ -31,7 +31,7 @@ Here is a diagram of the project:
 ![Diagram of the project](img/diagram.png "Diagram of the project")
 
 - The w_source window is a Source window that ingests example data from `input.csv` using a File and Socket connector.
-- The w_calculate window is a Calculate window that applies the STFT algorithm to the incoming data and generates spectral features to a file called `result.out`.
+- The w_calculate window is a Calculate window that applies the STFT algorithm to the incoming data and generates spectral features to a file called `result.txt`.
 
 ### w_source
 
@@ -82,14 +82,14 @@ When you test the project in SAS Event Stream Processing Studio, the results for
 Here is an example of the output in the `w_calculate` window:
 ![w_calculate tab](img/w_calculate.png "w_calculate tab")
 
-To download the `result.out` file, do the following steps:
+To download the `result.txt` file, do the following steps:
 1. Navigate out of test mode and back to the project.
 2. Click ![project package](/Analytics/analytics_STFT/img/project-package.png).
 3. Expand **output**.
-4. Select **result.out**.
+4. Select **result.txt**.
 5. Click ![download](/Analytics/analytics_STFT/img/download.png).  
   
-Here is an example of the data in output `result.out` file:
+Here is an example of the data in output `result.txt` file:
 ![result file](img/result_file.png "result file")
 
 ## Next Steps
