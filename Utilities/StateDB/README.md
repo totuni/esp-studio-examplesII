@@ -30,11 +30,9 @@ After the Redis setup is finished and running, two variables must be configured 
 - `REDIS_HOST`: Set the value to the Redis database server IP or host name. You must specify the IP address of the Redis host that can be resolved from the SAS Event Stream Processing container. The default value is **127.0.0.1**.
 - `REDIS_PORT`: Set the value to Redis database connection port. You do not need to change the value unless you modified it during the Redis installation. The default value is **6379**.
 
-![Properties for Redis connection](img/properties.png "Properties for Redis connection").
-
 ## Source Data
 
-To simulate data streaming during testing, a Source window and Timer Connector are used to produce one event per second. Then, a Lua window generates dummy sensor data that consists of the following components:
+To simulate data streaming during testing, a Source window and timer connector are used to produce one event per second. Then, a Lua window generates dummy sensor data that consists of the following components:
   - `sensor_id`: A sensor identifier that has a numeric value between zero to nine
   - `sensor_group`: A label that sorts the sensor into one of three values: mezzanine, reception, or workshop
   - `sensor_stmp`: The sensor reading timestamp
@@ -71,7 +69,7 @@ Explore the settings for the getMaxByGroup window:
 1. Open the project in SAS Event Stream Processing Studio and select the getMaxByGroup window.
 2. In the right pane, expand **Database Query**.
    - `Redis prefix`: Enables you to set a unique prefix for the Redis hash table. The prefix must be the same as the prefix that you set in the saveToRedis window so that it can perform a lookup. The default value is **stream**.
-   - `Query`: This table sets the query condition. This is the condition used to query data from the Redis hash table before performing aggregation. In this example, all records are selected from the Redis table where the `sensor_group` from the Input event matches the `SENSOR_GROUP` field in the Redis hash table. The aggregation function is then applied in the output mapping. 
+   - `Query`: This table sets the query condition. This is the condition used to query data from the Redis hash table before performing aggregation. In this example, all records are selected from the Redis table where the `sensor_group` from the Input event matches the `SENSOR_GROUP` field in the Redis hash table. Then, the aggregation function is applied in the output mapping. 
    - `Time field`: Defines the time reference used for retention counting. The default value is **(use system clock)**, but you can change it and specify a timestamp field from the Input event.
 3. Click ![output schema](/Utilities/StateDB/img/output-schema-icon.png). 
 4. Click ![edit icon](/Utilities/StateDB/img/edit-icon.png). The following fields are listed:
