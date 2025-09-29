@@ -82,15 +82,14 @@ When you test the project in SAS Event Stream Processing Studio, the results for
 Here is an example of the output in the w_calculate window:
 ![w_calculate tab](img/w_calculate.png "w_calculate tab")
 
-To download the `result.txt` file, do the following steps:
+To view the `result.txt` file, do the following steps:
 1. Navigate out of test mode and back to the project.
 2. Click ![project package](/Analytics/analytics_STFT/img/project-package.png).
 3. Expand **output**.
-4. Select **result.txt**.
-5. Click ![download](/Analytics/analytics_STFT/img/download.png).  
+4. Double click **result.txt**.
   
 Here is an example of the data in output `result.txt` file:
-![result file](img/result_file.png "result file")
+![result file](img/resultimage.png)
 
 ## Next Steps
 
