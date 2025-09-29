@@ -88,7 +88,7 @@
 	For this example, the output mapping is using a non-list format. An output-mapping that uses a list
 	output is also supported for this algorithm. 
 
-	The resulting calculated transforms are written to the file result.out via a file socket connector]]></description>
+	The resulting calculated transforms are written to the file result.txt via a file socket connector]]></description>
           <schema>
             <fields>
               <field name="time" type="int64" key="true"/>
@@ -126,7 +126,7 @@
               <properties>
                 <property name="type"><![CDATA[sub]]></property>
                 <property name="fstype"><![CDATA[csv]]></property>
-                <property name="fsname"><![CDATA[@ESP_PROJECT_OUTPUT@/result.out]]></property>
+                <property name="fsname"><![CDATA[@ESP_PROJECT_OUTPUT@/result.txt]]></property>
                 <property name="snapshot"><![CDATA[true]]></property>
                 <property name="header"><![CDATA[true]]></property>
               </properties>
