@@ -61,7 +61,34 @@ Explore the settings for this window:
      - The `trade_time` field is specified as the time field. This field is used to derive the time interval that is specified on the **Logic Expression** page of the wizard. If a time field is not specified, system time is used.
 4. Click **Next**.
 5. On the **Lua Code** page, view the code that specifies the EOI functions and an output function that are required for the pattern:
-   
+| Step | Lua Code |
+|------|----------|
+| First EOI function | <pre><code class="language-lua">function f1(event,context)<br>  if (event.symbol=="GMTC") then<br>    return true,{p0=event.price,q0=event.quant}<br>  end<br>  return false<br>end</code></pre> |
+
+
+
+
+     | Step                                                         | Lua Code Section                                             |
+     | ------------------------------------------------------------ | ------------------------------------------------------------ |
+     | The first EOI function, f1, identifies occurrences of the stock symbol GMTC | <pre><code class="language-lua">function f1(event,context)
+      if (event.symbol=="GMTC") then
+        return true,{p0=event.price,q0=event.quant}
+      end 
+      return false 
+     end </code></pre> |
+     |                                                              |                                                              |
+     |                                                              |                                                              |
+     |                                                              |                                                              |
+    
+     ```lua
+     
+     ```
+
+
+​     
+
+
+
     <table>
     <tr>
     <th>Step</th> <th>Lua Code Section</th>
@@ -69,8 +96,6 @@ Explore the settings for this window:
     <tr>
     <td>The first EOI function, f1, identifies occurrences of the stock symbol GMTC.</td>
     <td>
-
-
     ```
     function f1(event,context)
       if (event.symbol=="GMTC") then
@@ -80,8 +105,6 @@ Explore the settings for this window:
       return false
     end
     ```
-
-
     </td>
     </tr>
     <tr>
