@@ -61,18 +61,84 @@ Explore the settings for this window:
      - The `trade_time` field is specified as the time field. This field is used to derive the time interval that is specified on the **Logic Expression** page of the wizard. If a time field is not specified, system time is used.
 4. Click **Next**.
 5. On the **Lua Code** page, view the code that specifies the EOI functions and an output function that are required for the pattern:
+   
+    <table>
+    <tr>
+    <th>Step</th> <th>Lua Code Section</th>
+    </tr>
+    <tr>
+    <td>The first EOI function, f1, identifies occurrences of the stock symbol GMTC.</td>
+    <td>
 
 
-| Step                                                         | Lua Code Section                                             |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| The first EOI function, f1, identifies occurrences of the stock symbol GMTC | <pre><code class="language-lua">function f1(event,context)<br>  if (event.symbol=="GMTC") then<br>   return true,{p0=event.price,q0=event.quant}<br>  end <br>  return false <br> end </code></pre> |
-     |                                                              |                                                              |
-     |                                                              |                                                              |
-     |                                                              |                                                              |
+    ```
+    function f1(event,context)
+      if (event.symbol=="GMTC") then
+        return true,{p0=event.price,q0=event.quant}
+      end
+
+      return false
+    end
+    ```
 
 
+    </td>
+    </tr>
+    <tr>
+    <td>The second EOI function, f2, identifies re-occurrences of the stock symbol GMTC where the price and quantity of the stock has gone up 50% compared to events identified by f1.</td>
+    <td>
 
-​     
+      
+    ```
+    function f2(event,context)
+      if (context.data.p0<event.price*1.5 and 
+      context.data.q0<event.quant*1.5)
+      then
+        return true,{p1=event.price,q1=event.quant}
+      end
+
+      return false
+    end
+    ```
+
+      
+    </td>
+    </tr>
+    <tr>
+    <td> The third EOI function, f3, identifies re-occurrences of the stock symbol GMTC where the price and quantity of the stock has gone up 50% compared to events identified by f2.</td>
+    <td>
+
+
+    ```
+    function f3(event,context)
+      return context.data.p1<event.price*1.5 
+      and context.data.q1<event.quant*1.5
+    end
+    ```
+
+
+    </td>
+    </tr>
+    <tr>
+    <td>The output function, called output, assigns unique IDs to returned events and injects them into the event stream. The output function references output fields called ID1, ID2, and ID3, which are specified in the project's output schema.</td>
+    <td>
+
+
+    ```
+    function output(context)--4
+      local   event = {}
+      event.ID1 = context.events.e1.ID
+      event.ID2 = context.events.e2.ID
+      event.ID3 = context.events.e3.ID
+      return event
+    end
+    ```
+
+
+    </td>
+    </tr>
+    </table>
+
 
 
 
