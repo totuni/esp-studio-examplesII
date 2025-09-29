@@ -62,25 +62,14 @@ Explore the settings for this window:
 4. Click **Next**.
 5. On the **Lua Code** page, view the code that specifies the EOI functions and an output function that are required for the pattern:
 
-| ddd  | ddd  |
-| ---- | ---- |
-| ccde | hi   |
-|      |      |
-|      |      |
-|      |      |
 
-
-
-     | Step                                                         | Lua Code Section                                             |
-     | ------------------------------------------------------------ | ------------------------------------------------------------ |
-     | The first EOI function, f1, identifies occurrences of the stock symbol GMTC | <pre><code class="language-lua">function f1(event,context)<br>  if (event.symbol=="GMTC") then<br>   return true,{p0=event.price,q0=event.quant}<br>  end <br>  return false <br> end </code></pre> |
+| Step                                                         | Lua Code Section                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| The first EOI function, f1, identifies occurrences of the stock symbol GMTC | <pre><code class="language-lua">function f1(event,context)<br>  if (event.symbol=="GMTC") then<br>   return true,{p0=event.price,q0=event.quant}<br>  end <br>  return false <br> end </code></pre> |
      |                                                              |                                                              |
      |                                                              |                                                              |
      |                                                              |                                                              |
-    
-     ```lua
-     
-     ```
+
 
 
 ​     
@@ -94,7 +83,7 @@ Explore the settings for this window:
     <tr>
     <td>The first EOI function, f1, identifies occurrences of the stock symbol GMTC.</td>
     <td>
-    ```
+    <pre><code class="language-lua">
     function f1(event,context)
       if (event.symbol=="GMTC") then
         return true,{p0=event.price,q0=event.quant}
@@ -102,7 +91,7 @@ Explore the settings for this window:
     
       return false
     end
-    ```
+    </code></pre>
     </td>
     </tr>
     <tr>
