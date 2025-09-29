@@ -3,10 +3,7 @@
 This example demonstrates how to use a Lua-based Pattern window. The model identifies increases in a stock's price within a specific time interval.
 
 ---
-**NOTE:**
-Use this example with SAS Event Stream Processing 2024.03 and later. 
 
----
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
