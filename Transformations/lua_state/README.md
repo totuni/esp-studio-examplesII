@@ -6,10 +6,6 @@ The Lua window in SAS Event Stream Processing enables you to maintain and use ev
 
 ---
 
-**NOTE:**
-Use these examples with SAS Event Stream Processing 2022.10 and later.
-
----
 
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
