@@ -41,7 +41,7 @@ Explore the settings for the w_source window by doing the following steps:
 3. Click <img src="/Analytics/analytics_STFT/img/edit-icon.png" alt="edit icon" width=3% height=auto/>. Notice that the **Fsname** points to `input.csv`.
 4. Click **OK**.
 5. Expand **State and Event Type**. Notice that the project accepts only Insert events.
-6. Click <img src="/Analytics/analytics_STFT/img/output-schema-icon.png" alt="edit icon" width=3% height=auto/>. Fields include:
+6. Click <img src="/Analytics/analytics_STFT/img/output-schema-icon.png" alt="output schema icon" width=3% height=auto/>. Fields include:
    - `ID`: Primary key or time identifier
    - `y`: Signal value
 
@@ -84,11 +84,11 @@ Here is an example of the output in the w_calculate window:
 
 To view the `result.txt` file, do the following steps:
 1. Navigate out of test mode and back to the project.
-2. Click ![project package](/Analytics/analytics_STFT/img/project-package.png).
+2. Click <img src="/Analytics/analytics_STFT/img/package-icon.png" alt="package icon" width=3% height=auto/>.
 3. Expand **output**.
 4. Double click **result.txt**.
   
-Here is an example of the data in output `result.txt` file:
+Here is an example of the data in output `result.txt` file:  
 ![result file](img/resultimage.png)
 
 ## Next Steps
