@@ -23,8 +23,8 @@ sudo docker run --name test-redis -p 6379:6379 -d redis
 For more information, see: [**Redis Docker**](https://hub.docker.com/_/redis). 
 
 After the Redis setup is finished and running, two variables must be configured in SAS Event Stream Processing Studio. Do the following steps to configure the variables:
-1. Click ![project icon](/Utilities/StateDB/img/project-icon.png) to navigate to the project.
-2. Click ![properties icon](/Utilities/StateDB/img/properties-icon.png) and expand **User-Defined Properties**. You should see a similar table:
+1. Click <img src="/Utilities/StateDB/img/project-icon.png" alt="project icon" width=3% height=auto/> to navigate to the project.
+2. Click <img src="/Utilities/StateDB/img/properties-icon.png" alt="project icon" width=3% height=auto/> and expand **User-Defined Properties**. You should see a similar table:
 ![Properties for Redis connection](img/properties.png "Properties for Redis connection")
 
 - `REDIS_HOST`: Set the value to the Redis database server IP or host name. You must specify the IP address of the Redis host that can be resolved from the SAS Event Stream Processing container. The default value is **127.0.0.1**.
