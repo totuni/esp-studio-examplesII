@@ -9,7 +9,7 @@ For more information about installing and using example projects, see [Using the
 ## Use Case
 
 This project demonstrates how to perform Insert, Lookup, and Aggregate operations on an in-memory Redis hash table. This is useful in the following scenarios:
-- Performing fast lookups against large tables with many records.
+- Performing fast lookups against large tables.
 - Reducing the start up time of SAS Event Stream Processing projects by minimizing the container’s memory footprint.
 - Building a compute cluster where multiple SAS Event Stream Processing Kubernetes pods run as replicas of the same project. The pods run in parallel, sharing and aggregating different parts of the input stream.
 
@@ -17,22 +17,19 @@ This project demonstrates how to perform Insert, Lookup, and Aggregate operation
 
 This example requires [**Redis database**](https://redis.io/) to be installed and available in the SAS Event Stream Processing environment.
 To install and start Redis server, copy and paste the following command into your terminal and run it:
-<!-- is this correct? I changed the original language to "copy and paste the following command into your terminal"-->
-<!-- Andrey: I think its  fine now -->
 ```bash
 sudo docker run --name test-redis -p 6379:6379 -d redis
 ```
 For more information, see: [**Redis Docker**](https://hub.docker.com/_/redis). 
 
-After the Redis setup is finished and running, two variables must be configured in SAS Event Stream Processing Studio. To do this, navigate to Project ![project icon](/Utilities/StateDB/img/project-icon.png) > Properties ![properties icon](/Utilities/StateDB/img/properties-icon.png), scroll down, and expand the User-Defined Properties section:
-<!-- where can the reader find the server IP, hostname, or connection port in the UI? -->
-<!-- Andrey: added -->
-- `REDIS_HOST`: Set this to Redis database server IP or host name. The default value is **127.0.0.1**. You need to specify the IP address of the Redis host that can be resolved from the SAS ESP container.
-- `REDIS_PORT`: Set this to Redis database connection port. The default value is **6379**. You don’t need to change it unless you modified it during the Redis installation.
+After the Redis setup is finished and running, two variables must be configured in SAS Event Stream Processing Studio. Do the following steps to configure the variables:
+1. Click ![project icon](/Utilities/StateDB/img/project-icon.png) to navigate to the project.
+2. Click ![properties icon](/Utilities/StateDB/img/properties-icon.png) and expand **User-Defined Properties**. You should see a similar table:
+![Properties for Redis connection](img/properties.png "Properties for Redis connection")
 
-<!-- How did you get to this screenshot in the ESP UI? -->
-<!-- Andrey: added above -->
-The figure below shows the **User-Defined Properties**:  
+- `REDIS_HOST`: Set the value to the Redis database server IP or host name. You must specify the IP address of the Redis host that can be resolved from the SAS Event Stream Processing container. The default value is **127.0.0.1**.
+- `REDIS_PORT`: Set the value to Redis database connection port. You do not need to change the value unless you modified it during the Redis installation. The default value is **6379**.
+
 ![Properties for Redis connection](img/properties.png "Properties for Redis connection").
 
 ## Source Data
@@ -51,8 +48,8 @@ Here is a diagram of the project:
 - InputRate is a Source window that ingests dummy events using a Timer Connector.
 - SensorsData is a Lua window that generates dummy sensor events.
 - SaveToRedis is a StateDB Writer window that saves and updates records in Redis hash tables.
-- GetSavedStamp is a StateDB Reader window that looks up keys in Redis hash tables and retrieves the saved timestamp value for each key. <!-- is "value" what you see or should is be "a value" or even "the value"? --><!-- Andrey: rephrased -->
-- GetMaxByGroup is a StateDB Reader window that performs aggregate functions on Redis hash tables by a selected group value and returns the result. <!-- same question here for result. Is result something that appears in the UI or should it be "the results"? --><!-- Andrey: rephrased -->
+- GetSavedStamp is a StateDB Reader window that looks up keys in Redis hash tables and retrieves the saved timestamp value for each key.
+- GetMaxByGroup is a StateDB Reader window that performs aggregate functions on Redis hash tables by a selected group value and returns the result.
 
 ### saveToRedis
 
@@ -74,15 +71,14 @@ Explore the settings for the getMaxByGroup window:
 1. Open the project in SAS Event Stream Processing Studio and select the getMaxByGroup window.
 2. In the right pane, expand **Database Query**.
    - `Redis prefix`: Enables you to set a unique prefix for the Redis hash table. The prefix must be the same as the prefix that you set in the saveToRedis window so that it can perform a lookup. The default value is **stream**.
-  <!-- you originally wrote "above" so I'm assuming that means the getSaveStamp window, but please verify --><!-- Andrey: no, i meant above window - saveToRedis . Should be used the same `Redis prefix`. Also `Secondary Indexes` from that window will be used for  aggregation here-->
-   - `Query`: This table sets the query condition. This is the condition used to query data from the Redis hash table before performing aggregation. In our example, we select all records from the Redis table where the `sensor_group` from the input ESP event matches the `SENSOR_GROUP` field in the Redis hash table. The aggregation function is then applied in the output mapping. <!-- unclear what this means. is there a different/better way to explain this? --><!-- Andrey: rephrased -->
+   - `Query`: This table sets the query condition. This is the condition used to query data from the Redis hash table before performing aggregation. In this example, all records are selected from the Redis table where the `sensor_group` from the Input event matches the `SENSOR_GROUP` field in the Redis hash table. The aggregation function is then applied in the output mapping. 
    - `Time field`: Defines the time reference used for retention counting. The default value is **(use system clock)**, but you can change it and specify a timestamp field from the Input event.
 3. Click ![output schema](/Utilities/StateDB/img/output-schema-icon.png). 
 4. Click ![edit icon](/Utilities/StateDB/img/edit-icon.png). The following fields are listed:
     - `sensor_id`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_group`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_stmp`: This field is mapped to **Input, so it is received from the Input event.
-    - `sensor_group_max_id`: This field is mapped to **Query**, which means it is calculated based on data from the Redis hash table <!-- Redis what? Redis hash table? Redis value? --><!-- Andrey: table -->. Notice that the **Source Field** value is set to **SENSOR_ID** and the **Aggregate Function** value is **ESP_aMax**. This means that for each input event for a `sensor_group`, it returns the value of the `SENSOR_ID` that is stored in Redis for 60 seconds according to the retention policy.
+    - `sensor_group_max_id`: This field is mapped to **Query**, which means it is calculated based on data from the Redis hash table. Notice that the **Source Field** value is set to **SENSOR_ID** and the **Aggregate Function** value is **ESP_aMax**. This means that for each input event for a `sensor_group`, it returns the value of the `SENSOR_ID` that is stored in Redis for 60 seconds according to the retention policy.
   
 ### getSavedStamp
 
@@ -100,7 +96,6 @@ Explore the settings for the getSavedStamp window:
     - `sensor_group`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_stmp`: This field is mapped to **Input, so it is received from the Input event.
     - `sensor_saved_stmp`: This field is mapped to **Query**. Notice the **Source Field** column value is set to **SENSOR_STMP**, which means this field is received from the Redis `SENSOR_STMP` value. 
-<!-- typically with fields, we describe their significance, not just where they come from --><!-- The getSavedStamp window is used only for receiving data from Redis. What matters here is identifying which fields are propagated from the previous ESP event and which fields are newly queried from Redis.-->
 
 ## Test the Project and View the Results
 
@@ -111,8 +106,7 @@ When you test the project in SAS Event Stream Processing Studio, the results for
 - The **getSavedStamp** tab lists incoming data and data from Redis. In the **sensors_saved_stmp** column, you can see fetched data for the `sensor_id` key, which is currently stored in the Redis hash. At the beginning of the test, no data is cached. As the saveToRedis window starts to run, the data appears. The following figure shows the results for the **getSavedStamp** tab:
   ![getSavedStamp window output](img/getSavedStamp.png "getSavedStamp window output")
 
-- The **getMaxByGroup** tab lists the results of the aggregation. For each input event, a new field called `sensor_group_max_id` is calculated. It represents the maximum `SENSOR_ID` value stored in Redis within the last 60 seconds for the specific `sensor_group` of the input event. The following figure shows the results for the **getMaxByGroup** tab:
-<!-- I don't understand this sentence at all. Can you rework the sentence above please? --> <!-- Andrey: how about this?  -->
+- The **getMaxByGroup** tab lists the results of the aggregation. For each Input event, a new field called `sensor_group_max_id` is calculated. It represents the maximum `sensor_id` value stored in Redis within the last 60 seconds for the specific `sensor_group` of the Input event. The following figure shows the results for the **getMaxByGroup** tab:
   ![getMaxByGroup window output](img/getMaxByGroup.png "getMaxByGroup window output")
 
 ## Next Steps
@@ -124,4 +118,4 @@ You can enhance this project by doing any of the following:
 
 ## Additional Resources
 
-For more information, see: [SAS Help Center: Using StateDB Windows](https://go.documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n01c9h6p6pmlcmn11w46am1xgnum.htm)
+For more information, see: [SAS Help Center: Using StateDB Windows](https://go.documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n01c9h6p6pmlcmn11w46am1xgnum.htm).
