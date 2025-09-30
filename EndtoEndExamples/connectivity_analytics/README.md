@@ -227,7 +227,7 @@ function create(data,context)
 end
 ```
 
-### w_rate/w_aggr_stats
+### w_rate/w_copy/w_aggr_stats
 
 Collect aggregated data for few of Grafana dashboards, described  below.
 
