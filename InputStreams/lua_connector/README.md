@@ -2,7 +2,6 @@
 ## Overview
 This example contains a Source window with a Lua connector that reads RSS feeds from scientific sites and publishes them into the project every five seconds.
 
----
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
