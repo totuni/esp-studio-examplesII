@@ -30,7 +30,8 @@ This example shows different approaches for monitoring CMP data. Three event sam
   - `operator`: Network provider where device currently registered
   - `plan`: Network provider tariff
 
-- To make changes in synthetic data can be used source Python script in Jupyter Notebook format: `Generate_anomalies.ipynb`
+<!-- not sure these 3 bullets below belong here -->
+- To make changes in synthetic data, you can use source Python scripts in Jupyter Notebook format: `Generate_anomalies.ipynb` <!-- can this be reworded? a bit confusing -->
 - (Optional) Grafana Dashboards can be imported from file `grafana.json`
 - Demonstration recording `Grafana.mp4`
 
@@ -99,7 +100,7 @@ This applies data retention for the last 4 days (w_retention), aggregates averag
 
 ### w_change_latency
 
-This windows identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure which is pictured directly below:
+This windows identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure which is pictured directly below: <!-- is this correct -->
 <p align="center"><img alt="Diagram of the project" src="https://go.documentation.sas.com/api/docsets/espan/v_047/content/images/equation67.svg?locale=en" width="300"/></p>
 
 For more details, refer to [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
