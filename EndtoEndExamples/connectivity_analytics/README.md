@@ -1,30 +1,20 @@
-# Connectivity analytics for telemetry data in telecom networks
-
-## Vocabulary
-
-| Term | Definition |
-|------|------------|
-| **CMP**  | Connectivity Management Platform — a cloud-based system for managing IoT/M2M device connectivity, SIMs, and data usage. |
-| **IoT**  | Internet of Things — a network of connected devices that collect and exchange data. |
-| **SIM**  | Subscriber Identity Module — a smart card that stores network authorization information. |
-| **M2M**  | Machine-to-Machine — direct communication between devices over a network without human intervention. |
-| **telemetry data**  | Refers to the automated collection and transmission of data from network devices, equipment, or endpoints to a central system for monitoring, analysis, and management. |
+# Connectivity Analytics for Telemetry Data in Telecom Networks
 
 ## Overview
 
-This example demonstrates how to use **SAS Event Stream Processing** to analyze telemetry data from a Connectivity Management Platform (CMP), detect anomalies for specific devices, and raise real-time alerts.
+This example demonstrates how to use SAS Event Stream Processing to analyze telemetry data from a Connectivity Management Platform (CMP). Telemetry data refers to the automated collection and transmission between devices over a network without human invervention. The Connectivity Management Platform is a cloud-based system that manages the Internet of Things (IoT) and machine-to-machine (M2M) device connectivity. The CMP also manages subscriber identity modules (SIM) and data usage.
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
 
-This demonstration showcases different approaches for monitoring CMP data. Synthetic data is used with three event samples, and for each sample a specific stream processing technique is applied:
-- Device outside coverage area (e.g., tunnel): Events are detected using processing rules on streaming event data.
-- Attacked device or malware: Detection is based on rules applied to aggregated data within a specific time frame.
-- Equipment failures due to high demand: Change Detection using the Kullback–Leibler (KL) Divergence approach is applied.
+This example shows different approaches for monitoring CMP data. Three event samples use synthetic data, and for each sample, a specific stream processing technique is applied:
+- Device outside coverage area (for example, tunnel): events are detected using processing rules on streaming event data.
+- Attacked device or malware: detection is based on rules applied to aggregated data within a specific time frame.
+- Equipment failures due to high demand: change detection using the Kullback–Leibler (KL) Divergence approach is applied.
 
 ## Source Data and Other Files
 
-- The source window uses a File and Socket Connector to ingest a stream of synthetic data from `anomalies.csv` that includes:
+- The source window uses a file and socket connector to ingest a stream of synthetic data from an input file called `anomalies.csv` that includes:
 
   - `timestamp`: Unique identifier
   - `device_id`: Unique device identifier
@@ -32,24 +22,19 @@ This demonstration showcases different approaches for monitoring CMP data. Synth
   - `status`: Device status
   - `data_usage_mb`: Device network traffic usage
   - `signal_strength`: Device connection signal strength
-  - `latency_ms`: Latency in microseconds in receiving/sending network packages
-  - `jitter_ms`: Variation in latency (packets delay) over time
-  - `session_status`: Connection session status for currently registered network
-  - `location`: Device home region - country name
+  - `latency_ms`: Latency in microseconds in receiving or sending network packages
+  - `jitter_ms`: Variation in latency over time
+  - `session_status`: Connection session status for the currently registered network
+  - `location`: Country name of the device home region
   - `roaming`: If current region is home region for the device
   - `operator`: Network provider where device currently registered
   - `plan`: Network provider tariff
 
-- To make changes in synthetic data can be used source Python script in Jupyter Notebok format: `Generate_anomalies.ipynb`
+- To make changes in synthetic data can be used source Python script in Jupyter Notebook format: `Generate_anomalies.ipynb`
 - (Optional) Grafana Dashboards can be imported from file `grafana.json`
 - Demonstration recording `Grafana.mp4`
 
 <img alt="Demo process" src="img/demo.png" width="700">
-
-## Prerequisites
-
-There are no special prerequisites to run this example. It uses standard components of SAS Event Stream Processing and runs in both local and edge server environments.
-However, it also includes optional Grafana dashboards for visualization of alerts and  streaming data. To be able to use this component follow the instructions in the [Visualizing Alerts in Grafana](#Visualizing-Alerts-in-Grafana) chapter:
 
 ## Workflow
 
@@ -57,15 +42,31 @@ The following figure shows the diagram of the project:
 
 <img alt="Diagram of the project" src="img/diagram.png" width="300">
 
-In this workflow we generate alerts on streaming data using conditions on parsed input events data as well as aggregation and unsupervised analytic model. In following description we will focus on the main project logic, for simple transformations like `Source`, `Filter`, `Aggregate`, `Copy` and `Join`,  please  refer to relevant examples for more details. 
-
+- w_cmp_stream: A Source window that receives synthetic CMP data from the file. 
+- w_parsing: A Lua window that applies standard JSON message parsing using the **esp_parseJsonFrom** function.
+- w_retention: A Copy window that applies a data retention policy of four days.
+- w_usage_profile: An Aggregate window that aggregates average data usage for each device ID and indicates whether a device is roaming.
+- w_join_avg: A Join window that joins back current average values to the Input event as a new field.
+- w_change_latency: A Calculate window that detects anomalies in latency data from CMP. The supported algorithms are based on the Kullback–Leibler (KL) Divergence approach. 
+- w_latency_spike: A Filter window that filters out events and keeps only the events where `changeDetected` is equal one.
+- w_cells: A Source window that reads latitude and longitude data for `cell_id`.
+- add_cell_pos: A Join window that joins back the values from w_cells to the Input event.
+- w_rules: A Lua window that implements alert generation logic.
+- w_rate: A Counter window that... 
+- w_copy: A Copy window that...
+- w_aggr_stats: An Aggregate window that...  
+<!-- fill in missing information above please -->
 ### w_cmp_stream
-
-Receives synthetic CMP data from the file; the message data is written to json_data text field in JSON format.
+<!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
+Receives synthetic CMP data from the file; the message data is written to json_data text field in JSON format. <!-- is message data the same as output data? -->
 
 ### w_parsing
 
-Applies standard JSON message parsing using `esp_parseJsonFrom` function.
+Explore the settings for the w_parsing window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_parsing window.
+2. In the right pane, expand **Lua Settings**.
+3. Under **Code source**, you will see the following window of code:
+
 ```lua
 function create(data,context)
     local   message_info = esp_parseJsonFrom("json_data")
@@ -90,6 +91,7 @@ function create(data,context)
     return(e)
 end
 ```
+<!-- ok so what is the significance of this code? Does this code the logic of the function that is applied in this window? Try to write a sentence or two here explaining. -->
 ### w_retention/w_usage_profile/w_join_avg
 
 Standard design pattern to enrich incoming event with aggregated information.
@@ -97,43 +99,35 @@ This applies data retention for the last 4 days (w_retention), aggregates averag
 
 ### w_change_latency
 
-For anomaly detection in latency data from CMP we are using one of supported algorithms based on [Kullback-Leibler (KL) Divergence]( https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence).
-
-
+This windows identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure which is pictured directly below:
 <p align="center"><img alt="Diagram of the project" src="https://go.documentation.sas.com/api/docsets/espan/v_047/content/images/equation67.svg?locale=en" width="300"/></p>
 
-It helps in identifying sudden or unexpected deviations in a time series or data stream. 
 For more details, refer to [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
-The Calculate Window `w_change_latency` uses the KLDivergenceDiff measure, periodically updates the model using incoming data and provides decisions on change detection.
 
-Explore the setting for the `w_change_latency window` window by doing the following steps:
-1. Select the w_change_latency window.
-2. Expand **Settings** and then expand **Parameters**.  
-Parameters:
-    - `slidingAlpha`: 0.98, Specifies the fading factor for the sliding window. Value range is 0 < α<=1.
-    - `slidingHalfLifeSteps`: 0, Specifies the number of steps at which the weight of the input reaches half of its original weight for the sliding window.
-    - `refWindowSize`: 100, Specifies the size of the reference window.
-    - `changeThreshold`: 0.2, Specifies the threshold to determine whether a change occurred.
-    - `nBins`: 50, Specifies the maximum number of bins in the histogram for both reference and sliding windows, and the number of bins when computing KL divergence. 
-    - `maxEvalSteps`: 100, Specifies the maximum number of steps before performing a new evaluation.
-    - `adaptiveEval`: 1, Specifies whether to use the adaptive evaluation step size or not.
-    - `measure`: KLDivergenceDiff, Specifies the measure used to compare the data streams from the reference window and the sliding window. 
-    - `showEval`: 1, Specifies whether to show evaluation events regardless of whether a change is detected.
-    - `showAll`: 1, Specifies whether to show all events, regardless of whether an evaluation occurs.
+Explore the setting for the w_change_latency window window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_change_latency window.
+2. Expand **Settings** and then expand **Parameters**. See the following parameters:  
+    - `slidingAlpha`: Specifies the fading factor for the sliding window. The value range is 0<α<=1, and the default value is **0.98**.
+    - `slidingHalfLifeSteps`: Specifies the number of steps at which the weight of the input reaches half of its original weight for the sliding window. The default value is **0**.
+    - `refWindowSize`: Specifies the size of the reference window. The default value is **100**.
+    - `changeThreshold`: Specifies the threshold that determines whether a change occurred. The default value is **0.2**. 
+    - `nBins`: Specifies the maximum number of bins in the histogram for reference and sliding windows. This value also determines the number of bins when computing KL divergence. The default value is **50**. 
+    - `maxEvalSteps`: Specifies the maximum number of steps before performing a new evaluation. The default value is **100**.
+    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1** which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? -->
+    - `measure`: Specifies the measure used to compare the data streams from the reference window and from the sliding window. The default value is **KLDivergenceDiff**.
+    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **1** which means evaluation events are shown. <!-- fact check this please -->
+    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **1** which means all events are shown. <!-- same here -->
       
 3. Expand **Input Map**.  
-Input Map:
-    - `inputs`: `latency_ms`, Specifies the input variable for change detection. In our example we are analysing registered signal latency.
-
-
+    - `input`: Specifies the input variable for change detection. In this example, it analyzes **latency_ms** which is the registered signal latency.
+      
 4. Expand **Output Map**.  
-Output Map:
-    - `evaluatedOut`: `eval`, Specifies the name of the output variable that indicates whether an evaluation occurred.
-    - `changeValueOut`: `changeVal`, Specifies the name of the output variable that contains the change value (the difference between two KL divergence values)
-    - `changeDetectedOut`: `changeDetected`, Specifies the name of the output variable that indicates whether a change has been detected. We use this variable in the `w_latency_spike` window below.
+    - `evaluatedOut`: Specifies the name of the output variable that indicates whether an evaluation occurred. <!-- how does "eval" factor in? -->
+    - `changeValueOut`: Specifies the name of the output variable that contains the change value.  <!-- how does "changeVal" factor in? -->
+    - `changeDetectedOut`: Specifies the name of the output variable that indicates whether a change has been detected. This variable is used in the `w_latency_spike` window.  <!-- how does "changeDetected" factor in? -->
       
 ### w_latency_spike
-
+<!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
 Filters out events, keeping only where `changeDetected` is equal 1.
 
 ### w_cells/add_cell_pos
@@ -228,7 +222,7 @@ end
 ```
 
 ### w_rate/w_copy/w_aggr_stats
-
+<!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
 Collect aggregated data for few of Grafana dashboards, described  below.
 
 ## Test the Project and View the Results
