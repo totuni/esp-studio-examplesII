@@ -2,7 +2,8 @@
 
 ## Overview
 
-This example demonstrates how to use SAS Event Stream Processing to analyze telemetry data from a Connectivity Management Platform (CMP). Telemetry data refers to the automated collection and transmission between devices over a network without human invervention. The Connectivity Management Platform is a cloud-based system that manages the Internet of Things (IoT) and machine-to-machine (M2M) device connectivity. The CMP also manages subscriber identity modules (SIM) and data usage.
+This example demonstrates how to use SAS Event Stream Processing to analyze telemetry data from a Connectivity Management Platform (CMP). Telemetry data refers to the automated collection and transmission between devices over a network without human intervention. The Connectivity Management Platform is a cloud-based system that manages the Internet of Things (IoT) and machine-to-machine (M2M) device connectivity. The CMP also manages subscriber identity modules (SIM) and data usage.
+
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
@@ -10,7 +11,7 @@ For more information about how to install and use example projects, see [Using t
 This example shows different approaches for monitoring CMP data. Three event samples use synthetic data, and for each sample, a specific stream processing technique is applied:
 - Device outside coverage area (for example, tunnel): events are detected using processing rules on streaming event data.
 - Attacked device or malware: detection is based on rules applied to aggregated data within a specific time frame.
-- Equipment failures due to high demand: change detection using the Kullback–Leibler (KL) Divergence approach is applied.
+- Equipment failures due to high demand: change detection using the Kullback-Leibler (KL) Divergence approach is applied.
 
 ## Source Data and Other Files
 
@@ -43,7 +44,7 @@ The following figure shows the diagram of the project:
 - w_retention: A Copy window that applies a data retention policy of four days.
 - w_usage_profile: An Aggregate window that aggregates average data usage for each device ID and indicates whether a device is roaming.
 - w_join_avg: A Join window that joins back current average values to the Input event as a new field.
-- w_change_latency: A Calculate window that detects anomalies in latency data from CMP. The supported algorithms are based on the Kullback–Leibler (KL) Divergence approach. 
+- w_change_latency: A Calculate window that detects anomalies in latency data from CMP. The supported algorithms are based on the Kullback-Leibler (KL) Divergence approach. 
 - w_latency_spike: A Filter window that filters out events and keeps only the events where `changeDetected` is equal one.
 - w_cells: A Source window that reads latitude and longitude data for `cell_id`.
 - add_cell_pos: A Join window that joins back the values from w_cells to the Input event.
@@ -61,7 +62,7 @@ Receives synthetic CMP data from the file; the message data is written to json_d
 Explore the settings for the w_parsing window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_parsing window.
 2. In the right pane, expand **Lua Settings**.
-3. Under **Code source**, you will see the following window of code:
+3. Under **Code source**, you see the following window of code:
 
 ```lua
 function create(data,context)
@@ -98,7 +99,7 @@ These three windows use a standard design pattern to enrich incoming events with
 
 ### w_change_latency
 
-This windows identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure which is pictured directly below: <!-- is this correct? -->
+This window identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure that is pictured directly below: <!-- is this correct? -->
 <p align="center"><img alt="Diagram of the project" src="https://go.documentation.sas.com/api/docsets/espan/v_047/content/images/equation67.svg?locale=en" width="300"/></p>
 
 For more details, refer to [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
@@ -112,13 +113,13 @@ Explore the setting for the w_change_latency window:
     - `changeThreshold`: Specifies the threshold that determines whether a change occurred. The default value is **0.2**. 
     - `nBins`: Specifies the maximum number of bins in the histogram for reference and sliding windows. This value also determines the number of bins when computing KL divergence. The default value is **50**. 
     - `maxEvalSteps`: Specifies the maximum number of steps before performing a new evaluation. The default value is **100**.
-    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1** which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? -->
+    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1, which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? -->
     - `measure`: Specifies the measure used to compare the data streams from the reference window and from the sliding window. The default value is **KLDivergenceDiff**.
-    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **1** which means evaluation events are shown. <!-- fact check this please -->
-    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **1** which means all events are shown. <!-- same here -->
+    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **1, which means evaluation events are shown. <!-- fact check this please -->
+    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **1, which means all events are shown. <!-- same here -->
       
 3. Expand **Input Map**.  
-    - `input`: Specifies the input variable for change detection. In this example, it analyzes **latency_ms** which is the registered signal latency.
+    - `input`: Specifies the input variable for change detection. In this example, it analyzes **latency_ms, which is the registered signal latency.
       
 4. Expand **Output Map**.  
     - `evaluatedOut`: Specifies the name of the output variable that indicates whether an evaluation occurred. <!-- how does "eval" factor in? -->
@@ -131,7 +132,7 @@ Explore the setting for the w_change_latency window:
 Explore the setting for the w_latency_spike window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_latency_spike window.
 2. In the right pane, expand **Filter**.
-3. Under **Code source**, you will see the following window of code:
+3. Under **Code source**, you see the following window of code:
 
 ```lua
 function filter(event,context)
@@ -148,12 +149,12 @@ These two windows... <!-- fill this in with an explanation of how they work toge
 
 ### w_rules
 
-There are three types of alerts: ANOMALY_NO_SIGNAL, ANOMALY_USAGE, and ANOMALY_LATENCY_SPIKE. The ANOMALY_NO_SINGAL alert means the device is outside the coverage area. The ANOMALY_USAGE alert means the device is being attacked or there is malware. The ANOMALY_LATENCY_SPICE alert means there are equipment failures due to high demand. This Lua window applies alert generation logic to Input event fields, aggregated fields, and events where change is detected by the analytics algorithm. 
+There are three types of alerts: ANOMALY_NO_SIGNAL, ANOMALY_USAGE, and ANOMALY_LATENCY_SPIKE. The ANOMALY_NO_SIGNAL alert means that the device is outside the coverage area. The ANOMALY_USAGE alert means that the device is being attacked or there is malware. The ANOMALY_LATENCY_SPICE alert means there are equipment failures due to high demand. This Lua window applies alert generation logic to Input event fields, aggregated fields, and events where change is detected by the analytics algorithm. 
 
 Explore the setting for the w_rules window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_rules window.
 2. In the right pane, expand **Lua Settings**.
-3. Under **Code source**, you will see the following window of code:
+3. Under **Code source**, you see the following window of code:
    
 ```lua
 local alert_id = 1
@@ -238,49 +239,42 @@ When you test the project, the results appear on separate tabs. The following fi
 ![w_rules tab](img/w_rules.png "w_rules tab")
 <!-- are there any other windows you want to show screenshots of? -->
 
-## High level target solution architecture
+## High-level Target Solution Architecture
 Here is an example of a possible general architecture for a CMP data analysis system using SAS Event Stream Processing:  
 ![architecture](img/architecture.png "architecture")
 <!-- this feels out of place. Could this go somewhere else? Not sure it's even necessary to include. -->
 
 ## Next Steps
 
-Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to a dashboard in Grafana. <!-- reworded. is this correct? --> The following figure shows an example of a Grafana dashboard:
+Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to a dashboard in Grafana. <!-- reworded. is this correct? --> The following figures show an example of a Grafana dashboard:
 
 ![streaming data and distribution](img/grafana-1.png "streaming data and distribution")
-
-
-#### Real-Time Monitor Panel
-- **Input Data Table** – Displays CMP events (Uses data from ESP Window `w_cmp_stream`).
-- **Rate Gauge** – Shows the events processing rate (`w_rate`). 
-#### Analytic Panel
-- **Latency distribution histogram** – Displays distribution of jitter_ms, latency_ms and signal_strength (`w_aggr_stats`).
-- **KLDivergenceDiff bargauge** - Displays model evaluation (`w_change_latency`).
-  
 ![alerts](img/grafana-2.png "alerts")
 
-#### Alerts Panel
-- **group:latency table** – Displays alerts on changes in latency pattern, indicating possible equipment failures due to high demand (`w_rules`).
-- **group:signal table** - Displays no signal alerts when a device is outside the coverage area (`w_rules`).
-- **group:usage table** – Displays unusual traffic usage pattern alerts when a device probably has malware (`w_rules`).
-- **Latency spikes geomap** - Shows the location of devices where latency anomalies are detected (`w_rules`).
-- **Logs** – Displays aggregated alert data by alert type (`w_rules`).
+**Real-Time Monitor Pane**
+- `Input Data`: This table displays CMP events using data from the w_cmp_stream window.
+- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. <!-- is this correct? -->
 
-[Grafana video](grafana.mp4)
+**Analytics Pane**
+- `Latency distribution`: This histogram displays the distribution of `jitter_ms`, `latency_ms`, and `signal_strength`.
+- `KLDivergenceDiff (latency_ms)`: This bar gauge displays the model evaluation from the w_change_latency window.
 
----
-**NOTE:**
-This dashboard was created using standalone SAS Event Stream Processing, running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must recreate the queries because the connection URLs will differ.
+**Alerts Pane**
+- `group:latency`: This table displays alerts on changes in latency pattern, indicating possible equipment failures due to high demand.
+- `group:signal`: This table displays ANOMALY_NO_SIGNAL alerts when a device is outside the coverage area.
+- `group:usage`: This table displays ANOMALY_USAGE alerts when a device has malware.
+- `Latency spikes`: This geomap shows the location of devices where latency anomalies are detected.
+- `Logs`: These logs display aggregated alert data by alert type.
 
----
+**NOTE:** This dashboard was created using standalone SAS Event Stream Processing running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must re-create the queries because the connection URLs are different.
 
+For more information, see [Grafana video](grafana.mp4).
 
-You can enhance this project by:
+You can further enhance this project by doing any of the following:
 - Replacing the CSV source with a live sensor feed.
-- Adjusting rules logic for new types of anomalies which observed in the input stream.
-- Using other change detection methods in the Calculate window to improve detection accuracy where required by the input data.
-
+- Adjusting rules logic for new types of anomalies that are observed in the Input stream.
+- Using other change detection methods in the Calculate window to improve detection accuracy.
 
 ## Additional Resources
 
-- [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm#p0fydwd77vhobwn1c4c89qbv6r7f)
+For more information, see [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/default/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm#p0fydwd77vhobwn1c4c89qbv6r7f).
