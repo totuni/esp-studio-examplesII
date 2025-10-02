@@ -29,12 +29,7 @@ This example shows different approaches for monitoring CMP data. Three event sam
   - `roaming`: If current region is home region for the device
   - `operator`: Network provider where device currently registered
   - `plan`: Network provider tariff
-
-<!-- not sure these 3 bullets below belong here -->
-- To make changes in synthetic data, you can use source Python scripts in Jupyter Notebook format: `Generate_anomalies.ipynb` <!-- can this be reworded? a bit confusing -->
-- (Optional) Grafana Dashboards can be imported from file `grafana.json`
-- Demonstration recording `Grafana.mp4`
-
+<!-- please add one or two sentence describing the diagram below -->
 <img alt="Demo process" src="img/demo.png" width="700">
 
 ## Workflow
@@ -93,19 +88,22 @@ function create(data,context)
 end
 ```
 <!-- ok so what is the significance of this code? Does this code the logic of the function that is applied in this window? Try to write a sentence or two here explaining. -->
-### w_retention/w_usage_profile/w_join_avg
+### w_retention, w_usage_profile, and w_join_avg
 
-Standard design pattern to enrich incoming event with aggregated information.
-This applies data retention for the last 4 days (w_retention), aggregates average data usage `data_usage_mb` for each `device_id` and whether the device is in roaming or not - `roaming` (w_usage_profile). Each current average value is joined back to the input event as a new field `data_usage_avg_mb` (w_join_avg).
+These three windows use a standard design pattern to enrich incoming events with aggregated information.
+1. The w_retention window applies data retention for the last four days.
+2. The w_usage_profile window aggregates average data usage from the `data_usage_mb` field for each `device_id` field. This window also uses the `roaming` field to consider whether the device is roaming or not.
+3. The w_join_avg windows joins each current average value back to the Input event as a new field called `data_usage_avg_mb`.
+<!-- is there anything you want to point out in the settings of these windows? right now the descriptions are redundant of the ones I have in the workflow section. -->
 
 ### w_change_latency
 
-This windows identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure which is pictured directly below: <!-- is this correct -->
+This windows identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure which is pictured directly below: <!-- is this correct? -->
 <p align="center"><img alt="Diagram of the project" src="https://go.documentation.sas.com/api/docsets/espan/v_047/content/images/equation67.svg?locale=en" width="300"/></p>
 
 For more details, refer to [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
 
-Explore the setting for the w_change_latency window window:
+Explore the setting for the w_change_latency window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_change_latency window.
 2. Expand **Settings** and then expand **Parameters**. See the following parameters:  
     - `slidingAlpha`: Specifies the fading factor for the sliding window. The value range is 0<α<=1, and the default value is **0.98**.
@@ -129,30 +127,34 @@ Explore the setting for the w_change_latency window window:
       
 ### w_latency_spike
 <!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
-Filters out events, keeping only where `changeDetected` is equal 1.
 
-### w_cells/add_cell_pos
-Reads latitude and longitude data for cell_id (w_cells) and joins back these values to the input event (add_cell_pos).
-New fields are `cell_id_lat` and `cell_id_lon`.
-For demo purposes, only one location will be added.
+Explore the setting for the w_latency_spike window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_latency_spike window.
+2. In the right pane, expand **Filter**.
+3. Under **Code source**, you will see the following window of code:
+
+```lua
+function filter(event,context)
+    return (event.changeDetected==1)
+end
+```
+This code filters out events and keeps the ones where `changeDetected` is equal to one.
+
+### w_cells and add_cell_pos
+
+These two windows... <!-- fill this in with an explanation of how they work together -->
+1. The w_cells window reads latitude and longitude data for `cell_id`.
+2. The add_cell_pos window joins these values back to the Input event as fields called `cell_id_lat` and `cell_id_lon`.
 
 ### w_rules
 
-Lua window which implements alerts generation logic.
-Here there will be 3 types of alerts:
+There are three types of alerts: ANOMALY_NO_SIGNAL, ANOMALY_USAGE, and ANOMALY_LATENCY_SPIKE. The ANOMALY_NO_SINGAL alert means the device is outside the coverage area. The ANOMALY_USAGE alert means the device is being attacked or there is malware. The ANOMALY_LATENCY_SPICE alert means there are equipment failures due to high demand. This Lua window applies alert generation logic to Input event fields, aggregated fields, and events where change is detected by the analytics algorithm. 
 
-
-| alert_type | alert_description |
-|------|------------|
-| **ANOMALY_NO_SIGNAL**  | Device outside coverage area |
-| **ANOMALY_USAGE**  | Attacked device or malware |
-| **ANOMALY_LATENCY_SPIKE**  | Equipment failures due to high demand |
-
-As you can see in the code below we simply apply rules for alert generation on 
-- input event fields which we parsed from input JSON
-- fields  which we aggregated based on previous events
-- events where change detected by analytics algorithm 
-
+Explore the setting for the w_rules window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_rules window.
+2. In the right pane, expand **Lua Settings**.
+3. Under **Code source**, you will see the following window of code:
+   
 ```lua
 local alert_id = 1
 function create(data,context)
@@ -221,19 +223,32 @@ function create(data,context)
     end
 end
 ```
+This code is the alert generation logic used to create alerts.
 
-### w_rate/w_copy/w_aggr_stats
+### w_rate, w_copy, and w_aggr_stats
 <!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
-Collect aggregated data for few of Grafana dashboards, described  below.
+These windows collect aggregated data for Grafana dashboards.
+1. The w_rate window...
+2. The w_copy window...
+3. The w_aggr_stats window...
+<!-- fill in each window's role in this process and how each one contributes to collecting aggregated data -->
 
 ## Test the Project and View the Results
-When you test the project in SAS Event Stream Processing Studio, the results of generated alerts will appear after few seconds of processing in the `w_rules` window tab:
+When you test the project, the results appear on separate tabs. The following figure shows the results for the w_rules tab:  
 ![w_rules tab](img/w_rules.png "w_rules tab")
+<!-- are there any other windows you want to show screenshots of? -->
 
-## Visualizing Alerts in Grafana
-The alerts, model performance and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import the [grafana.json](grafana.json) dashboard file to Grafana. 
+## High level target solution architecture
+Here is an example of a possible general architecture for a CMP data analysis system using SAS Event Stream Processing:  
+![architecture](img/architecture.png "architecture")
+<!-- this feels out of place. Could this go somewhere else? Not sure it's even necessary to include. -->
+
+## Next Steps
+
+Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to a dashboard in Grafana. <!-- reworded. is this correct? --> The following figure shows an example of a Grafana dashboard:
 
 ![streaming data and distribution](img/grafana-1.png "streaming data and distribution")
+
 
 #### Real-Time Monitor Panel
 - **Input Data Table** – Displays CMP events (Uses data from ESP Window `w_cmp_stream`).
@@ -259,13 +274,6 @@ This dashboard was created using standalone SAS Event Stream Processing, running
 
 ---
 
-
-## High level target solution architecture
-Here is an example of a possible general architecture for a CMP data analysis system using SAS Event Stream Processing:  
-![architecture](img/architecture.png "architecture")
-
-
-## Next Steps
 
 You can enhance this project by:
 - Replacing the CSV source with a live sensor feed.
