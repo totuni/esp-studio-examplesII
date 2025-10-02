@@ -8,10 +8,10 @@ For more information about how to install and use example projects, see [Using t
 
 ## Use Case
 
-This example shows different approaches for monitoring CMP data. Three event samples use synthetic data, and for each sample, a specific stream processing technique is applied:
-- Device outside coverage area (for example, tunnel): events are detected using processing rules on streaming event data.
-- Attacked device or malware: detection is based on rules applied to aggregated data within a specific time frame.
-- Equipment failures due to high demand: change detection using the Kullback-Leibler (KL) Divergence approach is applied.
+This example shows different approaches for monitoring CMP data. Three event samples use synthetic data, and for each sample, a specific stream processing technique is applied: <!-- so the event samples are outside coverage area, attacked device, and equipment failures? A better way to word these bullets would be: For the ___ event sample, the ____ stream processing technique is applied. -->
+- Device outside coverage area: An example of this would be a tunnel, where there is no signal. Events are detected using processing rules on streaming event data.
+- Attacked device or malware: Event detection is based on rules applied to aggregated data within a specific time frame.
+- Equipment failures due to high demand: Change detection using the Kullback-Leibler (KL) Divergence approach is applied.
 
 ## Source Data and Other Files
 
@@ -54,8 +54,14 @@ The following figure shows the diagram of the project:
 - w_aggr_stats: An Aggregate window that...  
 <!-- fill in missing information above please -->
 ### w_cmp_stream
-<!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
-Receives synthetic CMP data from the file; the message data is written to json_data text field in JSON format. <!-- is message data the same as output data? -->
+
+Explore the settings for the w_cmp_stream window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_cmp_stream window.
+2. In the right pane, expand **Input Data (Publisher) Connectors**. Notice the connector called **anomalies_Connector**, which is the file and socket connector used to ingest the synthetic CMP data.  
+3. Click **output schema icon**. Notice the following fields:
+    - `id`: <!-- explain ID here -->
+    - `json_data`: The message data text field written in JSON format.
+<!-- is message data the same as output data? -->
 
 ### w_parsing
 
@@ -92,10 +98,24 @@ end
 ### w_retention, w_usage_profile, and w_join_avg
 
 These three windows use a standard design pattern to enrich incoming events with aggregated information.
-1. The w_retention window applies data retention for the last four days.
-2. The w_usage_profile window aggregates average data usage from the `data_usage_mb` field for each `device_id` field. This window also uses the `roaming` field to consider whether the device is roaming or not.
-3. The w_join_avg windows joins each current average value back to the Input event as a new field called `data_usage_avg_mb`.
-<!-- is there anything you want to point out in the settings of these windows? right now the descriptions are redundant of the ones I have in the workflow section. -->
+
+Explore the settings for the w_retention window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_retention window.
+2. In the right pane, expand **Retention**. Notice that the **Time limit** is set to four days, which means that data will be retained for the previous four days.
+
+Explore the settings for the w_usage_profile window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_usage_profile window.
+2. Click **output schema icon**. Notice the following fields:
+    - `device_id`:The unique ID of each device. <!-- is this correct? -->
+    - `roaming`: Displays true of false to indicate if a device is roaming.
+    - `data_usage_md`: The average data usage in megabytes of each device. <!-- is this correct? -->
+
+Explore the settings for the w_join_avg window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_join_avg window.
+2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to left outer.
+3. Expand **Join Conditions**. Notice that this join combines data from w_parsing and w_usage_profile.
+
+<!-- is there anything you want to point out in the settings of these windows? I wrote all of these steps based on the descriptions that you had of the windows. Feel free to add more if you would like. -->
 
 ### w_change_latency
 
@@ -127,7 +147,6 @@ Explore the setting for the w_change_latency window:
     - `changeDetectedOut`: Specifies the name of the output variable that indicates whether a change has been detected. This variable is used in the `w_latency_spike` window.  <!-- how does "changeDetected" factor in? -->
       
 ### w_latency_spike
-<!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
 
 Explore the setting for the w_latency_spike window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_latency_spike window.
@@ -139,13 +158,24 @@ function filter(event,context)
     return (event.changeDetected==1)
 end
 ```
-This code filters out events and keeps the ones where `changeDetected` is equal to one.
+This code filters out events and keeps the events where `changeDetected` is equal to one.
 
 ### w_cells and add_cell_pos
 
 These two windows... <!-- fill this in with an explanation of how they work together -->
-1. The w_cells window reads latitude and longitude data for `cell_id`.
-2. The add_cell_pos window joins these values back to the Input event as fields called `cell_id_lat` and `cell_id_lon`.
+
+Explore the settings for the w_cells window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_cells window.
+2. In the right pane, expand **Input Data (Publisher) Connectors**. Notice there is a Lua connector called **geo_data**.
+3. Click **output schema icon**. Notice the following fields:
+    - `cell_id`: The unique cell ID.
+    - `cell_id_lat`: The latitude data that the window reads from `cell_id`.
+    - `cell_id_lon`: The longitude data that the window reads from `cell_id`.
+  
+Explore the settings for the add_cell_pos window:
+1. Open the project in SAS Event Stream Processing Studio and select the add_cell_pos window.
+2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to left outer.
+3. Expand **Join Conditions**. Notice that this join combines data from w_latency_spike and w_cells.
 
 ### w_rules
 
@@ -227,7 +257,7 @@ end
 This code is the alert generation logic used to create alerts.
 
 ### w_rate, w_copy, and w_aggr_stats
-<!-- Is there anything in the settings of this window you want the user to explore? If not, I recommend removing this window section all together -->
+<!-- Is there anything in the settings of this window you want the user to explore? If so, please add steps like I did with the  w_retention, w_usage_profile, and w_join_avg windows. -->
 These windows collect aggregated data for Grafana dashboards.
 1. The w_rate window...
 2. The w_copy window...
