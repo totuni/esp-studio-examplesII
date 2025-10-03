@@ -36,6 +36,9 @@ The following diagram shows the main demo components and the data flow. Prepared
 <!-- please add one or two sentence describing the diagram below --><!-- A: added-->
 <img alt="Demo process" src="img/demo.png" width="700">
 
+
+<!-- A: Where is Grafana json file, Python Notebok?  -->
+
 ## Workflow
 
 The following figure shows the diagram of the project:
@@ -112,9 +115,9 @@ Explore the settings for the w_retention window:
 Explore the settings for the w_usage_profile window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_usage_profile window.
 2. Click **output schema icon**. Notice the following fields:
-    - `device_id`:The unique ID of each device. <!-- is this correct? -->
+    - `device_id`:The unique ID of each device. <!-- is this correct? --><!-- A: yes -->
     - `roaming`: Displays true of false to indicate if a device is roaming.
-    - `data_usage_md`: The average data usage in megabytes of each device. <!-- is this correct? -->
+    - `data_usage_md`: The average data usage in megabytes of each device. <!-- A: yes -->
 
 Explore the settings for the w_join_avg window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_join_avg window.
@@ -125,7 +128,7 @@ Explore the settings for the w_join_avg window:
 
 ### w_change_latency
 
-This window identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure that is pictured directly below: <!-- is this correct? -->
+This window identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure that is pictured directly below: <!-- is this correct? --><!-- A:yes -->
 <p align="center"><img alt="Diagram of the project" src="https://go.documentation.sas.com/api/docsets/espan/v_047/content/images/equation67.svg?locale=en" width="300"/></p>
 
 For more details, refer to [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
