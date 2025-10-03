@@ -64,7 +64,7 @@ Explore the settings for the w_cmp_stream window:
 3. Click **output schema icon**. Notice the following fields:
     - `id`: <!-- explain ID here -->
     - `json_data`: The message data text field written in JSON format.
-<!-- is message data the same as output data? -->
+<!-- is message data the same as output data? --> <!-- A: Yes. At this step, we only generate an ESP event based on an input row from the CSV file.  -->
 
 ### w_parsing
 
@@ -97,7 +97,10 @@ function create(data,context)
     return(e)
 end
 ```
-<!-- ok so what is the significance of this code? Does this code the logic of the function that is applied in this window? Try to write a sentence or two here explaining. -->
+
+In this code, we use the built-in ESP JSON parser function `esp_parseJsonFrom` to extract important JSON data fields into ESP event fields for further processing.
+
+<!-- ok so what is the significance of this code? Does this code the logic of the function that is applied in this window? Try to write a sentence or two here explaining. --><!-- A:  added -->
 ### w_retention, w_usage_profile, and w_join_avg
 
 These three windows use a standard design pattern to enrich incoming events with aggregated information.
@@ -118,7 +121,7 @@ Explore the settings for the w_join_avg window:
 2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to left outer.
 3. Expand **Join Conditions**. Notice that this join combines data from w_parsing and w_usage_profile.
 
-<!-- is there anything you want to point out in the settings of these windows? I wrote all of these steps based on the descriptions that you had of the windows. Feel free to add more if you would like. -->
+<!-- is there anything you want to point out in the settings of these windows? I wrote all of these steps based on the descriptions that you had of the windows. Feel free to add more if you would like. --> <!-- A:  I wanted to avoid overwhelming the reader with too much detail, while still keeping the main logic clear -->
 
 ### w_change_latency
 
