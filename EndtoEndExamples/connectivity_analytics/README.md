@@ -30,7 +30,10 @@ This example shows different approaches for monitoring CMP data. Three event sam
   - `roaming`: If current region is home region for the device
   - `operator`: Network provider where device currently registered
   - `plan`: Network provider tariff
-<!-- please add one or two sentence describing the diagram below -->
+
+The following diagram shows the main demo components and the data flow. Prepared CMP data is published to SAS ESP at a specific rate. SAS ESP preprocesses the data, detects anomalies, applies rules, and finally generates alerts. Grafana connects to various SAS ESP windows to visualize alerts and statistical data from the project.
+
+<!-- please add one or two sentence describing the diagram below --><!-- A: added-->
 <img alt="Demo process" src="img/demo.png" width="700">
 
 ## Workflow
@@ -49,10 +52,10 @@ The following figure shows the diagram of the project:
 - w_cells: A Source window that reads latitude and longitude data for `cell_id`.
 - add_cell_pos: A Join window that joins back the values from w_cells to the Input event.
 - w_rules: A Lua window that implements alert generation logic.
-- w_rate: A Counter window that... 
-- w_copy: A Copy window that...
-- w_aggr_stats: An Aggregate window that...  
-<!-- fill in missing information above please -->
+- w_rate: A Counter window that calculates the event processing rate for visualization on a Grafana Gauge chart. 
+- w_copy: A Copy window that retains input events for aggregation in the subsequent `w_aggr_stat` Window.
+- w_aggr_stats: An Aggregate window that computes data metrics for Grafana charts.
+<!-- fill in missing information above please --><!--updated  -->
 ### w_cmp_stream
 
 Explore the settings for the w_cmp_stream window:
