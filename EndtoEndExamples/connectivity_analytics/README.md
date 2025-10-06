@@ -183,7 +183,8 @@ This code filters out events and keeps the events where `changeDetected` is equa
 
 ### w_cells and add_cell_pos
 
-These two windows... <!-- fill this in with an explanation of how they work together -->
+These two windows enrich incoming data with geolocation information from an additional data source.  
+The `w_cells` source window retrieves cell positions from a text file, while the `add_cell_pos` join window looks up `cell_id` and adds latitude and longitude to the incoming event fields if a match is found in the `w_cells` window.<!-- fill this in with an explanation of how they work together --><!--A:  added-->
 
 Explore the settings for the w_cells window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_cells window.
