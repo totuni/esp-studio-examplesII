@@ -31,13 +31,21 @@ This example shows different approaches for monitoring CMP data. Three event sam
   - `operator`: Network provider where device currently registered
   - `plan`: Network provider tariff
 
-The following diagram shows the main demo components and the data flow. Prepared CMP data is published to SAS ESP at a specific rate. SAS ESP preprocesses the data, detects anomalies, applies rules, and finally generates alerts. Grafana connects to various SAS ESP windows to visualize alerts and statistical data from the project.
+The following diagram shows the main demo components and the data flow. Prepared CMP data is published to SAS ESP at a specific rate. SAS ESP preprocesses the data, detects anomalies, applies rules, and finally generates alerts. Grafana dashboards connects to various SAS ESP windows to visualize alerts and statistical data from the project.
 
 <!-- please add one or two sentence describing the diagram below --><!-- A: added-->
 <img alt="Demo process" src="img/demo.png" width="700">
 
+<!-- A: Where is Grafana json file, Python Notebok?  Here is proposed text:
 
-<!-- A: Where is Grafana json file, Python Notebok?  -->
+To make changes to the synthetic data sample, follow these steps:
+1. Navigate to the Git project.
+2. Download the file [Grafana video](Generate_anomalies.ipynb).
+3. Open the notebook in **Jupyter Notebook**.
+4. Make the necessary changes to the data generation steps and run the code.
+5. Download the new version of **`anomalies.csv`**.
+6. Replace the existing file in the **SAS ESP project package** with the updated one.
+-->
 
 ## Workflow
 
