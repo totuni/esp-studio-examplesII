@@ -159,9 +159,9 @@ Explore the setting for the w_change_latency window:
     - `input`: Specifies the input variable for change detection. In this example, it analyzes **latency_ms, which is the registered signal latency.
       
 4. Expand **Output Map**.  
-    - `evaluatedOut`: Specifies the name of the output variable that indicates whether an evaluation occurred. <!-- how does "eval" factor in? -->
-    - `changeValueOut`: Specifies the name of the output variable that contains the change value.  <!-- how does "changeVal" factor in? -->
-    - `changeDetectedOut`: Specifies the name of the output variable that indicates whether a change has been detected. This variable is used in the `w_latency_spike` window.  <!-- how does "changeDetected" factor in? -->
+    - `evaluatedOut`: Specifies the name of the output variable that indicates whether an evaluation occurred. This value is used as a supporting indicator of the anomaly detection algorithm’s performance on the Grafana dashboard.<!-- how does "eval" factor in? --><!-- A: added -->
+    - `changeValueOut`: Specifies the name of the output variable that contains the change value. This value is used as a supporting indicator of the anomaly detection algorithm’s performance on the Grafana dashboard. <!-- how does "changeVal" factor in? --><!-- A: added -->
+    - `changeDetectedOut`: Specifies the name of the output variable that indicates whether a change has been detected. This value indicates whether an anomaly has been detected in the observed `latency_ms`. It is used in the next `w_latency_spike` window to filter out latency anomalies.  <!-- how does "changeDetected" factor in? --><!-- A: added -->
       
 ### w_latency_spike
 
