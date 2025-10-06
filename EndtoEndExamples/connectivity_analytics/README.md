@@ -293,14 +293,14 @@ Here is an example of a possible general architecture for a CMP data analysis sy
 
 ## Next Steps
 
-Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to a dashboard in Grafana. <!-- reworded. is this correct? --> The following figures show an example of a Grafana dashboard:
+Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to Grafana ("Dashboards"->"Manage"->"Import"). <!-- reworded. is this correct? --> <!--A: reworded again. grafana.json is a separate Dashboard, we are importing a whole new dashbord in Grafana terms--> The following figures show an example of a Grafana dashboard:
 
 ![streaming data and distribution](img/grafana-1.png "streaming data and distribution")
 ![alerts](img/grafana-2.png "alerts")
 
 **Real-Time Monitor Pane**
 - `Input Data`: This table displays CMP events using data from the w_cmp_stream window.
-- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. <!-- is this correct? -->
+- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether SAS ESP is still reading and processing the input CSV or if the process has finished.<!-- is this correct? --><!--A:  yes,  but added new sentence-->
 
 **Analytics Pane**
 - `Latency distribution`: This histogram displays the distribution of `jitter_ms`, `latency_ms`, and `signal_strength`.
@@ -314,6 +314,7 @@ Alerts, model performance, and streaming data can be visualized using the [SAS E
 - `Logs`: These logs display aggregated alert data by alert type.
 
 **NOTE:** This dashboard was created using standalone SAS Event Stream Processing running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must re-create the queries because the connection URLs are different.
+<!--A:  i think this NOTE is  too far from the grafana.json import step. -->
 
 For more information, see [Grafana video](grafana.mp4).
 
