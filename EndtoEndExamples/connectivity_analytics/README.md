@@ -274,13 +274,24 @@ end
 This code is the alert generation logic used to create alerts.
 
 ### w_rate, w_copy, and w_aggr_stats
-<!-- Is there anything in the settings of this window you want the user to explore? If so, please add steps like I did with the  w_retention, w_usage_profile, and w_join_avg windows. -->
+<!-- Is there anything in the settings of this window you want the user to explore? If so, please add steps like I did with the  w_retention, w_usage_profile, and w_join_avg windows. --><!-- A:No, they simply serve to illustrate data liveliness and visualize the data distribution. -->
 These windows collect aggregated data for Grafana dashboards.
-1. The w_rate window...
-2. The w_copy window...
-3. The w_aggr_stats window...
-<!-- fill in each window's role in this process and how each one contributes to collecting aggregated data -->
+1. The w_rate window window that calculates the event processing rate for visualization on a Grafana Gauge chart. The refresh rate is configured with `count-interval` equel to `1 second`.
+2. The w_copy window retains input events for aggregation in the subsequent `w_aggr_stat` Window. It is an ESP best practice to provide any streaming aggregation with an appropriate copy window to limit the number of events retained in ESP memory for aggregation.
+3. The w_aggr_stats window that computes data metrics for Grafana charts. We use the output of this window in a Grafana histogram widget to visualize the synthetic data distribution.
 
+<!-- fill in each window's role in this process and how each one contributes to collecting aggregated data -->
+<!--A:
+
+we already have it above:
+
+- w_rate: A Counter window that calculates the event processing rate for visualization on a Grafana Gauge chart. 
+- w_copy: A Copy window that retains input events for aggregation in the subsequent `w_aggr_stat` Window. 
+- w_aggr_stats: An Aggregate window that computes data metrics for Grafana charts.
+
+
+
+-->
 ## Test the Project and View the Results
 When you test the project, the results appear on separate tabs. The following figure shows the results for the w_rules tab:  
 ![w_rules tab](img/w_rules.png "w_rules tab")
