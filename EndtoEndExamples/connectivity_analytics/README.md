@@ -150,10 +150,10 @@ Explore the setting for the w_change_latency window:
     - `changeThreshold`: Specifies the threshold that determines whether a change occurred. The default value is **0.2**. 
     - `nBins`: Specifies the maximum number of bins in the histogram for reference and sliding windows. This value also determines the number of bins when computing KL divergence. The default value is **50**. 
     - `maxEvalSteps`: Specifies the maximum number of steps before performing a new evaluation. The default value is **100**.
-    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1, which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? -->
+    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1, which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? --> <!-- A: right ,  according to doc: adaptiveEval is int32 and default value is 1 which means "true" -->
     - `measure`: Specifies the measure used to compare the data streams from the reference window and from the sliding window. The default value is **KLDivergenceDiff**.
-    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **1, which means evaluation events are shown. <!-- fact check this please -->
-    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **1, which means all events are shown. <!-- same here -->
+    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **0, which means evaluation events are not shown. We set it to `1` for debugging purposes. <!-- fact check this please --> <!-- A: fixed , Valid values are 1 for true and 0 for false. Default is 0  -->
+    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **0, which means all events are not shown. We set it to `1` for debugging purposes. <!-- same here --> <!-- A: fixed , Valid values are 1 for true and 0 for false. Default is 0  -->
       
 3. Expand **Input Map**.  
     - `input`: Specifies the input variable for change detection. In this example, it analyzes **latency_ms, which is the registered signal latency.
