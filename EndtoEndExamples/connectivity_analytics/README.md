@@ -267,22 +267,24 @@ end
 This code is the alert generation logic used to create alerts.
 
 ### w_rate, w_copy, and w_aggr_stats
-<!-- Is there anything in the settings of this window you want the user to explore? If so, please add steps like I did with the  w_retention, w_usage_profile, and w_join_avg windows. --><!-- A:No, they simply serve to illustrate data liveliness and visualize the data distribution. -->
+
 These windows collect aggregated data for Grafana dashboards.
-1. The w_rate window window that calculates the event processing rate for visualization on a Grafana Gauge chart. The refresh rate is configured with `count-interval` equel to `1 second`.
-2. The w_copy window retains input events for aggregation in the subsequent `w_aggr_stat` Window. It is an ESP best practice to provide any streaming aggregation with an appropriate copy window to limit the number of events retained in ESP memory for aggregation.
-3. The w_aggr_stats window that computes data metrics for Grafana charts. We use the output of this window in a Grafana histogram widget to visualize the synthetic data distribution.
 
-<!-- fill in each window's role in this process and how each one contributes to collecting aggregated data -->
-<!--A:
+Explore the settings for the w_rate window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_rate window.
+2. In the right pane, expand **Counter**. Notice that the **Time period** is set to 1 second. This value is the refresh rate for a Grafana gauge chart. 
 
-we already have it above, in the Workflow:
+Explore the settings for the w_copy window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_copy window.
+2. In the right pane, expand **Retention**. Notice that the **Time limit** is set to 1 hour, which means the window retains input events for aggregation up to 1 hour in the w_aggr_stat window. It is best practice to pair any streaming aggregation window with a copy window to limit the number of events retained in memory. 
 
-- w_rate: A Counter window that calculates the event processing rate for visualization on a Grafana Gauge chart. 
-- w_copy: A Copy window that retains input events for aggregation in the subsequent `w_aggr_stat` Window. 
-- w_aggr_stats: An Aggregate window that computes data metrics for Grafana charts.
+Explore the settings for the w_aggr_stats window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_aggr_stats window.
+2. Click **output schema icon**. These fields are used to visualize the synthetic data distribution:
+    - `latency_ms`
+    - `jitter_ms`
+    - `signal_strength`  
 
--->
 ## Test the Project and View the Results
 When you test the project, the results appear on separate tabs. The following figure shows the results for the w_rules tab:  
 ![w_rules tab](img/w_rules.png "w_rules tab")
@@ -296,10 +298,12 @@ Alerts, model performance, and streaming data can be visualized using the [SAS E
 The following figures show an example of a Grafana dashboard:
 ![streaming data and distribution](img/grafana-1.png "streaming data and distribution")
 ![alerts](img/grafana-2.png "alerts")
+**NOTE:** This dashboard was created using standalone SAS Event Stream Processing running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must re-create the queries because the connection URLs are different.  
 
 **Real-Time Monitor Pane**
 - `Input Data`: This table displays CMP events using data from the w_cmp_stream window.
 - `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether or not SAS Event Stream Processing is still reading and processing the input file.
+  
 **Analytics Pane**
 - `Latency distribution`: This histogram displays the distribution of `jitter_ms`, `latency_ms`, and `signal_strength`.
 - `KLDivergenceDiff (latency_ms)`: This bar gauge displays the model evaluation from the w_change_latency window.
@@ -310,9 +314,6 @@ The following figures show an example of a Grafana dashboard:
 - `group:usage`: This table displays ANOMALY_USAGE alerts when a device has malware.
 - `Latency spikes`: This geomap shows the location of devices where latency anomalies are detected.
 - `Logs`: These logs display aggregated alert data by alert type.
-
-**NOTE:** This dashboard was created using standalone SAS Event Stream Processing running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must re-create the queries because the connection URLs are different.
-<!--A:  i think this NOTE is  too far from the grafana.json import step, where user  might see problems with data sources -->
 
 For more information, see [Grafana video](grafana.mp4).
 
