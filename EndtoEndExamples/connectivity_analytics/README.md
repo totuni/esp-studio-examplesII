@@ -12,7 +12,7 @@ This example demonstrates different approaches for monitoring CMP data using syn
 Each event type illustrates a specific stream processing technique:
 - For the `Device Outside Coverage Area` event sample where devices (for example, in tunnels) have no signal, rule-based stream processing is used to detect missing or delayed events.
 - For the `Attacked Device or Malware` event sample, rule-based aggregation is applied over a defined time window to identify suspicious activity patterns.
-- For the `Equipment Failures Due to High Demand` event sample, change detection using the Kullback–Leibler (KL) Divergence method is applied to identify abnormal behavior trends.
+- For the `Equipment Failures Due to High Demand` event sample, change detection using the Kullback-Leibler (KL) Divergence method is applied to identify abnormal behavior trends.
 
 ## Source Data and Other Files
 
@@ -40,11 +40,11 @@ To make changes to the synthetic data sample, do the following:
 5. Download the new version of `anomalies.csv`.
 6. Replace the existing file in the project package with the updated one.
 
-The following diagram shows the data flow. Prepared CMP data is published to SAS Event Stream Processing at a specific rate. SAS Event Stream Processing preprocesses the data, detects anomalies, applies rules, and generates alerts. Grafana dashboards connect to various SAS Event Stream Processing windows to visualize alerts and statistical data from the project.
+## Workflow
+
+The following diagram shows the data flow. Prepared CMP data is published to SAS Event Stream Processing at ten events per second. SAS Event Stream Processing preprocesses the data, detects anomalies, applies rules, and generates alerts. Grafana dashboards connect to various SAS Event Stream Processing windows to visualize alerts and statistical data from the project.
 
 <img alt="Demo process" src="img/demo.png" width="700">
-
-## Workflow
 
 The following figure shows the diagram of the project:
 
@@ -112,7 +112,7 @@ These three windows use a standard design pattern to enrich incoming events with
 
 Explore the settings for the w_retention window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_retention window.
-2. In the right pane, expand **Retention**. Notice that the **Time limit** is set to four days, which means that data will be retained for the previous four days.
+2. In the right pane, expand **Retention**. Notice that the **Time limit** is set to four days, which means that data is retained for the previous four days.
 
 Explore the settings for the w_usage_profile window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_usage_profile window.
@@ -123,7 +123,7 @@ Explore the settings for the w_usage_profile window:
 
 Explore the settings for the w_join_avg window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_join_avg window.
-2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to left outer.
+2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to **left outer**.
 3. Expand **Join Conditions**. Notice that this join combines data from w_parsing and w_usage_profile.
 
 ### w_change_latency
@@ -184,7 +184,7 @@ Explore the settings for the w_cells window:
   
 Explore the settings for the add_cell_pos window:
 1. Open the project in SAS Event Stream Processing Studio and select the add_cell_pos window.
-2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to left outer.
+2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to **left outer**.
 3. Expand **Join Conditions**. Notice that this join combines data from w_latency_spike and w_cells.
 
 ### w_rules
@@ -290,7 +290,7 @@ When you test the project, the results appear on separate tabs. The following fi
 ![w_rules tab](img/w_rules.png "w_rules tab")
 
 ## Next Steps
-Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to Grafana by doing the following:
+Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Do the following steps to import [grafana.json](grafana.json) to Grafana:
 1. Click **Dashboards**.
 2. Click **Manage**.
 3. Click **Import**.  
@@ -300,9 +300,11 @@ The following figures show an example of a Grafana dashboard:
 ![alerts](img/grafana-2.png "alerts")
 **NOTE:** This dashboard was created using standalone SAS Event Stream Processing running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must re-create the queries because the connection URLs are different.  
 
+To view an example of a Grafana dashboard, see [Grafana video](grafana.mp4). <!-- unsure where to put this video -->
+
 **Real-Time Monitor Pane**
 - `Input Data`: This table displays CMP events using data from the w_cmp_stream window.
-- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether or not SAS Event Stream Processing is still reading and processing the input file.
+- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether SAS Event Stream Processing is still reading and processing the input file.
   
 **Analytics Pane**
 - `Latency distribution`: This histogram displays the distribution of `jitter_ms`, `latency_ms`, and `signal_strength`.
@@ -314,8 +316,6 @@ The following figures show an example of a Grafana dashboard:
 - `group:usage`: This table displays ANOMALY_USAGE alerts when a device has malware.
 - `Latency spikes`: This geomap shows the location of devices where latency anomalies are detected.
 - `Logs`: These logs display aggregated alert data by alert type.
-
-For more information, see [Grafana video](grafana.mp4).
 
 You can further enhance this project by doing any of the following:
 - Replacing the CSV source with a live sensor feed.
