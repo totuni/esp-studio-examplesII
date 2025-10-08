@@ -300,8 +300,6 @@ The following figures show an example of a Grafana dashboard:
 ![alerts](img/grafana-2.png "alerts")
 **NOTE:** This dashboard was created using standalone SAS Event Stream Processing running in the same namespace as Grafana. If you are using a different environment, such as the SAS Viya platform, you must re-create the queries because the connection URLs are different.  
 
-To view an example of a Grafana dashboard, see [Grafana video](grafana.mp4). <!-- unsure where to put this video -->
-
 **Real-Time Monitor Pane**
 - `Input Data`: This table displays CMP events using data from the w_cmp_stream window.
 - `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether SAS Event Stream Processing is still reading and processing the input file.
