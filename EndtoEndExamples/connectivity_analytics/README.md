@@ -9,13 +9,10 @@ For more information about how to install and use example projects, see [Using t
 ## Use Case
 
 This example demonstrates different approaches for monitoring CMP data using synthetic data that encapsulates three types of events.
-Each event type illustrates a specific stream processing technique: <!-- so the event samples are outside coverage area, attacked device, and equipment failures? A better way to word these bullets would be: For the ___ event sample, the ____ stream processing technique is applied. --> <!--A: new version -->
-<!--- Device outside coverage area: An example of this would be a tunnel, where there is no signal. Events are detected using processing rules on streaming event data.
-- Attacked device or malware: Event detection is based on rules applied to aggregated data within a specific time frame.
-- Equipment failures due to high demand: Change detection using the Kullback-Leibler (KL) Divergence approach is applied.-->
-- For the 'Device Outside Coverage Area' event sample, where devices (e.g., in tunnels) have no signal, rule-based stream processing is used to detect missing or delayed events.
-- For the 'Attacked Device or Malware' event sample, rule-based aggregation is applied over a defined time window to identify suspicious activity patterns.
-- For the 'Equipment Failures Due to High Demand' event sample, change detection using the Kullback–Leibler (KL) Divergence method is applied to identify abnormal behavior trends.
+Each event type illustrates a specific stream processing technique:
+- For the `Device Outside Coverage Area` event sample where devices (for example, in tunnels) have no signal, rule-based stream processing is used to detect missing or delayed events.
+- For the `Attacked Device or Malware` event sample, rule-based aggregation is applied over a defined time window to identify suspicious activity patterns.
+- For the `Equipment Failures Due to High Demand` event sample, change detection using the Kullback–Leibler (KL) Divergence method is applied to identify abnormal behavior trends.
 
 ## Source Data and Other Files
 
@@ -35,21 +32,17 @@ Each event type illustrates a specific stream processing technique: <!-- so the 
   - `operator`: Network provider where device currently registered
   - `plan`: Network provider tariff
 
-The following diagram shows the main demo components and the data flow. Prepared CMP data is published to SAS ESP at a specific rate. SAS ESP preprocesses the data, detects anomalies, applies rules, and finally generates alerts. Grafana dashboards connects to various SAS ESP windows to visualize alerts and statistical data from the project.
+To make changes to the synthetic data sample, do the following:
+1. Navigate to the Git project. <!-- can we add a link to the project from the customer facing git here? make "Git project" a clickable URL link that takes them to the project -->
+2. Download the file [generate_anomalies.ipynb](Generate_anomalies.ipynb).
+3. Open the file in Jupyter Notebook.
+4. Make the necessary changes to the data generation steps, and run the code.
+5. Download the new version of `anomalies.csv`.
+6. Replace the existing file in the project package with the updated one.
 
-<!-- please add one or two sentence describing the diagram below --><!-- A: added-->
+The following diagram shows the data flow. Prepared CMP data is published to SAS Event Stream Processing at a specific rate. SAS Event Stream Processing preprocesses the data, detects anomalies, applies rules, and generates alerts. Grafana dashboards connect to various SAS Event Stream Processing windows to visualize alerts and statistical data from the project.
+
 <img alt="Demo process" src="img/demo.png" width="700">
-
-<!-- A: Where is Python Notebok file?  Here is proposed text:
-
-To make changes to the synthetic data sample, follow these steps:
-1. Navigate to the Git project.
-2. Download the file [Grafana video](Generate_anomalies.ipynb).
-3. Open the notebook in **Jupyter Notebook**.
-4. Make the necessary changes to the data generation steps and run the code.
-5. Download the new version of **`anomalies.csv`**.
-6. Replace the existing file in the **SAS ESP project package** with the updated one.
--->
 
 ## Workflow
 
@@ -67,20 +60,19 @@ The following figure shows the diagram of the project:
 - w_cells: A Source window that reads latitude and longitude data for `cell_id`.
 - add_cell_pos: A Join window that joins back the values from w_cells to the Input event.
 - w_rules: A Lua window that implements alert generation logic.
-- w_rate: A Counter window that calculates the event processing rate for visualization on a Grafana Gauge chart. 
-- w_copy: A Copy window that retains input events for aggregation in the subsequent `w_aggr_stat` Window.
+- w_rate: A Counter window that calculates the event processing rate for visualization on a Grafana gauge chart. 
+- w_copy: A Copy window that retains input events for aggregation in the `w_aggr_stat` window.
 - w_aggr_stats: An Aggregate window that computes data metrics for Grafana charts.
-<!-- fill in missing information above please --><!--updated  -->
+
 ### w_cmp_stream
 
 Explore the settings for the w_cmp_stream window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_cmp_stream window.
 2. In the right pane, expand **Input Data (Publisher) Connectors**. Notice the connector called **anomalies_Connector**, which is the file and socket connector used to ingest the synthetic CMP data.  
 3. Click **output schema icon**. Notice the following fields:
-    - `id`: Autogenerated ESP event key field. <!-- explain ID here --><!-- A: added-->
-    - `json_data`: The message data text field written in JSON format.
-<!-- is message data the same as output data? --> <!-- A: Yes. At this step, we only generate an ESP event based on an input row from the CSV file.  -->
-
+    - `id`: Autogenerated event key field. 
+    - `json_data`: The output data text field written in JSON format.
+        
 ### w_parsing
 
 Explore the settings for the w_parsing window:
@@ -112,10 +104,8 @@ function create(data,context)
     return(e)
 end
 ```
+This code uses the built-in JSON parser function called **esp_parseJsonFrom** to extract important JSON data fields and puts them into event fields for further processing. 
 
-In this code, we use the built-in ESP JSON parser function `esp_parseJsonFrom` to extract important JSON data fields into ESP event fields for further processing.
-
-<!-- ok so what is the significance of this code? Does this code the logic of the function that is applied in this window? Try to write a sentence or two here explaining. --><!-- A:  added -->
 ### w_retention, w_usage_profile, and w_join_avg
 
 These three windows use a standard design pattern to enrich incoming events with aggregated information.
@@ -127,23 +117,21 @@ Explore the settings for the w_retention window:
 Explore the settings for the w_usage_profile window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_usage_profile window.
 2. Click **output schema icon**. Notice the following fields:
-    - `device_id`:The unique ID of each device. <!-- is this correct? --><!-- A: yes -->
+    - `device_id`:The unique ID of each device.
     - `roaming`: Displays true of false to indicate if a device is roaming.
-    - `data_usage_md`: The average data usage in megabytes of each device. <!-- A: yes -->
+    - `data_usage_md`: The average data usage in megabytes of each device.
 
 Explore the settings for the w_join_avg window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_join_avg window.
 2. In the right pane, expand **Join Criteria**. Notice that the **Join type** is set to left outer.
 3. Expand **Join Conditions**. Notice that this join combines data from w_parsing and w_usage_profile.
 
-<!-- is there anything you want to point out in the settings of these windows? I wrote all of these steps based on the descriptions that you had of the windows. Feel free to add more if you would like. --> <!-- A:  I wanted to avoid overwhelming the reader with too much detail, while still keeping the main logic clear -->
-
 ### w_change_latency
 
-This window identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure that is pictured directly below: <!-- is this correct? --><!-- A:yes -->
+This window identifies sudden or unexpected deviations in a time series or data stream. It uses the KLDivergenceDiff measure that is pictured directly below: 
 <p align="center"><img alt="Diagram of the project" src="https://go.documentation.sas.com/api/docsets/espan/v_047/content/images/equation67.svg?locale=en" width="300"/></p>
 
-For more details, refer to [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
+For more details, see [SAS Help Center: Change Detection](https://go.documentation.sas.com/doc/en/espcdc/v_063/espan/n0jveogr5iwzyxn1w7imhj73d4zf.htm).
 
 Explore the setting for the w_change_latency window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_change_latency window.
@@ -154,18 +142,18 @@ Explore the setting for the w_change_latency window:
     - `changeThreshold`: Specifies the threshold that determines whether a change occurred. The default value is **0.2**. 
     - `nBins`: Specifies the maximum number of bins in the histogram for reference and sliding windows. This value also determines the number of bins when computing KL divergence. The default value is **50**. 
     - `maxEvalSteps`: Specifies the maximum number of steps before performing a new evaluation. The default value is **100**.
-    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1, which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? --> <!-- A: right ,  according to doc: adaptiveEval is int32 and default value is 1 which means "true" -->
+    - `adaptiveEval`: Specifies whether to use the adaptive evaluation step size or not. The default value is **1**, which means the adaptive evaluation step size is used. <!-- I'm guessing 1 is yes and 0 is no? Like binary? --> <!-- A: right ,  according to doc: adaptiveEval is int32 and default value is 1 which means "true" -->
     - `measure`: Specifies the measure used to compare the data streams from the reference window and from the sliding window. The default value is **KLDivergenceDiff**.
-    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **0, which means evaluation events are not shown. We set it to `1` for debugging purposes. <!-- fact check this please --> <!-- A: fixed , Valid values are 1 for true and 0 for false. Default is 0  -->
-    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **0, which means all events are not shown. We set it to `1` for debugging purposes. <!-- same here --> <!-- A: fixed , Valid values are 1 for true and 0 for false. Default is 0  -->
-      
+    - `showEval`: Specifies whether to show evaluation events regardless of whether a change is detected. The default value is **0**, which means evaluation events are not shown. It is set to **1** for debugging purposes. 
+    - `showAll`: Specifies whether to show all events, regardless of whether an evaluation occurs. The default value is **0**, which means all events are not shown. It is set to **1** for debugging purposes.
+
 3. Expand **Input Map**.  
     - `input`: Specifies the input variable for change detection. In this example, it analyzes **latency_ms, which is the registered signal latency.
       
 4. Expand **Output Map**.  
-    - `evaluatedOut`: Specifies the name of the output variable that indicates whether an evaluation occurred. This value is used as a supporting indicator of the anomaly detection algorithm’s performance on the Grafana dashboard.<!-- how does "eval" factor in? --><!-- A: added -->
-    - `changeValueOut`: Specifies the name of the output variable that contains the change value. This value is used as a supporting indicator of the anomaly detection algorithm’s performance on the Grafana dashboard. <!-- how does "changeVal" factor in? --><!-- A: added -->
-    - `changeDetectedOut`: Specifies the name of the output variable that indicates whether a change has been detected. This value indicates whether an anomaly has been detected in the observed `latency_ms`. It is used in the next `w_latency_spike` window to filter out latency anomalies.  <!-- how does "changeDetected" factor in? --><!-- A: added -->
+    - `evaluatedOut`: Specifies the name of the output variable that indicates whether an evaluation occurred. This value is used as a supporting indicator of the anomaly detection algorithm’s performance on the Grafana dashboard.
+    - `changeValueOut`: Specifies the name of the output variable that contains the change value. This value is used as a supporting indicator of the anomaly detection algorithm’s performance on the Grafana dashboard. 
+    - `changeDetectedOut`: Specifies the name of the output variable that indicates whether a change has been detected. This value indicates whether an anomaly has been detected in the observed `latency_ms`. It is used in the next `w_latency_spike` window to filter out latency anomalies.
       
 ### w_latency_spike
 
@@ -184,7 +172,7 @@ This code filters out events and keeps the events where `changeDetected` is equa
 ### w_cells and add_cell_pos
 
 These two windows enrich incoming data with geolocation information from an additional data source.  
-The `w_cells` source window retrieves cell positions from a text file, while the `add_cell_pos` join window looks up `cell_id` and adds latitude and longitude to the incoming event fields if a match is found in the `w_cells` window.<!-- fill this in with an explanation of how they work together --><!--A:  added-->
+The `w_cells` source window retrieves cell positions from a text file, while the `add_cell_pos` join window looks up `cell_id` and adds latitude and longitude to the incoming event fields if a match is found in the `w_cells` window.
 
 Explore the settings for the w_cells window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_cells window.
@@ -298,24 +286,20 @@ we already have it above, in the Workflow:
 ## Test the Project and View the Results
 When you test the project, the results appear on separate tabs. The following figure shows the results for the w_rules tab:  
 ![w_rules tab](img/w_rules.png "w_rules tab")
-<!-- are there any other windows you want to show screenshots of? --> <!-- A: No. The purpose of the project is solely to provide real-time alerts for any detected anomalies. -->
-
-## High-level Target Solution Architecture
-Here is an example of a possible general architecture for a CMP data analysis system using SAS Event Stream Processing:  
-![architecture](img/architecture.png "architecture")
-<!-- this feels out of place. Could this go somewhere else? Not sure it's even necessary to include. --><!--A:  agree,  let's  remove it -->
 
 ## Next Steps
+Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to Grafana by doing the following:
+1. Click **Dashboards**.
+2. Click **Manage**.
+3. Click **Import**.  
 
-Alerts, model performance, and streaming data can be visualized using the [SAS Event Stream Processing Data Source Plug-in for Grafana](https://github.com/sassoftware/grafana-esp-plugin). Import [grafana.json](grafana.json) to Grafana ("Dashboards"->"Manage"->"Import"). <!-- reworded. is this correct? --> <!--A: reworded again. grafana.json is a separate Dashboard, we are importing a whole new "dashbord" in Grafana terms--> The following figures show an example of a Grafana dashboard:
-
+The following figures show an example of a Grafana dashboard:
 ![streaming data and distribution](img/grafana-1.png "streaming data and distribution")
 ![alerts](img/grafana-2.png "alerts")
 
 **Real-Time Monitor Pane**
 - `Input Data`: This table displays CMP events using data from the w_cmp_stream window.
-- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether SAS ESP is still reading and processing the input CSV or if the process has finished.<!-- is this correct? --><!--A:  yes,  but added new sentence-->
-
+- `Rate (msg/sec)`: This gauge shows the events processing rate in messages per second. Based on the processing speed, you can tell whether or not SAS Event Stream Processing is still reading and processing the input file.
 **Analytics Pane**
 - `Latency distribution`: This histogram displays the distribution of `jitter_ms`, `latency_ms`, and `signal_strength`.
 - `KLDivergenceDiff (latency_ms)`: This bar gauge displays the model evaluation from the w_change_latency window.
