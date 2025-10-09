@@ -24,12 +24,12 @@ Each event type illustrates a specific stream processing technique:
   - `status`: Device status
   - `data_usage_mb`: Device network traffic usage
   - `signal_strength`: Device connection signal strength
-  - `latency_ms`: Latency in microseconds in receiving or sending network packages
+  - `latency_ms`: Latency in microseconds for receiving or sending network packages
   - `jitter_ms`: Variation in latency over time
   - `session_status`: Connection session status for the currently registered network
   - `location`: Country name of the device home region
-  - `roaming`: If current region is home region for the device
-  - `operator`: Network provider where device currently registered
+  - `roaming`: Whether the current region is the home region for the device
+  - `operator`: Network provider where the device is currently registered
   - `plan`: Network provider tariff
 
 To make changes to the synthetic data sample, do the following:
@@ -294,7 +294,7 @@ Alerts, model performance, and streaming data can be visualized using the [SAS E
 1. From the navigation bar, click **Dashboards**.
 2. Click **New**.
 3. From the drop down list, select **Import**.
-4. Click **Upload dashboard JSON file** and select `grajana.json` from the file selector.
+4. Click **Upload dashboard JSON file** and select `grajana.json` using the file selector.
 5. Click **Import**.
 
 The following figures show an example of a Grafana dashboard:
