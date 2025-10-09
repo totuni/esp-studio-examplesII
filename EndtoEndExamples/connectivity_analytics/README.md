@@ -33,7 +33,7 @@ Each event type illustrates a specific stream processing technique:
   - `plan`: Network provider tariff
 
 To make changes to the synthetic data sample, do the following:
-1. Navigate to the [Git project](EndtoEndExamples/connectivity_analytics).
+1. Navigate to the [Git project](/connectivity_analytics).
 2. Download the file [generate_anomalies.ipynb](Generate_anomalies.ipynb).
 3. Open the file in Jupyter Notebook.
 4. Make the necessary changes to the data generation steps, and run the code.
