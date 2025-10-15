@@ -153,7 +153,7 @@ You can enhance this project by incorporating additional SAS Data Quality functi
   - DQ.STANDARDIZE
   - DQ.TOKEN
 
- For more information about all the supported functions, see: 🔗 [SAS Data Quality Functions in ESP](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n0qr20xa01a5kcn1kvk185dzgnpt.htm).
+ For more information about supported functions, see: 🔗 [SAS Data Quality Functions in ESP](https://documentation.sas.com/doc/en/espcdc/v_062/espcreatewindows/n0qr20xa01a5kcn1kvk185dzgnpt.htm).
 
 ## Additional Resources
 
