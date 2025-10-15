@@ -139,6 +139,8 @@ When you test the project in SAS Event Stream Processing Studio, the results of 
 
 As shown above, the system successfully matches the `sender` name with the watchlist entry, even when different spellings are used. This demonstrates the effectiveness of using match codes for fuzzy matching.
 
+**NOTE:** If the project fails to run, make sure you have SAS Data Quality installed on your environment. To verify this, check the log of the project. If you see a message similar to, `Set expression failed for window expression engine when initializing expression dq dataq string error`, contact your administrator to install SAS Data Quality.
+
 ## Next Steps
 
 You can enhance this project by incorporating additional SAS Data Quality function such as the functions below:
