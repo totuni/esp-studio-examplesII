@@ -29,8 +29,9 @@ This example requires you to install SAS Data Quality. You must also configure t
 
 - `DFESP_QKB_LIC`: Set this to the full path of the SAS Data Quality license file.
 
-For more details, refer to the official SAS documentation:  
-🔗 [Setting Up SAS Data Quality in ESP](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
+For more information, see:  
+- [How To (Kubernetes)](https://go.documentation.sas.com/doc/en/calqkb/latest/p190zlzdh3b4z3n1kunelaojxs0w.htm)  
+- [Setting Up SAS Data Quality in ESP](https://documentation.sas.com/doc/en/espcdc/default/espcreatewindows/n19ijp61ldn7vrn10czlree4uqir.htm)
 
 ## Workflow
 
