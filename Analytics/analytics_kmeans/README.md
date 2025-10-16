@@ -1,20 +1,17 @@
 # Perform K-MEANS Clustering (K-MEANS) on Streaming Data Using SAS Event Stream Processing
 
 ## Overview
-This example demonstrates the use of the machine learning algorithm K-means on streaming data. It includes a **Source window** that ingests signal samples, as well as **Train** and **Score** Windows that build the K-means model and assign each incoming event to its closest cluster in real time.
+This example demonstrates the use of K-means on streaming data. It includes a Source window that ingests signal samples, and Train and Score windows that build the K-means model and assign each incoming event to its closest cluster in real time.
  
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
 
-This project demonstrates how to perform **real-time K-means clustering** on continuous event streams using SAS Event Stream Processing (ESP). Unlike traditional batch clustering, this approach updates clusters dynamically as new data arrives, making it ideal for environments where **milliseconds matter**.
+This project demonstrates how to perform real-time K-means clustering on continuous event streams using SAS Event Stream Processing (ESP). Unlike traditional batch clustering, this approach updates clusters dynamically as new data arrives, making it ideal for time-sensitive environments.
 It is useful in the following scenarios:
-- **Anomaly Detection**:  
-  Detect unusual behaviors in sensor data, financial transactions, or network traffic in real time.
-- **Segmentation**:  
-  Continuously group users, devices, or events into segments that update as behavior changes.
-- **Pattern Recognition**:  
-  Identify emerging patterns in fast-moving data such as IoT telemetry, clickstream activity, or fraud signals.
+- Anomaly Detection: Detects unusual behaviors in sensor data, financial transactions, or network traffic in real time.
+- Segmentation: Continuously groups users, devices, or events into segments that update as behavior changes.
+- Pattern Recognition: Identifies emerging patterns in fast-moving data such as IoT telemetry, clickstream activity, or fraud signals.
 
 ## How Streaming K-means Differs from Classic K-means
 
@@ -30,10 +27,10 @@ It is useful in the following scenarios:
 
 ## Source Data
 
-The `events.csv` file is loaded through a File and Socket Connector in the Source window called `w_source`. The stream of example data includes the following:
-  - `ID`: an event key
+The `events.csv` file is loaded through a file and socket connector in the Source window called w_source. The stream of example data includes the following:
+  - `ID`: An event key
   - `x_c`: An x coordinate for the event
-  - `y_c`: An y coordinate for the event
+  - `y_c`: A y coordinate for the event
      
 ## Workflow
 The following figure shows the diagram of the project:
@@ -41,48 +38,50 @@ The following figure shows the diagram of the project:
 ![Diagram of the project](img/analytics_kmeans_diagram.png "Diagram of the project")
 
 The diagram is composed of the following components:  
-- **w_source Source Window** – Ingests incoming signal samples (events) from the input file (events.csv).  
-- **w_training Train Window** – Builds and continuously updates the K-means clustering model in real time.  
-- **w_scoring Score Window** – Assigns each new event to the nearest cluster centroid and outputs the cluster ID along with distance metrics.  
+- The w_source window is a Source Window that ingests incoming signal samples (events) from the input file, `events.csv`.  
+- The w_training window is a Train Window that builds and continuously updates the K-means clustering model in real time.  
+- The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid and outputs the cluster ID and distance metrics.  
 
 ### w_source
-Explore the settings for the w_source window by doing the following steps:
+
+Explore the settings for the w_source window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_source window.
-2. Expand **Input Data (Publisher) Connectors**. Notice the file and socket connector called **events_Connector**.
-3. Click ![edit icon](img/edit-icon.png). Notice that the **Fsname** points to `events.csv`.
-4. Click **OK**.
-5. Expand **State and Event Type**. Notice that the project accepts only Insert events.
-6. Click ![Output Schema](img/output-schema-icon.png "Output Schema"). Fields include:
+2. In the right pane, expand **State and Event Type**. Notice that the project accepts only Insert events.
+3. Expand **Input Data (Publisher) Connectors**. Notice the file and socket connector called **events_Connector**.
+4. Select the connector and click ![edit icon](img/edit-icon.png). Notice that the value of **Fsname** is a path that points to `events.csv`.
+5. Click **OK**.
+6. Click ![Output Schema](img/output-schema-icon.png "Output Schema"). See the following fields:
    - `id`: Primary key 
    - `x_c`: An x coordinate of data
-   - `y_c`: An y coordinate of data
+   - `y_c`: A y coordinate of data
 
 ### w_training
 
-This Train Window looks at all events and periodically generates a new clustering model using the k-means algorithm. Generated clustering model events are published to the `w_score` Window.
+This Train Window looks at all events and periodically generates a new clustering model using the K-means algorithm. Generated clustering model events are published to the w_score window.
 
-Open the project in SAS Event Stream Processing Studio and select the `w_training window`. In the right pane, in the **Settings** section, expand **Parameters**. Observe the following settings:
-- `nClusters`: This parameter specifies the number of clusters.
-- `initSeed`: This parameter specifies the random seed that is used during initialization when each point is assigned to a random cluster.
-- `dampingFactor`: This parameter specifies the damping factor for old data points.
-- `fadeOutFactor`: This parameter specifies the value for determining whether an existing cluster is fading out.
-- `disturbFactor`: This parameter specifies the disturbance factor when splitting a cluster.
-- `nInit`: This parameter specifies the number of data events that are used during initialization.
-- `velocity`: This parameter specifies the number of events that arrive at a single timestamp.
-- `commitInterval`: This parameter specifies the number of timestamps to elapse before committing a model to downstream scoring.
-
-Expand the **Input Map** section. Observe that the `inputs` role specifies the variable names used in clustering: `x_c` and `y_c`.
+Explore the settings for the w_training window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_training window.
+2. In the right pane, expand **Settings**. Then, expand **Parameters**. Notice the following parameters:
+- `nClusters`: Specifies the number of clusters.
+- `initSeed`: Specifies the random seed that is used during initialization when each point is assigned to a random cluster.
+- `dampingFactor`: Specifies the damping factor for old data points.
+- `fadeOutFactor`: Specifies the value for determining whether an existing cluster is fading out.
+- `disturbFactor`: Specifies the disturbance factor when splitting a cluster.
+- `nInit`: Specifies the number of data events that are used during initialization.
+- `velocity`: Specifies the number of events that arrive at a single timestamp.
+- `commitInterval`: Specifies the number of timestamps to elapse before committing a model to downstream scoring.
+3. Expand **Input Map**. Notice that the **inputs** role specifies the variable names used in clustering: `x_c` and `y_c`.
 
 ### w_scoring
 
-The events are scored in this Score window.
-
-Select the w_scoring window. In the right pane, in the **Settings** section, expand **Streaming K-Means Clustering**. Observe the following settings:
-- In the **Input Map** section, the `inputs` role specifies the variable names used in clustering: `x_c` and `y_c`.
-- In the **Output Map** section, observe the following settings:
-  - The `labelOut` role specifies the output variable name that stores the cluster label. The variable name is `seg`. 
-  - The `minDistanceOut` role specifies the output variable name that stores the distance to the nearest cluster. The variable name is `minDist`. 
-  - The `modelIdOut` role specifies the output variable name that stores the ID of the model from which the score is computed. The variable name is `model_id`.
+Explore the settings for the w_scoring window:
+1. Open the project in SAS Event Stream Processing Studio and select the w_scoring window.
+2. In the right pane, expand **Settings**. Then, expand **Streaming K-Means Clustering**.
+3. Expand **Input Map**. Notice that the **inputs** role specifies the variable names used in clustering: `x_c` and `y_c`.
+4. Expand **Output Map**. Notice the following settings:
+  - The **labelOut** role specifies the output variable name that stores the cluster label. The variable name is `seg`. 
+  - The **minDistanceOut** role specifies the output variable name that stores the distance to the nearest cluster. The variable name is `minDist`. 
+  - The **modelIdOut** role specifies the output variable name that stores the ID of the model from which the score is computed. The variable name is `model_id`.
 
 ## Test the Project and View the Results
 
@@ -96,7 +95,7 @@ The **w_training** tab displays the generated clustering model using the k-means
 The **w_scoring** tab displays the scored events:
 ![Results for the w_scoring tab](img/w_scoring.png "Results for the w_scoring tab")
 
-You might see warnings in the Log pane about the w_source window being throttled. You can ignore these warnings.
+If you see warnings in the **Log** pane about the w_source window being throttled, they can be safely ignored.
 
 ## Next Steps
 
@@ -106,7 +105,7 @@ You can enhance this project by doing any of the following:
 
 ## Additional Resources
 
-For more information, see [SAS Help Center: Training and Scoring with K-means Clustering](https://go.documentation.sas.com/doc/en/espcdc/v_064/espan/p1cvplf50cug5jn1mz8b5qrq6q36.htm#p01ejm2939294pn1jxmoiqqoh21q).
+For more information, see [SAS Help Center: Training and Scoring with K-means Clustering](https://go.documentation.sas.com/doc/en/espcdc/default/espan/p1cvplf50cug5jn1mz8b5qrq6q36.htm#p01ejm2939294pn1jxmoiqqoh21q).
 
 
 
