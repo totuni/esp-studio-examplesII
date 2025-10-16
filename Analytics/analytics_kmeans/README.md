@@ -27,17 +27,17 @@ It is useful in the following scenarios:
 
 ## Source Data
 
-The `events.csv` file is loaded through a file and socket connector in the Source window called w_source. The stream of example data includes the following:
+The input file is loaded through w_source using a file a socket connector. The file is called `events.csv` and it contains a stream of example data that includes the following:  
   - `ID`: An event key
   - `x_c`: An x coordinate for the event
   - `y_c`: A y coordinate for the event
      
 ## Workflow
+
 The following figure shows the diagram of the project:
 
 ![Diagram of the project](img/analytics_kmeans_diagram.png "Diagram of the project")
-
-The diagram is composed of the following components:  
+ 
 - The w_source window is a Source Window that ingests incoming signal samples (events) from the input file, `events.csv`.  
 - The w_training window is a Train Window that builds and continuously updates the K-means clustering model in real time.  
 - The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid and outputs the cluster ID and distance metrics.  
@@ -50,14 +50,14 @@ Explore the settings for the w_source window:
 3. Expand **Input Data (Publisher) Connectors**. Notice the file and socket connector called **events_Connector**.
 4. Select the connector and click ![edit icon](img/edit-icon.png). Notice that the value of **Fsname** is a path that points to `events.csv`.
 5. Click **OK**.
-6. Click ![Output Schema](img/output-schema-icon.png "Output Schema"). See the following fields:
+6. Click <img src="Analytics/analytics_kmeans/img/output-schema-icon.png" alt="Description" width="3%" height=auto>. See the following fields:
    - `id`: Primary key 
    - `x_c`: An x coordinate of data
    - `y_c`: A y coordinate of data
 
 ### w_training
 
-This Train Window looks at all events and periodically generates a new clustering model using the K-means algorithm. Generated clustering model events are published to the w_score window.
+This window looks at all of the events and periodically generates a new clustering model using the K-means algorithm. Generated clustering model events are published to the w_score window.
 
 Explore the settings for the w_training window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_training window.
@@ -86,6 +86,7 @@ Explore the settings for the w_scoring window:
 ## Test the Project and View the Results
 
 When you test the project in SAS Event Stream Processing Studio, the results for each window appear on separate tabs in test mode. 
+
 The **w_source** tab displays events to be scored:
 ![Results for the w_source tab](img/w_source.png "Results for the w_source tab")
 
