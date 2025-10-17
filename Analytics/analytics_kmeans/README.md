@@ -1,29 +1,27 @@
-# Perform K-MEANS Clustering (K-MEANS) on Streaming Data Using SAS Event Stream Processing
+# Perform K-means Clustering on Streaming Data
 
 ## Overview
-This example demonstrates the use of K-means on streaming data. It includes a Source window that ingests signal samples, and Train and Score windows that build the K-means model and assign each incoming event to its closest cluster in real time.
+This example demonstrates the use of k-means on streaming data. It includes a Source window that ingests signal samples, and Train and Score windows that build the k-means model and assign each incoming event to its closest cluster in real time.
  
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
+<!-- does traditional batch clustering use k-means algorithm? I'm confused because the text compares traditional clustering and k-means, but the table compares classic vs streaming. -->
+This project demonstrates how to perform real-time k-means clustering on continuous event streams using SAS Event Stream Processing. Unlike traditional batch clustering, this approach updates clusters dynamically as new data arrives, making it ideal for time-sensitive environments. The following table highlights some differences between classic k-means clustering and streaming k-means clustering.
 
-This project demonstrates how to perform real-time K-means clustering on continuous event streams using SAS Event Stream Processing (ESP). Unlike traditional batch clustering, this approach updates clusters dynamically as new data arrives, making it ideal for time-sensitive environments.
-It is useful in the following scenarios:
+| Aspect | Classic K-means | Streaming K-means |
+|--------|-----------------|------------------------------|
+| **Data handling** | Works on a fixed data set. | Works on continuous incoming events. |
+| **Iteration** | Repeats assignment and updates steps until convergence. | No full re-iteration; clusters update incrementally with each batch. |
+| **Centroid update** | Centroids are recalculated as the mean of all assigned points. | Centroids updated using a damping factor, which weights recent data higher. |
+| **Old data** | All points contribute equally, regardless of age. | Older points gradually lose influence. |
+| **Cluster dynamics** | Number of clusters are fixed, only centroids move. | Clusters can fade out (`fadeOutFactor`) or split (`disturbFactor`). |
+| **Use case** | Static data sets (for example, customer segmentation at a single point in time). | Real-time adaptive clustering (for example, IoT sensor streams, fraud detection, anomaly detection). |
+
+Streaming k-means clustering is useful in the following scenarios:
 - Anomaly Detection: Detects unusual behaviors in sensor data, financial transactions, or network traffic in real time.
 - Segmentation: Continuously groups users, devices, or events into segments that update as behavior changes.
 - Pattern Recognition: Identifies emerging patterns in fast-moving data such as IoT telemetry, clickstream activity, or fraud signals.
-
-## How Streaming K-means Differs from Classic K-means
-
-| Aspect | Classic K-means | Streaming K-means (SAS ESP) |
-|--------|-----------------|------------------------------|
-| **Data handling** | Works on a fixed dataset (batch mode). | Works on continuous incoming events (streaming). |
-| **Iteration** | Repeats assignment + update steps until convergence. | No full re-iteration; clusters update incrementally with each batch. |
-| **Centroid update** | Centroids are recalculated as the mean of all assigned points. | Centroids updated using a **damping factor**, giving more weight to recent data. |
-| **Old data** | All points contribute equally, regardless of age. | Older points gradually lose influence (`dampingFactor`). |
-| **Cluster dynamics** | Number of clusters fixed, centroids only move. | Clusters can **fade out** (`fadeOutFactor`) or **split** (`disturbFactor`). |
-| **Use case** | Static datasets (e.g., customer segmentation at a single point in time). | Real-time adaptive clustering (e.g., IoT sensor streams, fraud detection, anomaly detection). |
-
 
 ## Source Data
 
@@ -38,9 +36,9 @@ The following figure shows the diagram of the project:
 
 ![Diagram of the project](img/analytics_kmeans_diagram.png "Diagram of the project")
  
-- The w_source window is a Source Window that ingests incoming signal samples (events) from the input file, `events.csv`.  
-- The w_training window is a Train Window that builds and continuously updates the K-means clustering model in real time.  
-- The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid and outputs the cluster ID and distance metrics.  
+- The w_source window is a Source Window that ingests incoming signal samples from the input file, `events.csv`.  
+- The w_training window is a Train Window that builds and continuously updates the k-means clustering model in real time.  
+- The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid and writes the cluster ID and distance metrics.  <!-- to where? where is it outputted?-->
 
 ### w_source
 
@@ -57,19 +55,19 @@ Explore the settings for the w_source window:
 
 ### w_training
 
-This window looks at all of the events and periodically generates a new clustering model using the K-means algorithm. Generated clustering model events are published to the w_score window.
+This window looks at all of the events and periodically generates a new clustering model using the k-means algorithm. Generated clustering model events are published to the w_score window.
 
 Explore the settings for the w_training window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_training window.
 2. In the right pane, expand **Settings**. Then, expand **Parameters**. Notice the following parameters:
-- `nClusters`: Specifies the number of clusters.
-- `initSeed`: Specifies the random seed that is used during initialization when each point is assigned to a random cluster.
-- `dampingFactor`: Specifies the damping factor for old data points.
-- `fadeOutFactor`: Specifies the value for determining whether an existing cluster is fading out.
-- `disturbFactor`: Specifies the disturbance factor when splitting a cluster.
-- `nInit`: Specifies the number of data events that are used during initialization.
-- `velocity`: Specifies the number of events that arrive at a single timestamp.
-- `commitInterval`: Specifies the number of timestamps to elapse before committing a model to downstream scoring.
+      - `nClusters`: Specifies the number of clusters.
+      - `initSeed`: Specifies the random seed that is used during initialization when each point is assigned to a random cluster.
+      - `dampingFactor`: Specifies the damping factor for old data points.
+      - `fadeOutFactor`: Specifies the value for determining whether an existing cluster is fading out.
+      - `disturbFactor`: Specifies the disturbance factor when splitting a cluster.
+      - `nInit`: Specifies the number of data events that are used during initialization.
+      - `velocity`: Specifies the number of events that arrive at a single timestamp.
+      - `commitInterval`: Specifies the number of timestamps to elapse before committing a model to downstream scoring.
 3. Expand **Input Map**. Notice that the **inputs** role specifies the variable names used in clustering: `x_c` and `y_c`.
 
 ### w_scoring
@@ -79,9 +77,9 @@ Explore the settings for the w_scoring window:
 2. In the right pane, expand **Settings**. Then, expand **Streaming K-Means Clustering**.
 3. Expand **Input Map**. Notice that the **inputs** role specifies the variable names used in clustering: `x_c` and `y_c`.
 4. Expand **Output Map**. Notice the following settings:
-  - The **labelOut** role specifies the output variable name that stores the cluster label. The variable name is `seg`. 
-  - The **minDistanceOut** role specifies the output variable name that stores the distance to the nearest cluster. The variable name is `minDist`. 
-  - The **modelIdOut** role specifies the output variable name that stores the ID of the model from which the score is computed. The variable name is `model_id`.
+     - The **labelOut** role specifies the output variable name that stores the cluster label. The variable name is `seg`. 
+     - The **minDistanceOut** role specifies the output variable name that stores the distance to the nearest cluster. The variable name is `minDist`. 
+     - The **modelIdOut** role specifies the output variable name that stores the ID of the model from which the score is computed. The variable name is `model_id`.
 
 ## Test the Project and View the Results
 
@@ -102,7 +100,7 @@ If you see warnings in the **Log** pane about the w_source window being throttle
 
 You can enhance this project by doing any of the following:
 - Replace the CSV source with a live sensor feed
-- Experiment with different K-means training parameters to optimize clustering resolution
+- Experiment with different k-means training parameters to optimize clustering resolution
 
 ## Additional Resources
 
