@@ -1,7 +1,7 @@
 # Perform K-means Clustering on Streaming Data
 
 ## Overview
-This example demonstrates the use of k-means on streaming data. It includes a Source window that ingests signal samples, and Train and Score windows that build the k-means model and assign each incoming event to its closest cluster in real time.
+This example demonstrates the use of k-means clustering on streaming data. It includes a Source window that ingests signal samples, and Train and Score windows that build the k-means model and assign each incoming event to its closest cluster in real time.
  
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
@@ -25,7 +25,7 @@ Streaming k-means clustering is useful in the following scenarios:
 
 ## Source Data
 
-The input file is loaded through w_source using a file a socket connector. The file is called `events.csv` and it contains a stream of example data that includes the following:  
+The input file is loaded through w_source using a file and socket connector. The file is called `events.csv`, and it contains a stream of example data that includes the following:  
   - `ID`: An event key
   - `x_c`: An x coordinate for the event
   - `y_c`: A y coordinate for the event
@@ -38,7 +38,7 @@ The following figure shows the diagram of the project:
  
 - The w_source window is a Source Window that ingests incoming signal samples from the input file, `events.csv`.  
 - The w_training window is a Train Window that builds and continuously updates the k-means clustering model in real time.  
-- The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid. It creates `seg` and `min_dist` to output these metrics.  
+- The w_scoring window is a Score Window that assigns each incoming event to the nearest cluster centroid and writes the cluster ID (`seg`) and distance (`min_dist`) to the **w_scoring** tab.
 
 ### w_source
 
@@ -55,7 +55,7 @@ Explore the settings for the w_source window:
 
 ### w_training
 
-This window looks at all of the events and periodically generates a new clustering model using the k-means algorithm. Generated clustering model events are published to the w_score window.
+This window analyzes all of the events and periodically generates a new clustering model using the k-means algorithm. Generated clustering model events are published to the w_score window.
 
 Explore the settings for the w_training window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_training window.
