@@ -6,9 +6,8 @@ This example demonstrates the use of k-means on streaming data. It includes a So
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
-<!-- does traditional batch clustering use k-means algorithm? I'm confused because the text compares traditional clustering and k-means, but the table compares classic vs streaming. -->
-<!-- A: Yes, traditional batch clustering algorithms like k-means can be used, but the key point is that they operate on batch data. In the table, we compare the k-means algorithm—which processes a large set of events at once to create clusters—with streaming clustering, where events arrive one by one, requiring continuous clustering or reclustering in real time based on the most recent data available. -->
-This project demonstrates how to perform real-time k-means clustering on continuous event streams using SAS Event Stream Processing. Unlike traditional batch clustering, this approach updates clusters dynamically as new data arrives, making it ideal for time-sensitive environments. The following table highlights some differences between classic k-means clustering and streaming k-means clustering.
+
+This project demonstrates how to perform real-time k-means clustering on continuous event streams using SAS Event Stream Processing. Unlike classic k-means clustering, streaming clustering updates clusters dynamically as new data arrives, making it ideal for time-sensitive environments. The following table highlights some differences between classic k-means clustering and streaming k-means clustering.
 
 | Aspect | Classic K-means | Streaming K-means |
 |--------|-----------------|------------------------------|
@@ -39,18 +38,7 @@ The following figure shows the diagram of the project:
  
 - The w_source window is a Source Window that ingests incoming signal samples from the input file, `events.csv`.  
 - The w_training window is a Train Window that builds and continuously updates the k-means clustering model in real time.  
-- The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid and writes the cluster ID and distance metrics.  <!-- to where? where is it outputted?-->
-<!-- A:  to output ESP event added 2  fields :
-cluster ID   = "seg" on w_scoring screentshot   
-
-"The labelOut role specifies the output variable name that stores the cluster label. The variable name is seg."
-
-distance = "minDist"  
-
-"The minDistanceOut role specifies the output variable name that stores the distance to the nearest cluster. The variable name is minDist."
-
-Please  fix how you do think appropriate
--->
+- The w_scoring window is a Score Window that assigns each new event to the nearest cluster centroid. It creates `seg` and `min_dist` to output these metrics.  
 
 ### w_source
 
@@ -88,10 +76,10 @@ Explore the settings for the w_scoring window:
 1. Open the project in SAS Event Stream Processing Studio and select the w_scoring window.
 2. In the right pane, expand **Settings**. Then, expand **Streaming K-Means Clustering**.
 3. Expand **Input Map**. Notice that the **inputs** role specifies the variable names used in clustering: `x_c` and `y_c`.
-4. Expand **Output Map**. Notice the following settings:
-     - The **labelOut** role specifies the output variable name that stores the cluster label. The variable name is `seg`. 
-     - The **minDistanceOut** role specifies the output variable name that stores the distance to the nearest cluster. The variable name is `minDist`. 
-     - The **modelIdOut** role specifies the output variable name that stores the ID of the model from which the score is computed. The variable name is `model_id`.
+4. Expand **Output Map**. Notice the following roles:
+     - The **labelOut** role specifies the name of the output variable that stores the cluster ID. The variable is called  `seg`. 
+     - The **minDistanceOut** role specifies the name of the output variable that stores the distance to the nearest cluster. The variable is called `min_dist`. 
+     - The **modelIdOut** role specifies the name of the output variable that stores the ID of the model used for scoring. The variable is called `model_id`.
 
 ## Test the Project and View the Results
 
