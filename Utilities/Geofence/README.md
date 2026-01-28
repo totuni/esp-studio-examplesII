@@ -3,11 +3,6 @@
 This example uses Join, Geofence, and Filter windows to match wanted vehicles that are in close proximity to critical infrastructure sites. This example also demonstrates the use of connector orchestration.
 
 ---
-**NOTE:**
-Use this example with SAS Event Stream Processing 2024.01 and later. This example contains a Python-based Filter window. Earlier releases of SAS Event Stream Processing do not support Python-based Filter windows. 
-
----
-
 For more information about how to install and use example projects, see [Using the Examples](https://github.com/sassoftware/esp-studio-examples#using-the-examples).
 
 ## Use Case
@@ -36,13 +31,13 @@ The following figure shows the diagram of the project:
 - The Geofence window is a Geofence window. This is where geofencing information that relates to the matched vehicles enters the model.
 - The GeofenceMatches window is a Filter window. This is where matches with null values are filtered out.
 
-### ANPR
+### Automatic Number Plate Recognition or ANPR
 
 The ANPR window streams information about all vehicles within close proximity of critical infrastructure sites from the `anpr.csv file` to the WantedVehicleMatch window.
 
 Explore the settings for the ANPR window:
 1. Open the project in SAS Event Stream Processing Studio and select the ANPR window. 
-2. In the right pane, expand **State and Event Type**. Observe that the model accepts only Insert events and the key field is generated automatically.
+2. In the right pane, expand **State and Event Type**. Observe that the window is stateless meaning that it does not store events in memory.
 3. To examine the window's output schema, on the right toolbar, click ![Output Schema](img/output-schema-icon.png "Output Schema"). Observe the following fields: 
    - `vrm`: This is the vehicle registration mark.
    - `lat`: This is the latitude where the vehicle was found.
@@ -82,7 +77,7 @@ Explore the settings for the CriticalInfrastructure window:
    
 ### Geofence 
 
-The Geofence window performs geofencing on the matched vehicles.
+A *geofence* is a virtual perimeter for a real-world geographic area. You can dynamically generate a geofence as a radius around a specific location or create one as a set of specific boundaries. The Geofence window determines whether the location of a a vehicle is inside or close to an area of interest.
 
 Explore the settings for the Geofence window:
 1. Select the Geofence window.
