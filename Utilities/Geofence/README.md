@@ -31,13 +31,13 @@ The following figure shows the diagram of the project:
 - The Geofence window is a Geofence window. This is where geofencing information that relates to the matched vehicles enters the model.
 - The GeofenceMatches window is a Filter window. This is where matches with null values are filtered out.
 
-### Automatic Number Plate Recognition or ANPR
+### Automatic Number Plate Recognition (ANPR)
 
 The ANPR window streams information about all vehicles within close proximity of critical infrastructure sites from the `anpr.csv file` to the WantedVehicleMatch window.
 
 Explore the settings for the ANPR window:
 1. Open the project in SAS Event Stream Processing Studio and select the ANPR window. 
-2. In the right pane, expand **State and Event Type**. Observe that the window is stateless meaning that it does not store events in memory.
+2. In the right pane, expand **State and Event Type**. Observe that the window is stateless, meaning that it does not store events in memory.
 3. To examine the window's output schema, on the right toolbar, click ![Output Schema](img/output-schema-icon.png "Output Schema"). Observe the following fields: 
    - `vrm`: This is the vehicle registration mark.
    - `lat`: This is the latitude where the vehicle was found.
@@ -77,7 +77,7 @@ Explore the settings for the CriticalInfrastructure window:
    
 ### Geofence 
 
-A *geofence* is a virtual perimeter for a real-world geographic area. You can dynamically generate a geofence as a radius around a specific location or create one as a set of specific boundaries. The Geofence window determines whether the location of a a vehicle is inside or close to an area of interest.
+A *geofence* is a virtual perimeter for a real-world geographic area. You can dynamically generate a geofence as a radius around a specific location or create one as a set of specific boundaries. The Geofence window determines whether the location of a vehicle is inside or close to an area of interest.
 
 Explore the settings for the Geofence window:
 1. Select the Geofence window.
